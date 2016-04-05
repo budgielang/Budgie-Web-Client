@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "target": "es5",
+        "sourceMap": true,
+        "jsx": "react"
+    },
+    "exclude": [
+        "bower_components",
+        "node_modules",
+        "typings",
+        "References"
+    ]
+}

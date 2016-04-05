@@ -1,0 +1,97 @@
+/* General elements */
+
+html, body, #app {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+textarea {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+pre {
+    display: inline;
+}
+
+
+/* App layout */
+
+#WebClient {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
+#WebClient > section {
+    flex: 1;
+    align-self: stretch;
+    position: relative;
+    max-width: 100%;
+}
+
+#WebClient > section > .component {
+    margin-top: 35px;
+    padding: 0 7px;
+    height: calc(100% - 35px);
+    box-sizing: border-box;
+    font-size: 1.17em;
+}
+
+
+/* Editor component */
+
+.option-buttons {
+    float: right;
+}
+
+.option-buttons input {
+    height: 35px;
+}
+
+textarea.editor-component {
+    position: absolute;
+    width: 100%;
+    overflow-x: scroll;
+    font-size: 1.4em;
+    white-space: pre;
+}
+
+
+/* Preview component */
+
+#PreviewSection {
+    overflow-x: auto;
+}
+
+.preview-language-selector {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 35px;
+    padding: 0 3px;
+    z-index: 100;
+}
+
+.preview-error-bar {
+    margin-left: -7px;
+    padding: 0 7px;
+    width: calc(100% + 7px);
+    height: 0;
+    background: rgb(255, 247, 247);
+    overflow: hidden;
+    transition: all 117ms;
+}
+
+.preview-error-bar.error-bar-full {
+    height: 2em;
+    padding: 11px 7px 0;
+    border-bottom: 1px solid rgb(240, 175, 175);
+}

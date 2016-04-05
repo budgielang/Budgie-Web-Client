@@ -1,0 +1,6 @@
+Source/**/*.js
+Source/**/*.js.map
+bower_components
+node_modules/
+typings
+npm-debug.log

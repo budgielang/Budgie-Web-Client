@@ -1,0 +1,29 @@
+{
+  "name": "GLS",
+  "description": "TypeScript web editor for GLS.",
+  "main": "index.js",
+  "authors": [
+    "[object Object]"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "amd"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "^0.14.8"
+  },
+  "devDependencies": {
+    "react": "^0.14.8",
+    "requirejs": "^2.2.0",
+    "highlightjs": "^9.2.0"
+  }
+}

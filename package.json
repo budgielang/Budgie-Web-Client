@@ -1,0 +1,33 @@
+{
+  "author": {
+    "name": "Josh Goldberg",
+    "email": "josh@fullscreenmario.com"
+  },
+  "bugs": {
+    "url": "https://github.com/HighSchoolHacking/GLS-Web-Client/issues"
+  },
+  "description": "A web editor for GLS.",
+  "devDependencies": {
+    "chai": "~2.X",
+    "grunt": "~0.4.X",
+    "grunt-cli": "~0.1.X",
+    "grunt-contrib-clean": "~0.6.X",
+    "grunt-contrib-concat": "~1.0.X",
+    "grunt-contrib-copy": "~0.8.X",
+    "grunt-contrib-uglify": "~0.8.X",
+    "grunt-mocha-test": "~0.12.X",
+    "grunt-tslint": "~3.0.X",
+    "grunt-typescript": "~0.8.X",
+    "grunt-zip": "~0.17.X",
+    "mocha": "~2.X",
+    "tslint": "~3.5.X",
+    "typescript": "~1.7.X"
+  },
+  "license": "MIT",
+  "name": "GLS",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:HighSchoolHacking/GLS-Web-Client.git"
+  },
+  "version": "0.0.0"
+}
