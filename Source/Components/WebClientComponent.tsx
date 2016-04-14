@@ -124,7 +124,7 @@ export default class WebClientComponent extends React.Component<IWebClientCompon
             <select
                 defaultValue={this.state.sampleName}
                 onChange={event => this.reset((event.target as HTMLSelectElement).value)}>
-                {WebClientComponent.SampleKeys.map(sampleName => <option value={sampleName}>{sampleName}</option>)}
+                {WebClientComponent.SampleKeys.map(sampleName => <option key={sampleName} value={sampleName}>{sampleName}</option>)}
             </select>);
     }
 

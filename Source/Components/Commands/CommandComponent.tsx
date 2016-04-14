@@ -57,7 +57,7 @@ export default class CommandComponent extends React.Component<ICommandComponentP
      */
     private renderSingleParameter(parameter: SingleParameter, i: number): JSX.Element {
         return (
-            <span className="parameter single-parameter">
+            <span className="parameter single-parameter" key={i}>
                 <span className="parameter-name">{parameter.name}</span>
             </span>);
     }
@@ -67,7 +67,7 @@ export default class CommandComponent extends React.Component<ICommandComponentP
      */
     private renderRepeatingParameters(parameter: RepeatingParameters, i: number): JSX.Element {
         return (
-            <span className="parameter repeating-parameters">
+            <span className="parameter repeating-parameters" key={i}>
                 {this.renderParameters(parameter.parameters)}
             </span>);
     }
