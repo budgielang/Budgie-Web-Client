@@ -19,6 +19,10 @@ declare namespace GLS.Languages.Properties {
          * Whether initialization is done as a static method of the array class.
          */
         initializeViaStatic: boolean;
+        /**
+         * How to retrieve an array's length.
+         */
+        length: NativeCallProperties;
     }
 }
 declare namespace GLS.Languages.Properties {
@@ -108,6 +112,86 @@ declare namespace GLS.Languages.Properties {
          * A default decorator after member variables, such as "" or " = None".
          */
         variableDefault: string;
+    }
+}
+declare namespace GLS.Languages.Properties {
+    /**
+     * Metadata on a language's lists.
+     */
+    class ListProperties {
+        /**
+         * Whether the language uses flexible arrays.
+         */
+        asArray: boolean;
+        /**
+         * The name of the list class.
+         */
+        className: string;
+        /**
+         * How to retrieve the length of a list.
+         */
+        length: NativeCallProperties;
+        /**
+         * How to add an element to the end of a list.
+         */
+        push: NativeCallProperties;
+    }
+}
+declare namespace GLS.Languages.Properties {
+    /**
+     * Metadata on how to perform a native call, such as Array::push.
+     */
+    class NativeCallProperties {
+        /**
+         * Whether this is used as a function, rather than a property.
+         */
+        asFunction: boolean;
+        /**
+         * Whether this is a static function, rather than a member.
+         */
+        asStatic: boolean;
+        /**
+         * How this is called in the language.
+         */
+        name: string;
+        /**
+         * @param name   What the native call is called.
+         * @returns A new NativeCallProperties describing a member function.
+         */
+        static NewMemberFunction(name: string): NativeCallProperties;
+        /**
+         * @param name   What the native call is called.
+         * @returns A new NativeCallProperties describing a member propertiy.
+         */
+        static NewMemberProperty(name: string): NativeCallProperties;
+        /**
+         * @param name   What the native call is called.
+         * @returns A new NativeCallProperties describing a static function.
+         */
+        static NewStaticFunction(name: string): NativeCallProperties;
+    }
+}
+declare namespace GLS.Languages.Properties {
+    /**
+     * Metadata on a language's Strings.
+     */
+    class StringProperties {
+        /**
+         * The name of the string class.
+         */
+        className: string;
+        /**
+         * The name of the concatenation operator.
+         */
+        concatenate: string;
+        /**
+         * How to determine the index of a substring.
+         */
+        index: NativeCallProperties;
+        /**
+         * How to retrieve a string's length.
+         */
+        length: NativeCallProperties;
     }
 }
 declare namespace GLS.Languages.Properties {
@@ -468,25 +552,6 @@ declare namespace GLS.Languages.Properties {
 }
 declare namespace GLS.Languages.Properties {
     /**
-     * Metadata on a language's lists.
-     */
-    class ListProperties {
-        /**
-         * Whether the language uses flexible arrays.
-         */
-        asArray: boolean;
-        /**
-         * The name of the list class.
-         */
-        className: string;
-        /**
-         * The keyword used for pushing.
-         */
-        push: string;
-    }
-}
-declare namespace GLS.Languages.Properties {
-    /**
      * Metadata on a language's loops.
      */
     class LoopProperties {
@@ -681,21 +746,6 @@ declare namespace GLS.Languages.Properties {
          * Initializes aliases based on the equivalent member properties.
          */
         generateAliases(): void;
-    }
-}
-declare namespace GLS.Languages.Properties {
-    /**
-     * Metadata on a language's Strings.
-     */
-    class StringProperties {
-        /**
-         * The name of the string class.
-         */
-        className: string;
-        /**
-         * The name of the concatenation operator.
-         */
-        concatenate: string;
     }
 }
 declare namespace GLS.Languages.Properties {
@@ -1589,11 +1639,133 @@ declare namespace GLS.Languages {
         protected generateVariableProperties(variables: Properties.VariableProperties): void;
     }
 }
+declare namespace GLS.Languages {
+    /**
+     * A quick lookup of standard languages.
+     */
+    class LanguagesBag {
+        /**
+         * An instance of the CSharp class.
+         */
+        CSharp: CSharp;
+        /**
+         * An instance of the CSharp class.
+         */
+        Python: Python;
+        /**
+         * An instance of the Ruby class.
+         */
+        Ruby: Ruby;
+        /**
+         * An instance of the TypeScript class.
+         */
+        TypeScript: TypeScript;
+        /**
+         * Known languages, keyed by name.
+         */
+        private languagesByName;
+        /**
+         * Adds a language to the listing.
+         *
+         * @param name   The name of the language.
+         * @param language   The language to add.
+         */
+        addLanguage(name: string, language: Language): void;
+        /**
+         * @param name   A name of a language.
+         * @returns The language under that name.
+         */
+        getLanguage(name: string): Language;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A single line of code converted from raw GLS syntax.
+     */
+    class CommandResult {
+        /**
+         * How much indentation will change from the result.
+         */
+        indentation: number;
+        /**
+         * Text contents of the result.
+         *
+         * @remarks If "\0", this isn't added.
+         */
+        text: string;
+        /**
+         * Initializes a new instance of the CommandResult class.
+         *
+         * @param text   Text contents of the result.
+         * @param indentation   How much indentation will change from the result.
+         */
+        constructor(text: string, indentation: number);
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A cluster of code converted from a line of GLS syntax.
+     */
+    class LineResults {
+        /**
+         * Text contents of the result.
+         */
+        commandResults: CommandResult[];
+        /**
+         * Whether this should have a semicolon appended.
+         */
+        addSemicolon: boolean;
+        /**
+         * Initializes a new instance of the LineResults class.
+         *
+         * @param commandResults   Lines of code converted fromthe GLS syntax.
+         * @param addsSemicolon   Whether this should end with a semicolon.
+         */
+        constructor(commandResults: CommandResult[], addSemicolon: boolean);
+        /**
+         * Creates a new result containing a single line with a semicolon.
+         *
+         * @param text   The contents of the line.
+         * @param addSemicolon   Whether the line should end with a semicolon.
+         * @returns A new single line result.
+         */
+        static newSingleLine(text: string, addSemicolon: boolean): LineResults;
+        /**
+         * Creates a new result containing the start or end of a block.
+         *
+         * @param text   The contents of the line.
+         * @param indentation   How much the line changes indentation.
+         * @returns A new block-changing line result.
+         */
+        static newBlockLine(text: string, indentation: number): LineResults;
+    }
+}
+declare namespace GLS.Commands.Parameters {
+    /**
+     * Some parameter(s) to be passed to a command.
+     */
+    abstract class Parameter {
+        /**
+         * A plain-text description of this parameter.
+         */
+        description: string;
+        /**
+         * Initializes a new instance of the Parameter class.
+         *
+         * @param descriptor   A plain-text description of the parameter.
+         */
+        constructor(description: string);
+    }
+}
 declare namespace GLS.Commands {
     /**
      * Abstract base class for commands that may be rendered into language code.
      */
     abstract class Command {
+        /**
+         * Default information on parameters a command takes in (none).
+         */
+        private static defaultParameters;
         /**
          * The driving context for converting the command.
          */
@@ -1603,18 +1775,30 @@ declare namespace GLS.Commands {
          */
         protected language: Languages.Language;
         /**
+         * Whether this command'slines should end with a semicolon.
+         */
+        protected addsSemicolon: boolean;
+        /**
          * Initializes a new instance of the Command class.
          *
          * @param context   The driving context for converting the command.
          */
         constructor(context: ConversionContext);
         /**
+         * @returns Whether this command's lines should end with a semicolon.
+         */
+        getAddsSemicolon(): boolean;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          */
-        abstract render(parameters: string[]): CommandResult[];
+        abstract render(parameters: string[]): LineResults;
         /**
          * Adds a portion of raw syntax that may contain endlines.
          *
@@ -1631,7 +1815,7 @@ declare namespace GLS.Commands {
          */
         protected requireParametersLength(parameters: string[], amount: number): void;
         /**
-         * Throws an error if too many parameters are passed.
+         * Throws an error if not enough parameters are passed.
          *
          * @param parameters   Parameters passed to a command.
          * @param minimum   The minimum allowed number of parameters.
@@ -1668,30 +1852,6 @@ declare namespace GLS.Commands {
 }
 declare namespace GLS.Commands {
     /**
-     * A single line of code converted from raw GLS syntax.
-     */
-    class CommandResult {
-        /**
-         * How much indentation will change from the result.
-         */
-        indentation: number;
-        /**
-         * Text contents of the result.
-         *
-         * @remarks If "\0", this isn't added.
-         */
-        text: string;
-        /**
-         * Initializes a new instance of the CommandResult class.
-         *
-         * @param text   Text contents of the result.
-         * @param indentation   How much indentation will change from the result.
-         */
-        constructor(text: string, indentation: number);
-    }
-}
-declare namespace GLS.Commands {
-    /**
      * Constants used for creating commands.
      */
     class CommandStrings {
@@ -1716,11 +1876,59 @@ declare namespace GLS.Commands {
         static generateRawCommand(inputs: string[]): string;
     }
 }
+declare namespace GLS.Commands.Parameters {
+    /**
+     * Some number of repeating parameters.
+     */
+    class RepeatingParameters extends Parameter {
+        /**
+         * Parameters contained inside.
+         */
+        parameters: Parameter[];
+        /**
+         * Initializes a new instance of the Parameter class.
+         *
+         * @param descriptor   A plain-text description of the parameter.
+         * @param parameters   Parameters contained inside.
+         */
+        constructor(description: string, parameters: Parameter[]);
+    }
+}
+declare namespace GLS.Commands.Parameters {
+    /**
+     * A single named parameter.
+     */
+    class SingleParameter extends Parameter {
+        /**
+         * The name of this parameter.
+         */
+        name: string;
+        /**
+         * Whether this must be provided.
+         */
+        required: boolean;
+        /**
+         * Initializes a new instance of the Parameter class.
+         *
+         * @param descriptor   A plain-text description of the parameter.
+         * @param parameters   Parameters contained inside.
+         */
+        constructor(name: string, description: string, required: boolean);
+    }
+}
 declare namespace GLS.Commands {
     /**
      * A command for initializing a new array.
      */
     class ArrayInitializeCommand extends Command {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
         /**
          * Renders the command for a language with the given parameters.
          *
@@ -1729,23 +1937,74 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (type[, item, ...]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
     /**
-     * A command for a retrieving the length of an array.
+     * A command for performing a native call, such as Array::push.
      */
-    class ArrayLengthCommand extends Command {
+    abstract class NativeCallCommand extends Command {
+        /**
+         * Metadata on how to perform the native call.
+         */
+        protected nativeCallProperties: Languages.Properties.NativeCallProperties;
+        /**
+         * Initializes a new instance of the Command class.
+         *
+         * @param context   The driving context for converting the command.
+         */
+        constructor(context: ConversionContext);
         /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any number of
          *                     items to initialize in the Array.
          * @returns Line(s) of code in the language.
-         * @remarks Usage: (array).
+         * @remarks Usage: (name[, parameters, ...]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
+        /**
+         * @returns Metadata on how to perform the native call.
+         */
+        protected abstract retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
+        /**
+         * Renders the native call as a static.
+         *
+         * @param parameters   The command's name, followed by any number of
+         *                     items to initialize in the Array.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (name[, parameters, ...]).
+         */
+        private renderAsStatic(parameters);
+        /**
+         * Renders the native call as a member.
+         *
+         * @param parameters   The command's name, followed by any number of
+         *                     items to initialize in the Array.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (name[, parameters, ...]).
+         */
+        private renderAsMember(parameters);
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for a retrieving the length of an array.
+     */
+    class ArrayLengthCommand extends NativeCallCommand {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * @returns Metadata on how to perform the native call.
+         */
+        protected retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
     }
 }
 declare namespace GLS.Commands {
@@ -1760,7 +2019,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1769,13 +2028,21 @@ declare namespace GLS.Commands {
      */
     class CommentBlockCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (contents, ...).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1790,7 +2057,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1805,7 +2072,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1820,7 +2087,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1835,7 +2102,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1844,10 +2111,18 @@ declare namespace GLS.Commands {
      */
     class CommentDocTagCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * A maximum length for tag lines.
          *
-         * @todo Calculate this using language style.
-         * @todo Factor in indentation from this.context, if possible.
+         * @todo Calculate this using language style (#16).
+         * @todo Factor in indentation from this.context (#17).
          */
         private MaximumLineLength;
         /**
@@ -1857,7 +2132,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (tag[, parameter][, comments]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Renders a JSDoc-like command for a language with the given parameters.
          *
@@ -1923,13 +2198,21 @@ declare namespace GLS.Commands {
      */
     class CommentLineCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (contents, ...).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1944,7 +2227,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1953,13 +2236,21 @@ declare namespace GLS.Commands {
      */
     class ConcatenateCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (string, string[, string, ...])
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1968,13 +2259,21 @@ declare namespace GLS.Commands {
      */
     class ElseIfStartCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (conditional).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1989,7 +2288,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -1998,13 +2297,21 @@ declare namespace GLS.Commands {
      */
     class FileEndCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (fileName).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2013,13 +2320,21 @@ declare namespace GLS.Commands {
      */
     class FileStartCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (fileName).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2034,7 +2349,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2043,13 +2358,21 @@ declare namespace GLS.Commands {
      */
     class ForEachKeyStartCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (container, keyName, keyType).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Renders a Ruby-style method iteration.
          *
@@ -2057,7 +2380,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (container, keyName, keyType).
          */
-        renderForEachAsMethod(parameters: string[]): CommandResult[];
+        renderForEachAsMethod(parameters: string[]): LineResults;
         /**
          * Renders a traditional foreach loop.
          *
@@ -2065,7 +2388,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (container, keyName, keyType).
          */
-        renderForEachAsLoop(parameters: string[]): CommandResult[];
+        renderForEachAsLoop(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2074,13 +2397,21 @@ declare namespace GLS.Commands {
      */
     class ForEachPairStartCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (container, pairName, keyName, keyType, valueName, valueType).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Renders a Ruby-style method iteration.
          *
@@ -2088,7 +2419,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (container, pairName, keyName, keyType, valueName, valueType).
          */
-        renderForEachAsMethod(parameters: string[]): CommandResult[];
+        renderForEachAsMethod(parameters: string[]): LineResults;
         /**
          * Renders a traditional foreach loop.
          *
@@ -2096,7 +2427,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (container, pairName, keyName, keyType, valueName, valueType).
          */
-        renderForEachAsLoop(parameters: string[]): CommandResult[];
+        renderForEachAsLoop(parameters: string[]): LineResults;
         /**
          * Adds the retrieval of a pair's key.
          *
@@ -2129,13 +2460,21 @@ declare namespace GLS.Commands {
      */
     class ForNumbersStartCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (name, type, start, end).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Renders a Pythonic ranged loop.
          *
@@ -2143,7 +2482,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (name, type, start, end).
          */
-        renderStartRanged(parameters: string[]): string;
+        private renderStartRanged(parameters);
         /**
          * Renders a traditional loop.
          *
@@ -2151,7 +2490,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (name, type, start, end).
          */
-        renderStartLoop(parameters: string[]): string;
+        private renderStartLoop(parameters);
     }
 }
 declare namespace GLS.Commands {
@@ -2166,7 +2505,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2189,13 +2528,21 @@ declare namespace GLS.Commands {
      */
     class FunctionStartCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (name, returnType[, parameterName, parameterType, ...]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Generates a string for a parameter.
          *
@@ -2219,13 +2566,21 @@ declare namespace GLS.Commands {
      */
     class IfStartCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (conditional).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2234,13 +2589,21 @@ declare namespace GLS.Commands {
      */
     class IndexCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (container, index).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2249,6 +2612,14 @@ declare namespace GLS.Commands {
      */
     class ListInitializeCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any number of
@@ -2256,37 +2627,45 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (type[, item, ...]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
     /**
-     * A command for a retrieving the length of a list.
+     * A command for retrieving the length of a list.
      */
-    class ListLengthCommand extends Command {
+    class ListLengthCommand extends NativeCallCommand {
         /**
-         * Renders the command for a language with the given parameters.
-         *
-         * @param parameters   The command's name, followed by any parameters.
-         * @returns Line(s) of code in the language.
-         * @remarks Usage: (list).
+         * Information on parameters this command takes in.
          */
-        render(parameters: string[]): CommandResult[];
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * @returns Metadata on how to perform the native call.
+         */
+        protected retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
     }
 }
 declare namespace GLS.Commands {
     /**
      * A command for a list push statement.
      */
-    class ListPushCommand extends Command {
+    class ListPushCommand extends NativeCallCommand {
         /**
-         * Renders the command for a language with the given parameters.
-         *
-         * @param parameters   The command's name, followed by any parameters.
-         * @returns Line(s) of code in the language.
-         * @remarks Usage: (array, item).
+         * Information on parameters this command takes in.
          */
-        render(parameters: string[]): CommandResult[];
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * @returns Metadata on how to perform the native call.
+         */
+        protected retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
     }
 }
 declare namespace GLS.Commands {
@@ -2295,13 +2674,21 @@ declare namespace GLS.Commands {
      */
     class LiteralCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
-         * @remarks Usage: (contents, ...).
+         * @remarks Usage: ([contents, ...]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2316,7 +2703,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2331,7 +2718,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2340,13 +2727,21 @@ declare namespace GLS.Commands {
      */
     class NotCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (value).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2355,20 +2750,13 @@ declare namespace GLS.Commands {
      */
     class OperationCommand extends Command {
         /**
-         * Renders the command for a language with the given parameters.
-         *
-         * @param parameters   The command's name, followed by any parameters.
-         * @returns Line(s) of code in the language.
-         * @remarks Usage: (value, operator, value[, operator, value, ...]).
+         * Information on parameters this command takes in.
          */
-        render(parameters: string[]): CommandResult[];
-    }
-}
-declare namespace GLS.Commands {
-    /**
-     * A command for printing an inline operation.
-     */
-    class OperationInlineCommand extends Command {
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
         /**
          * Renders the command for a language with the given parameters.
          *
@@ -2376,7 +2764,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: (value, operator, value[, operator, value, ...]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2385,13 +2773,21 @@ declare namespace GLS.Commands {
      */
     class OperatorCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (operator).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Converts a raw operator into the language's equivalent.
          *
@@ -2407,13 +2803,21 @@ declare namespace GLS.Commands {
      */
     class ParenthesisCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (contents, ...).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2422,13 +2826,21 @@ declare namespace GLS.Commands {
      */
     class PrintCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
-         * @remarks Usage: (contents).
+         * @remarks Usage: ([contents]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2437,13 +2849,59 @@ declare namespace GLS.Commands {
      */
     class ReturnCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: ([value]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for a searching for a substring in a string.
+     */
+    class StringIndexCommand extends NativeCallCommand {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * @returns Metadata on how to perform the native call.
+         */
+        protected retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for a retrieving the length of an string.
+     */
+    class StringLengthCommand extends NativeCallCommand {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * @returns Metadata on how to perform the native call.
+         */
+        protected retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
     }
 }
 declare namespace GLS.Commands {
@@ -2458,7 +2916,7 @@ declare namespace GLS.Commands {
          * @returns Line(s) of code in the language.
          * @remarks Usage: ().
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2467,13 +2925,21 @@ declare namespace GLS.Commands {
      */
     class TypeCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (type).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Converts a raw type name into the language's equivalent.
          *
@@ -2514,13 +2980,21 @@ declare namespace GLS.Commands {
      */
     class ValueCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (value).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Converts a raw value into the language's equivalent.
          *
@@ -2536,13 +3010,21 @@ declare namespace GLS.Commands {
      */
     class VariableCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (name, type[, value]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2551,13 +3033,21 @@ declare namespace GLS.Commands {
      */
     class VariableInlineCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (name, type[, value]).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
         /**
          * Renders the "= value" part of a command.
          *
@@ -2580,13 +3070,21 @@ declare namespace GLS.Commands {
      */
     class WhileStartCommand extends Command {
         /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (conditional).
          */
-        render(parameters: string[]): CommandResult[];
+        render(parameters: string[]): LineResults;
     }
 }
 declare namespace GLS.Commands {
@@ -2605,13 +3103,26 @@ declare namespace GLS.Commands {
          */
         constructor(context: ConversionContext);
         /**
+         * @returns Commands, keyed by their GLS aliases.
+         */
+        getCommands(): {
+            [i: string]: Command;
+        };
+        /**
+         * Retrieves the command under the given alias.
+         *
+         * @param name   The alias of a command.
+         * @returns The command under the given alias.
+         */
+        getCommand(alias: string): Command;
+        /**
          * Renders a command in a language.
          *
          * @param language   The language to render the command in.
          * @param command   A command name, followed by parameters for it.
          * @returns Line(s) of code in the language.
          */
-        renderCommand(parameters: string[]): CommandResult[];
+        renderCommand(parameters: string[]): Commands.LineResults;
     }
 }
 declare namespace GLS {
@@ -2639,14 +3150,14 @@ declare namespace GLS {
          * @param line   A line of raw GLS syntax.
          * @returns The equivalent lines of code in the language.
          */
-        parseCommand(line: string): Commands.CommandResult[];
+        parseCommand(line: string): Commands.LineResults;
         /**
          * Renders a parsed line into the equivalent language code.
          *
          * @param lineParsed   A parsed line from raw GLS syntax.
          * @returns The equivalent lines of code in the language.
          */
-        renderParsedCommand(lineParsed: string[]): Commands.CommandResult[];
+        renderParsedCommand(lineParsed: string[]): Commands.LineResults;
         /**
          * Parses a sub-command of GLS syntax from within a full line.
          *
@@ -2698,7 +3209,7 @@ declare namespace GLS {
         /**
          * Initializes a new instance of the ConversionContext class.
          *
-         * @param language
+         * @param language   The language this context is converting GLS code into.
          */
         constructor(language: Languages.Language);
         /**
@@ -2726,7 +3237,7 @@ declare namespace GLS {
          * @param lineParsed   A parsed line from raw GLS syntax.
          * @returns The equivalent lines of code in the language.
          */
-        convertParsed(parameters: string[]): Commands.CommandResult[];
+        convertParsed(parameters: string[]): Commands.LineResults;
         /**
          * Generates spaces equivalent to 4-space code tabbing.
          *

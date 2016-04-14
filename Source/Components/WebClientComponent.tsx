@@ -4,6 +4,7 @@ import * as React from "react";
 
 import EditorComponent from "./EditorComponent";
 import PreviewComponent from "./PreviewComponent";
+import Samples from "../Samples";
 
 /**
  * Properties for a WebClientComponent.
@@ -18,6 +19,11 @@ interface IWebClientComponentState {
      * Which language to convert GLS syntax into.
      */
     outputLanguage: string;
+
+    /**
+     * The most recently selected sample code.
+     */
+    sampleName: string;
 
     /**
      * The current editor session.
@@ -39,37 +45,20 @@ export default class WebClientComponent extends React.Component<IWebClientCompon
      */
     private static DefaultState: IWebClientComponentState = {
         outputLanguage: "CSharp",
+        sampleName: "Default",
         sessionId: performance.now(),
-        sourceLines: [
-            `comment block start`,
-            `comment block : GLS ((General Language Syntax)) is a single syntax`,
-            `comment block : that compiles into real OOP languages.`,
-            `comment block : ---`,
-            `comment block : Write code in the editor,`,
-            `comment block : and see the language output there!`,
-            `comment block end`,
-            ``,
-            `file start : Program`,
-            `    main start`,
-            `        print : ("GLS is awesome!")`,
-            `        `,
-            `        comment line : Variables`,
-            `        variable : foo string`,
-            `        variable : bar number 7`,
-            `        `,
-            `        comment line : Operations`,
-            `        operation : bar (multiply by) 2`,
-            `        operation : bar (decrease by) bar times { parenthesis : { operation inline : 2 plus bar } }`,
-            `        `,
-            `    main end`,
-            `file end : Program`
-        ]
+        sourceLines: Samples.Default
     };
 
     /**
      * A key to store state under in local storage.
      */
     private static StateLocalStorageKey: string = "GLS::WebClient::State";
+
+    /**
+     * 
+     */
+    private static SampleKeys: string[] = Object.keys(Samples);
 
     /**
      * The current internal state of the component.
@@ -121,19 +110,36 @@ export default class WebClientComponent extends React.Component<IWebClientCompon
     private renderOptions(): JSX.Element {
         return (
             <div className="option-buttons">
+                <label>Select a sample:</label>
+                {this.renderSamplesSelect()}
                 <input onClick={() => this.reset()} type="button" value="reset" />
             </div>);
     }
 
     /**
-     * Resets state back to the default.
+     * 
      */
-    private reset(): void {
+    private renderSamplesSelect(): JSX.Element {
+        return (
+            <select
+                defaultValue={this.state.sampleName}
+                onChange={event => this.reset((event.target as HTMLSelectElement).value)}>
+                {WebClientComponent.SampleKeys.map(sampleName => <option value={sampleName}>{sampleName}</option>)}
+            </select>);
+    }
+
+    /**
+     * Resets state for sample code.
+     * 
+     * @param sampleName   The name of the sample to use (by default, the current one).
+     */
+    private reset(sampleName: string = this.state.sampleName): void {
         this.setState(
             {
                 outputLanguage: this.state.outputLanguage,
-                sessionId: performance.now(), 
-                sourceLines: WebClientComponent.DefaultState.sourceLines
+                sampleName: sampleName,
+                sessionId: performance.now(),
+                sourceLines: sampleName ? Samples[sampleName] : this.state.sourceLines
             },
             () => this.receiveNewEditorValue(this.state.sourceLines));
     }

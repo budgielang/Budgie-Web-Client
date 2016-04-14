@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import CommandsListComponent from "./Commands/CommandsListComponent";
+
 /**
  * Properties for an EditorComponent.
  */
@@ -33,10 +35,22 @@ export default class EditorComponent extends React.Component<IEditorComponentPro
      */
     public render(): JSX.Element {
         return (
-            <textarea
-                className="component editor-component"
-                defaultValue={this.props.defaultValue}
-                onChange={event => this.receiveNewValue(event)} />);
+            <div className="component editor-component">
+                <textarea
+                    className="editor-textarea"
+                    defaultValue={this.props.defaultValue}
+                    onChange={event => this.receiveNewValue(event)} />
+                {this.renderCommandsList()}
+            </div>);
+    }
+
+    /**
+     * Renders the command list.
+     * 
+     * @returns The rendered command list.
+     */
+    private renderCommandsList(): JSX.Element {
+        return <CommandsListComponent />;
     }
 
     /**
