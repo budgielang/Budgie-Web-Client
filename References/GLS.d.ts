@@ -1255,6 +1255,115 @@ declare namespace GLS.Languages {
 }
 declare namespace GLS.Languages {
     /**
+     * A summary of information for the Java language.
+     */
+    class Java extends CLikeLanguage {
+        /**
+         * Generates metadata on arrays.
+         *
+         * @param arrays   A property container for metadata on arrays.
+         */
+        protected generateArrayProperties(arrays: Properties.ArrayProperties): void;
+        /**
+         * Generates metadata on booleans.
+         *
+         * @param booleans   A property container for metadata on booleans.
+         */
+        protected generateBooleanProperties(booleans: Properties.BooleanProperties): void;
+        /**
+         * Generates metadata on classes.
+         *
+         * @param classes   A property container for metadata on classes.
+         */
+        protected generateClassProperties(classes: Properties.ClassProperties): void;
+        /**
+         * Generates metadata on class generics.
+         *
+         * @param generics   A property container for metadata on class generics.
+         */
+        protected generateClassGenericProperties(generics: Properties.ClassGenericProperties): void;
+        /**
+         * Generates metadata on comments.
+         *
+         * @param comments   A property container for metadata on comments.
+         */
+        protected generateCommentProperties(comments: Properties.CommentProperties): void;
+        /**
+         * Generates metadata on conditionals.
+         *
+         * @param conditionals   A property container for metadata on conditionals.
+         */
+        protected generateConditionalProperties(conditionals: Properties.ConditionalProperties): void;
+        /**
+         * Generates metadata on dictionaries.
+         *
+         * @param dictionaries   A property container for metadata on dictionaries.
+         */
+        protected generateDictionaryProperties(dictionaries: Properties.DictionaryProperties): void;
+        /**
+         * Generates metadata on exceptions.
+         *
+         * @param exceptions   A property container for metadata on exceptions.
+         */
+        protected generateExceptionProperties(exceptions: Properties.ExceptionProperties): void;
+        /**
+         * Generates general metadata.
+         *
+         * @param general   A property container for general metadata.
+         */
+        protected generateGeneralProperties(general: Properties.GeneralProperties): void;
+        /**
+         * Generates metadata on functions.
+         *
+         * @param functions   A property container for metadata on functions.
+         */
+        protected generateFunctionProperties(functions: Properties.FunctionProperties): void;
+        /**
+         * Generates metadata on lists.
+         *
+         * @param lists   A property container for metadata on lists.
+         */
+        protected generateListProperties(lists: Properties.ListProperties): void;
+        /**
+         * Generates metadata on loops.
+         *
+         * @param loops   A property container for metadata on loops.
+         */
+        protected generateLoopProperties(loops: Properties.LoopProperties): void;
+        /**
+         * Generates metadata on numbers.
+         *
+         * @param numbers   A property container for metadata on numbers.
+         */
+        protected generateNumberProperties(numbers: Properties.NumberProperties): void;
+        /**
+         * Generates metadata on output.
+         *
+         * @param output   A property container for metadata on output.
+         */
+        protected generateOutputProperties(output: Properties.OutputProperties): void;
+        /**
+         * Generates metadata on strings.
+         *
+         * @param strings   A property container for metadata on strings.
+         */
+        protected generateStringProperties(strings: Properties.StringProperties): void;
+        /**
+         * Generates metadata on style.
+         *
+         * @param style   A property container for metadata on style.
+         */
+        protected generateStyleProperties(style: Properties.StyleProperties): void;
+        /**
+         * Generates metadata on variables.
+         *
+         * @param variables   A property container for metadata on variables.
+         */
+        protected generateVariableProperties(variables: Properties.VariableProperties): void;
+    }
+}
+declare namespace GLS.Languages {
+    /**
      * A summary of information for a Pythonic language.
      */
     abstract class PythonicLanguage extends Language {

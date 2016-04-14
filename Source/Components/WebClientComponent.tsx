@@ -91,6 +91,7 @@ export default class WebClientComponent extends React.Component<IWebClientCompon
                         value={this.state.outputLanguage}
                         onChange={event => this.receiveNewOutputLanguage(event)}>
                         <option value="CSharp">CSharp</option>
+                        <option value="Java">Java</option>
                         <option value="Python">Python</option>
                         <option value="Ruby">Ruby</option>
                         <option value="TypeScript">TypeScript</option>

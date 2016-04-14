@@ -1044,6 +1044,264 @@ var GLS;
         Languages.CSharp = CSharp;
     })(Languages = GLS.Languages || (GLS.Languages = {}));
 })(GLS || (GLS = {}));
+/// <reference path="CLikeLanguage.ts" />
+/// <reference path="Properties/ArrayProperties.ts" />
+/// <reference path="Properties/BooleanProperties.ts" />
+/// <reference path="Properties/ClassProperties.ts" />
+/// <reference path="Properties/ClassGenericProperties.ts" />
+/// <reference path="Properties/ClassMemberProperties.ts" />
+/// <reference path="Properties/CommentProperties.ts" />
+/// <reference path="Properties/ConditionalProperties.ts" />
+/// <reference path="Properties/DictionaryProperties.ts" />
+/// <reference path="Properties/ExceptionProperties.ts" />
+/// <reference path="Properties/FunctionProperties.ts" />
+/// <reference path="Properties/GeneralProperties.ts" />
+/// <reference path="Properties/LambdaProperties.ts" />
+/// <reference path="Properties/LoopProperties.ts" />
+/// <reference path="Properties/NativeCallProperties.ts" />
+/// <reference path="Properties/NumberProperties.ts" />
+/// <reference path="Properties/OperatorProperties.ts" />
+/// <reference path="Properties/StringProperties.ts" />
+/// <reference path="Properties/StyleProperties.ts" />
+/// <reference path="Properties/VariableProperties.ts" />
+var GLS;
+(function (GLS) {
+    var Languages;
+    (function (Languages) {
+        "use strict";
+        /**
+         * A summary of information for the Java language.
+         */
+        var Java = (function (_super) {
+            __extends(Java, _super);
+            function Java() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * Generates metadata on arrays.
+             *
+             * @param arrays   A property container for metadata on arrays.
+             */
+            Java.prototype.generateArrayProperties = function (arrays) {
+                arrays.className = "Array";
+                arrays.initializeAsNew = true;
+                arrays.initializeByType = true;
+                arrays.length = Languages.Properties.NativeCallProperties.NewMemberProperty("length()");
+            };
+            /**
+             * Generates metadata on booleans.
+             *
+             * @param booleans   A property container for metadata on booleans.
+             */
+            Java.prototype.generateBooleanProperties = function (booleans) {
+                booleans.className = "boolean";
+            };
+            /**
+             * Generates metadata on classes.
+             *
+             * @param classes   A property container for metadata on classes.
+             */
+            Java.prototype.generateClassProperties = function (classes) {
+                _super.prototype.generateClassProperties.call(this, classes);
+                classes.aliases = {
+                    "boolean": "boolean",
+                    "dictionary": "HashMap",
+                    "list": "ArrayList",
+                    "number": "double"
+                };
+                classes.constructorAsClassName = true;
+                classes.defineInheritanceLeft = " extends ";
+            };
+            /**
+             * Generates metadata on class generics.
+             *
+             * @param generics   A property container for metadata on class generics.
+             */
+            Java.prototype.generateClassGenericProperties = function (generics) {
+                generics.left = "<";
+                generics.middle = ", ";
+                generics.right = ">";
+            };
+            /**
+             * Generates metadata on comments.
+             *
+             * @param comments   A property container for metadata on comments.
+             */
+            Java.prototype.generateCommentProperties = function (comments) {
+                _super.prototype.generateCommentProperties.call(this, comments);
+                comments.docEnd = " */";
+                comments.docLineEnd = "";
+                comments.docLineStart = " * ";
+                comments.docTagAliases = {
+                    "note": "remarks",
+                    "parameter": "param",
+                    "returns": "returns",
+                    "summary": "",
+                    "todo": "todo"
+                };
+                comments.docTagsWithParameters = {
+                    "summary": "\0",
+                    "parameter": ""
+                };
+                comments.docTagEnd = " ";
+                comments.docTagSpaceAfter = "  ";
+                comments.docTagStart = "@";
+                comments.docStart = "/**";
+            };
+            /**
+             * Generates metadata on conditionals.
+             *
+             * @param conditionals   A property container for metadata on conditionals.
+             */
+            Java.prototype.generateConditionalProperties = function (conditionals) {
+                _super.prototype.generateConditionalProperties.call(this, conditionals);
+                conditionals.continueLeft = "} ";
+                conditionals.continueRight = " {";
+                conditionals.startRight = ") {";
+            };
+            /**
+             * Generates metadata on dictionaries.
+             *
+             * @param dictionaries   A property container for metadata on dictionaries.
+             */
+            Java.prototype.generateDictionaryProperties = function (dictionaries) {
+                dictionaries.className = "HashMap";
+                dictionaries.initializeStart = "{";
+                dictionaries.initializeEnd = "}";
+                dictionaries.initializePairLeft = "{ ";
+                dictionaries.initializePairMiddle = ", ";
+                dictionaries.initializePairRight = "}";
+                dictionaries.keyChecker = "containsKey";
+            };
+            /**
+             * Generates metadata on exceptions.
+             *
+             * @param exceptions   A property container for metadata on exceptions.
+             */
+            Java.prototype.generateExceptionProperties = function (exceptions) {
+                exceptions.className = "Exception";
+            };
+            /**
+             * Generates general metadata.
+             *
+             * @param general   A property container for general metadata.
+             */
+            Java.prototype.generateGeneralProperties = function (general) {
+                general.name = "Java";
+                general.extension = ".java";
+            };
+            /**
+             * Generates metadata on functions.
+             *
+             * @param functions   A property container for metadata on functions.
+             */
+            Java.prototype.generateFunctionProperties = function (functions) {
+                _super.prototype.generateFunctionProperties.call(this, functions);
+                functions.defineStartLeft = " ";
+                functions.defineStartRight = " {";
+            };
+            /**
+             * Generates metadata on lists.
+             *
+             * @param lists   A property container for metadata on lists.
+             */
+            Java.prototype.generateListProperties = function (lists) {
+                lists.className = "ArrayList";
+                lists.push = Languages.Properties.NativeCallProperties.NewMemberFunction("add");
+            };
+            /**
+             * Generates metadata on loops.
+             *
+             * @param loops   A property container for metadata on loops.
+             */
+            Java.prototype.generateLoopProperties = function (loops) {
+                _super.prototype.generateLoopProperties.call(this, loops);
+                loops.foreach = "for";
+                loops.forEachGetKeys = ".keySet()";
+                loops.forEachGetPairs = ".entrySet()";
+                loops.forEachMiddle = " : ";
+                loops.forEachPairsAsPair = true;
+                loops.forEachPairsPairClass = "Map.Entry";
+                loops.forEachPairsRetrieveKey = ".getKey()";
+                loops.forEachPairsRetrieveValue = ".getValue()";
+                loops.forEachRight = "";
+            };
+            /**
+             * Generates metadata on numbers.
+             *
+             * @param numbers   A property container for metadata on numbers.
+             */
+            Java.prototype.generateNumberProperties = function (numbers) {
+                numbers.className = "double";
+            };
+            /**
+             * Generates metadata on output.
+             *
+             * @param output   A property container for metadata on output.
+             */
+            Java.prototype.generateOutputProperties = function (output) {
+                output.print = "System.out.println";
+            };
+            /**
+             * Generates metadata on strings.
+             *
+             * @param strings   A property container for metadata on strings.
+             */
+            Java.prototype.generateStringProperties = function (strings) {
+                _super.prototype.generateStringProperties.call(this, strings);
+                strings.className = "string";
+                strings.index = Languages.Properties.NativeCallProperties.NewMemberFunction("indexOf");
+                strings.length = Languages.Properties.NativeCallProperties.NewMemberProperty("length()");
+            };
+            /**
+             * Generates metadata on style.
+             *
+             * @param style   A property container for metadata on style.
+             */
+            Java.prototype.generateStyleProperties = function (style) {
+                _super.prototype.generateStyleProperties.call(this, style);
+                style.fileEndLines = [];
+                style.fileIndentation = 0;
+                style.fileStartLines = [
+                    "import java.lang.System;",
+                    "import java.util.*;",
+                    "",
+                    "package {0};",
+                    "",
+                ];
+                style.mainEndLines = [
+                    "    }",
+                    "}"
+                ];
+                style.mainIndentation = 2;
+                style.mainStartLines = [
+                    "class Program {",
+                    "    public static void Main() {",
+                ];
+                style.printEnd = ")";
+                style.printStart = "System.out.println(";
+            };
+            /**
+             * Generates metadata on variables.
+             *
+             * @param variables   A property container for metadata on variables.
+             */
+            Java.prototype.generateVariableProperties = function (variables) {
+                _super.prototype.generateVariableProperties.call(this, variables);
+                variables.aliases = {
+                    "infinity": "double.POSITIVE_INFINITY"
+                };
+                variables.castLeft = "(";
+                variables.castRight = ")";
+                variables.declaration = "";
+                variables.explicitTypes = true;
+                variables.null = "null";
+            };
+            return Java;
+        })(Languages.CLikeLanguage);
+        Languages.Java = Java;
+    })(Languages = GLS.Languages || (GLS.Languages = {}));
+})(GLS || (GLS = {}));
 /// <reference path="Language.ts" />
 /// <reference path="Properties/ArrayProperties.ts" />
 /// <reference path="Properties/BooleanProperties.ts" />

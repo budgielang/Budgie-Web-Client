@@ -52,6 +52,7 @@ export default class PreviewComponent extends React.Component<IPreviewComponentP
      */
     private static Languages: { [i: string]: GLS.Languages.Language } = {
         CSharp: new GLS.Languages.CSharp(),
+        Java: new GLS.Languages.Java(),
         Python: new GLS.Languages.Python(),
         Ruby: new GLS.Languages.Ruby(),
         TypeScript: new GLS.Languages.TypeScript()
