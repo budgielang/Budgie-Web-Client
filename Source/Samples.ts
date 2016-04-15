@@ -74,7 +74,7 @@ var Samples = {
         `file start : Program`,
         `    main start`,
         `        comment line : Conditionals`,
-        `        if start : { operation : 2 plus 2 (equual to) 4 }`,
+        `        if start : { operation : 2 plus 2 (equal to) 4 }`,
         `            print : ("Seems legit")`,
         `        else if start : { operation : 2 plus 2 (equal to) 5}`,
         `            print : ("That seems wrong...")`,
