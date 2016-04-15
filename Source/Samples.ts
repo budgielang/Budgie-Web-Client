@@ -56,7 +56,7 @@ var Samples = {
         `        comment line : Operation chains`,
         `        operation : foo (multiply by) 2`,
         `        operation : foo (decrease by) bar times { parenthesis : { operation : bar minus 3 } }`,
-        `        variable : bar number { operation : foo (divide by) 3 plus 4 times 7 (multiply by ) foo }`,
+        `        variable : bar number { operation : foo (divide by) 3 plus 4 times foo }`,
         `        `,
         `        `,
         `    main end`,

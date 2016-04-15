@@ -5214,8 +5214,8 @@ var GLS;
              * @returns   The "= value" part of a command.
              */
             VariableInlineCommand.prototype.renderVariableValue = function (valueRaw) {
-                var operator = this.context.convert(["operator : equals"])[0];
-                var value = this.context.convert(["value : " + valueRaw])[0];
+                var operator = this.context.convertCommon("operator", "equals");
+                var value = this.context.convertCommon("value", valueRaw);
                 return operator + " " + value;
             };
             /**
