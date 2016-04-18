@@ -401,9 +401,9 @@ declare namespace GLS.Languages.Properties {
          */
         initializeEnd: string;
         /**
-         * How to start initializing a new dictionary's values.
+         * How to end a new dictionary's in-place value.
          */
-        initializeStart: string;
+        initializePairComma: string;
         /**
          * How to start an in-place pair initialization.
          */
@@ -417,9 +417,25 @@ declare namespace GLS.Languages.Properties {
          */
         initializePairRight: string;
         /**
+         * How to start initializing a new dictionary's values.
+         */
+        initializeStart: string;
+        /**
          * The name of the function to check if a key exists.
          */
         keyChecker: string;
+        /**
+         * How to start displaying types in a dictionary type.
+         */
+        typeLeft: string;
+        /**
+         * Characters in the middle of types in a dictionary type.
+         */
+        typeMiddle: string;
+        /**
+         * How to end displaying types in a dictionary type.
+         */
+        typeRight: string;
     }
 }
 declare namespace GLS.Languages.Properties {
@@ -1168,12 +1184,6 @@ declare namespace GLS.Languages {
          */
         protected generateClassProperties(classes: Properties.ClassProperties): void;
         /**
-         * Generates metadata on class generics.
-         *
-         * @param generics   A property container for metadata on class generics.
-         */
-        protected generateClassGenericProperties(generics: Properties.ClassGenericProperties): void;
-        /**
          * Generates metadata on comments.
          *
          * @param comments   A property container for metadata on comments.
@@ -1276,12 +1286,6 @@ declare namespace GLS.Languages {
          * @param classes   A property container for metadata on classes.
          */
         protected generateClassProperties(classes: Properties.ClassProperties): void;
-        /**
-         * Generates metadata on class generics.
-         *
-         * @param generics   A property container for metadata on class generics.
-         */
-        protected generateClassGenericProperties(generics: Properties.ClassGenericProperties): void;
         /**
          * Generates metadata on comments.
          *
@@ -1487,6 +1491,12 @@ declare namespace GLS.Languages {
          */
         protected generateCommentProperties(comments: Properties.CommentProperties): void;
         /**
+         * Generates properties on dictionaries.
+         *
+         * @param dictionaries   The property container for metadata on dictionaries.
+         */
+        protected generateDictionaryProperties(dictionaries: Properties.DictionaryProperties): void;
+        /**
          * Generates general metadata.
          *
          * @param general   A property container for general metadata.
@@ -1577,6 +1587,12 @@ declare namespace GLS.Languages {
          * @param comments   A property container for metadata on comments.
          */
         protected generateCommentProperties(comments: Properties.CommentProperties): void;
+        /**
+         * Generates properties on dictionaries.
+         *
+         * @param dictionaries   The property container for metadata on dictionaries.
+         */
+        protected generateDictionaryProperties(dictionaries: Properties.DictionaryProperties): void;
         /**
          * Generates general metadata.
          *
@@ -1758,6 +1774,10 @@ declare namespace GLS.Languages {
          */
         CSharp: CSharp;
         /**
+         * An instance of the Java class.
+         */
+        Java: Java;
+        /**
          * An instance of the CSharp class.
          */
         Python: Python;
@@ -1773,6 +1793,10 @@ declare namespace GLS.Languages {
          * Known languages, keyed by name.
          */
         private languagesByName;
+        /**
+         * @returns Names of languages in the listing.
+         */
+        getLanguageNames(): string[];
         /**
          * Adds a language to the listing.
          *
@@ -2358,6 +2382,86 @@ declare namespace GLS.Commands {
          * @param parameters   The command's name, followed by any parameters.
          * @returns Line(s) of code in the language.
          * @remarks Usage: (string, string[, string, ...])
+         */
+        render(parameters: string[]): LineResults;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for the end of a new dictionary.
+     */
+    class DictionaryNewEndCommand extends Command {
+        /**
+         * Renders the command for a language with the given parameters.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: ().
+         */
+        render(parameters: string[]): LineResults;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for starting to initialize a new dictionary.
+     */
+    class DictionaryNewStartCommand extends Command {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * Renders the command for a language with the given parameters.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (keyType, valueType).
+         */
+        render(parameters: string[]): LineResults;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for an in-place dictionary initialization pair.
+     */
+    class DictionaryPairCommand extends Command {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * Renders the command for a language with the given parameters.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (keyType, valueType[, comma]).
+         */
+        render(parameters: string[]): LineResults;
+        /**
+         * Renders a quoted (string) or unquoted (variable) pair key.
+         *
+         * @param keyRaw   The raw key used for it.
+         * @returns The key, wrapped as necessary.
+         * @todo Add wrapping brackets as needed (research for Python, Ruby).
+         */
+        private renderKey(keyRaw);
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for declaring a dictionary type.
+     */
+    class DictionaryTypeCommand extends Command {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * Renders the command for a language with the given parameters.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (keyType, valueType).
          */
         render(parameters: string[]): LineResults;
     }
@@ -3168,6 +3272,29 @@ declare namespace GLS.Commands {
 }
 declare namespace GLS.Commands {
     /**
+     * A command for the start of declaring a variable.
+     */
+    class VariableStartCommand extends Command {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * Renders the command for a language with the given parameters.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (name, type, value).
+         */
+        render(parameters: string[]): LineResults;
+    }
+}
+declare namespace GLS.Commands {
+    /**
      * A command for the end of a while loop.
      */
     class WhileEndCommand extends BlockEndCommand {
@@ -3354,5 +3481,24 @@ declare namespace GLS {
          * @returns An all-spaces String of length = amount * 4.
          */
         private generateTabs(amount);
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for initializing a new dictionary.
+     */
+    class DictionaryNewCommand extends Command {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * Renders the command for a language with the given parameters.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (keyType, valueType).
+         */
+        render(parameters: string[]): LineResults;
     }
 }

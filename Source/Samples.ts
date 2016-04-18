@@ -100,7 +100,32 @@ var Samples = {
         `file end : Program`
     ],
     Dictionaries: [
-        `comment line : coming soon!`
+        `comment block start`,
+        `comment block : GLS ((General Language Syntax)) is a single syntax`,
+        `comment block : that compiles into common OOP languages.`,
+        `comment block : ---`,
+        `comment block : Write code in the editor,`,
+        `comment block : and see the language output in real time!`,
+        `comment block end`,
+        ``,
+        `file start : Program`,
+        `    main start`,
+        `        comment line : Dictionary types`,
+        `        variable : foo { dictionary type : string int } { dictionary new : string int }`,
+        `        variable : bar { dictionary type : string { dictionary type : string int } } { dictionary new : string { dictionary new : string int } }`,
+        `        `,
+        `        comment line : Indices`,
+        `        operation : { index : foo "baz" } equals 7`,
+        `        variable : qux int { index : foo "baz" }`,
+        `        `,
+        `        comment line : In-place initialization`,
+        `        variable start : aaa { dictionary type : string int } { dictionary new start : string int }`,
+        `            dictionary pair : "bbb" 1 ,`,
+        `            dictionary pair : "ccc" 2 ,`,
+        `            dictionary pair : "ddd" 3`,
+        `        dictionary new end`,
+        `    main end`,
+        `file end : Program`
     ],
     Loops: [
         `comment block start`,

@@ -646,6 +646,7 @@ var GLS;
                 generics.left = "<";
                 generics.middle = ", ";
                 generics.right = ">";
+                generics.used = true;
             };
             /**
              * Generates metadata on classmembers.
@@ -855,16 +856,6 @@ var GLS;
                 classes.defineInheritanceLeft = " : ";
             };
             /**
-             * Generates metadata on class generics.
-             *
-             * @param generics   A property container for metadata on class generics.
-             */
-            CSharp.prototype.generateClassGenericProperties = function (generics) {
-                generics.left = "<";
-                generics.middle = ", ";
-                generics.right = ">";
-            };
-            /**
              * Generates metadata on comments.
              *
              * @param comments   A property container for metadata on comments.
@@ -905,12 +896,17 @@ var GLS;
              */
             CSharp.prototype.generateDictionaryProperties = function (dictionaries) {
                 dictionaries.className = "Dictionary";
-                dictionaries.initializeStart = "{";
+                dictionaries.initializeAsNew = true;
                 dictionaries.initializeEnd = "}";
+                dictionaries.initializePairComma = ",";
                 dictionaries.initializePairLeft = "{ ";
                 dictionaries.initializePairMiddle = ", ";
-                dictionaries.initializePairRight = "}";
+                dictionaries.initializePairRight = " }";
+                dictionaries.initializeStart = "\n{";
                 dictionaries.keyChecker = "ContainsKey";
+                dictionaries.typeLeft = "<";
+                dictionaries.typeMiddle = ", ";
+                dictionaries.typeRight = ">";
             };
             /**
              * Generates metadata on exceptions.
@@ -1113,16 +1109,6 @@ var GLS;
                 classes.defineInheritanceLeft = " extends ";
             };
             /**
-             * Generates metadata on class generics.
-             *
-             * @param generics   A property container for metadata on class generics.
-             */
-            Java.prototype.generateClassGenericProperties = function (generics) {
-                generics.left = "<";
-                generics.middle = ", ";
-                generics.right = ">";
-            };
-            /**
              * Generates metadata on comments.
              *
              * @param comments   A property container for metadata on comments.
@@ -1166,12 +1152,17 @@ var GLS;
              */
             Java.prototype.generateDictionaryProperties = function (dictionaries) {
                 dictionaries.className = "HashMap";
-                dictionaries.initializeStart = "{";
-                dictionaries.initializeEnd = "}";
-                dictionaries.initializePairLeft = "{ ";
+                dictionaries.initializeAsNew = true;
+                dictionaries.initializeEnd = "}}";
+                dictionaries.initializePairComma = "";
+                dictionaries.initializeStart = "() {{";
+                dictionaries.initializePairLeft = "put(";
                 dictionaries.initializePairMiddle = ", ";
-                dictionaries.initializePairRight = "}";
+                dictionaries.initializePairRight = ");";
                 dictionaries.keyChecker = "containsKey";
+                dictionaries.typeLeft = "<";
+                dictionaries.typeMiddle = ", ";
+                dictionaries.typeRight = ">";
             };
             /**
              * Generates metadata on exceptions.
@@ -1385,11 +1376,12 @@ var GLS;
              * @param dictionaries   The property container for metadata on dictionaries.
              */
             PythonicLanguage.prototype.generateDictionaryProperties = function (dictionaries) {
-                dictionaries.initializeStart = "{";
                 dictionaries.initializeEnd = "}";
-                dictionaries.initializePairLeft = "\"";
-                dictionaries.initializePairMiddle = "\": ";
+                dictionaries.initializePairComma = ",";
+                dictionaries.initializePairLeft = "";
+                dictionaries.initializePairMiddle = ": ";
                 dictionaries.initializePairRight = "";
+                dictionaries.initializeStart = "{";
             };
             /**
              * Generates metadata on exceptions.
@@ -1610,6 +1602,15 @@ var GLS;
                 comments.lineRight = "";
             };
             /**
+             * Generates properties on dictionaries.
+             *
+             * @param dictionaries   The property container for metadata on dictionaries.
+             */
+            Python.prototype.generateDictionaryProperties = function (dictionaries) {
+                _super.prototype.generateDictionaryProperties.call(this, dictionaries);
+                dictionaries.className = "dict";
+            };
+            /**
              * Generates general metadata.
              *
              * @param general   A property container for general metadata.
@@ -1815,6 +1816,15 @@ var GLS;
                 comments.docTagStart = "[";
                 comments.lineLeft = "# ";
                 comments.lineRight = "";
+            };
+            /**
+             * Generates properties on dictionaries.
+             *
+             * @param dictionaries   The property container for metadata on dictionaries.
+             */
+            Ruby.prototype.generateDictionaryProperties = function (dictionaries) {
+                _super.prototype.generateDictionaryProperties.call(this, dictionaries);
+                dictionaries.className = "hash";
             };
             /**
              * Generates general metadata.
@@ -2039,11 +2049,15 @@ var GLS;
              */
             TypeScript.prototype.generateDictionaryProperties = function (dictionaries) {
                 dictionaries.className = "Object";
-                dictionaries.initializeStart = "{";
                 dictionaries.initializeEnd = "}";
-                dictionaries.initializePairLeft = "\"";
-                dictionaries.initializePairMiddle = "\": ";
+                dictionaries.initializePairComma = ",";
+                dictionaries.initializePairLeft = "";
+                dictionaries.initializePairMiddle = ": ";
                 dictionaries.initializePairRight = "";
+                dictionaries.initializeStart = "{";
+                dictionaries.typeLeft = "{ [i: ";
+                dictionaries.typeMiddle = "]: ";
+                dictionaries.typeRight = " }";
                 dictionaries.keyChecker = "hasOwnProperty";
             };
             /**
@@ -2178,6 +2192,7 @@ var GLS;
     })(Languages = GLS.Languages || (GLS.Languages = {}));
 })(GLS || (GLS = {}));
 /// <reference path="CSharp.ts" />
+/// <reference path="Java.ts" />
 /// <reference path="Language.ts" />
 /// <reference path="Python.ts" />
 /// <reference path="Ruby.ts" />
@@ -2197,6 +2212,10 @@ var GLS;
                  */
                 this.CSharp = new Languages.CSharp();
                 /**
+                 * An instance of the Java class.
+                 */
+                this.Java = new Languages.Java();
+                /**
                  * An instance of the CSharp class.
                  */
                 this.Python = new Languages.Python();
@@ -2213,11 +2232,18 @@ var GLS;
                  */
                 this.languagesByName = {
                     "CSharp": this.CSharp,
+                    "Java": this.Java,
                     "Python": this.Python,
                     "Ruby": this.Ruby,
                     "TypeScript": this.TypeScript
                 };
             }
+            /**
+             * @returns Names of languages in the listing.
+             */
+            LanguagesBag.prototype.getLanguageNames = function () {
+                return Object.keys(this.languagesByName);
+            };
             /**
              * Adds a language to the listing.
              *
@@ -3352,6 +3378,205 @@ var GLS;
             return ConcatenateCommand;
         })(Commands.Command);
         Commands.ConcatenateCommand = ConcatenateCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="Command.ts" />
+/// <reference path="LineResults.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for the end of a new dictionary.
+         */
+        var DictionaryNewEndCommand = (function (_super) {
+            __extends(DictionaryNewEndCommand, _super);
+            function DictionaryNewEndCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * Renders the command for a language with the given parameters.
+             *
+             * @param parameters   The command's name, followed by any parameters.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: ().
+             */
+            DictionaryNewEndCommand.prototype.render = function (parameters) {
+                this.requireParametersLength(parameters, 0);
+                var ender = this.language.properties.dictionaries.initializeEnd;
+                return new Commands.LineResults([new Commands.CommandResult(ender, -1)], true);
+            };
+            return DictionaryNewEndCommand;
+        })(Commands.Command);
+        Commands.DictionaryNewEndCommand = DictionaryNewEndCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="Command.ts" />
+/// <reference path="LineResults.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for starting to initialize a new dictionary.
+         */
+        var DictionaryNewStartCommand = (function (_super) {
+            __extends(DictionaryNewStartCommand, _super);
+            function DictionaryNewStartCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * Renders the command for a language with the given parameters.
+             *
+             * @param parameters   The command's name, followed by any parameters.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: (keyType, valueType).
+             */
+            DictionaryNewStartCommand.prototype.render = function (parameters) {
+                this.requireParametersLength(parameters, 2);
+                if (!this.language.properties.dictionaries.initializeAsNew) {
+                    return Commands.LineResults.newSingleLine("{", false);
+                }
+                var output = "new ";
+                output += this.context.convertParsed(["dictionary type", parameters[1], parameters[2]]).commandResults[0].text;
+                var results = [new Commands.CommandResult(output, 0)];
+                this.addLineEnder(results, this.language.properties.dictionaries.initializeStart, 1);
+                return new Commands.LineResults(results, false);
+            };
+            /**
+             * Information on parameters this command takes in.
+             */
+            DictionaryNewStartCommand.parameters = [
+                new Commands.Parameters.SingleParameter("keyType", "The type of the keys.", true),
+                new Commands.Parameters.SingleParameter("valueType", "Tye type of the values", true)
+            ];
+            return DictionaryNewStartCommand;
+        })(Commands.Command);
+        Commands.DictionaryNewStartCommand = DictionaryNewStartCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="Command.ts" />
+/// <reference path="LineResults.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for an in-place dictionary initialization pair.
+         */
+        var DictionaryPairCommand = (function (_super) {
+            __extends(DictionaryPairCommand, _super);
+            function DictionaryPairCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * Renders the command for a language with the given parameters.
+             *
+             * @param parameters   The command's name, followed by any parameters.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: (keyType, valueType[, comma]).
+             */
+            DictionaryPairCommand.prototype.render = function (parameters) {
+                this.requireParametersLengthRange(parameters, 2, 3);
+                var results = "";
+                results += this.language.properties.dictionaries.initializePairLeft;
+                results += this.renderKey(parameters[1]);
+                results += this.language.properties.dictionaries.initializePairMiddle;
+                results += parameters[2];
+                results += this.language.properties.dictionaries.initializePairRight;
+                if (parameters.length === 4) {
+                    results += this.language.properties.dictionaries.initializePairComma;
+                }
+                return Commands.LineResults.newSingleLine(results, false);
+            };
+            /**
+             * Renders a quoted (string) or unquoted (variable) pair key.
+             *
+             * @param keyRaw   The raw key used for it.
+             * @returns The key, wrapped as necessary.
+             * @todo Add wrapping brackets as needed (research for Python, Ruby).
+             */
+            DictionaryPairCommand.prototype.renderKey = function (keyRaw) {
+                var firstCharacter = keyRaw[0];
+                var lastCharacter = keyRaw[keyRaw.length - 1];
+                if (firstCharacter === "\"" && lastCharacter === "\"") {
+                    return keyRaw;
+                }
+                if (firstCharacter === "\"") {
+                    throw new Error("Dictionary pair keys that start with quotes must end with quotes.");
+                }
+                if (lastCharacter === "\"") {
+                    throw new Error("Dictionary pair keys that end with quotes must start with quotes.");
+                }
+                throw new Error("Variables as dictionary keys are not supported at this time.");
+            };
+            /**
+             * Information on parameters this command takes in.
+             */
+            DictionaryPairCommand.parameters = [
+                new Commands.Parameters.SingleParameter("key", "The pair key.", true),
+                new Commands.Parameters.SingleParameter("value", "The pair value", true),
+                new Commands.Parameters.SingleParameter("comma", "Whether a comma is needed", false)
+            ];
+            return DictionaryPairCommand;
+        })(Commands.Command);
+        Commands.DictionaryPairCommand = DictionaryPairCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="Command.ts" />
+/// <reference path="LineResults.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for declaring a dictionary type.
+         */
+        var DictionaryTypeCommand = (function (_super) {
+            __extends(DictionaryTypeCommand, _super);
+            function DictionaryTypeCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * Renders the command for a language with the given parameters.
+             *
+             * @param parameters   The command's name, followed by any parameters.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: (keyType, valueType).
+             */
+            DictionaryTypeCommand.prototype.render = function (parameters) {
+                this.requireParametersLength(parameters, 2);
+                var output = "";
+                if (this.language.properties.dictionaries.initializeAsNew) {
+                    output += this.language.properties.dictionaries.className;
+                }
+                if (this.language.properties.classes.generics.used) {
+                    output += this.language.properties.dictionaries.typeLeft;
+                    output += this.context.convertCommon("type", parameters[1]);
+                    output += this.language.properties.dictionaries.typeMiddle;
+                    output += this.context.convertCommon("type", parameters[2]);
+                    output += this.language.properties.dictionaries.typeRight;
+                }
+                return Commands.LineResults.newSingleLine(output, false);
+            };
+            /**
+             * Information on parameters this command takes in.
+             */
+            DictionaryTypeCommand.parameters = [
+                new Commands.Parameters.SingleParameter("keyType", "The type of the keys.", true),
+                new Commands.Parameters.SingleParameter("valueType", "Tye type of the values", true)
+            ];
+            return DictionaryTypeCommand;
+        })(Commands.Command);
+        Commands.DictionaryTypeCommand = DictionaryTypeCommand;
     })(Commands = GLS.Commands || (GLS.Commands = {}));
 })(GLS || (GLS = {}));
 /// <reference path="../Languages/Language.ts" />
@@ -5015,7 +5240,7 @@ var GLS;
              * @returns Whether the type name includes Array notation.
              */
             TypeCommand.prototype.typeContainsArray = function (typeNameRaw) {
-                return typeNameRaw.indexOf("[") !== -1;
+                return typeNameRaw.indexOf("[]") !== -1;
             };
             /**
              * @param typeNameRaw   A name of a type.
@@ -5231,6 +5456,73 @@ var GLS;
         Commands.VariableInlineCommand = VariableInlineCommand;
     })(Commands = GLS.Commands || (GLS.Commands = {}));
 })(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="Command.ts" />
+/// <reference path="LineResults.ts" />
+/// <reference path="Parameters/Parameter.ts" />
+/// <reference path="Parameters/SingleParameter.ts" />
+/// <reference path="Parameters/RepeatingParameters.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for the start of declaring a variable.
+         */
+        var VariableStartCommand = (function (_super) {
+            __extends(VariableStartCommand, _super);
+            function VariableStartCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * @returns Information on parameters this command takes in.
+             */
+            VariableStartCommand.prototype.getParameters = function () {
+                return VariableStartCommand.parameters;
+            };
+            /**
+             * Renders the command for a language with the given parameters.
+             *
+             * @param parameters   The command's name, followed by any parameters.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: (name, type, value).
+             */
+            VariableStartCommand.prototype.render = function (parameters) {
+                this.requireParametersLength(parameters, 3);
+                // Languages like C# will give the last value in parameters including a "\n"
+                var newParameters = ["variable"];
+                for (var i = 1; i < parameters.length; i += 1) {
+                    newParameters.push(parameters[i].split("\n")[0]);
+                }
+                var output = this.context.convertParsed(newParameters);
+                output.addSemicolon = false;
+                // Languages like C# might need to pass a separate "\n{" through
+                if (this.language.properties.style.separateBraceLines) {
+                    var lastParameter = parameters[parameters.length - 1];
+                    if (lastParameter.indexOf("\n") !== -1) {
+                        lastParameter = lastParameter.split("\n")[1];
+                        output.commandResults.push(new Commands.CommandResult(lastParameter, 1));
+                    }
+                }
+                else {
+                    output.commandResults[output.commandResults.length - 1].indentation += 1;
+                }
+                return output;
+            };
+            /**
+             * Information on parameters this command takes in.
+             */
+            VariableStartCommand.parameters = [
+                new Commands.Parameters.SingleParameter("name", "The name of the variable.", true),
+                new Commands.Parameters.SingleParameter("type", "The type of the variable.", true),
+                new Commands.Parameters.SingleParameter("value", "The start of the value of the variable.", true)
+            ];
+            return VariableStartCommand;
+        })(Commands.Command);
+        Commands.VariableStartCommand = VariableStartCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
 /// <reference path="BlockEndCommand.ts" />
 var GLS;
 (function (GLS) {
@@ -5317,6 +5609,10 @@ var GLS;
 /// <reference path="CommentLineCommand.ts" />
 /// <reference path="ContinueCommand.ts" />
 /// <reference path="ConcatenateCommand.ts" />
+/// <reference path="DictionaryNewEndCommand.ts" />
+/// <reference path="DictionaryNewStartCommand.ts" />
+/// <reference path="DictionaryPairCommand.ts" />
+/// <reference path="DictionaryTypeCommand.ts" />
 /// <reference path="ElseIfStartCommand.ts" />
 /// <reference path="ElseStartCommand.ts" />
 /// <reference path="FileEndCommand.ts" />
@@ -5350,6 +5646,7 @@ var GLS;
 /// <reference path="ValueCommand.ts" />
 /// <reference path="VariableCommand.ts" />
 /// <reference path="VariableInlineCommand.ts" />
+/// <reference path="VariableStartCommand.ts" />
 /// <reference path="WhileEndCommand.ts" />
 /// <reference path="WhileStartCommand.ts" />
 var GLS;
@@ -5380,6 +5677,11 @@ var GLS;
                     "comment line": new Commands.CommentLineCommand(context),
                     "concatenate": new Commands.ConcatenateCommand(context),
                     "continue": new Commands.ContinueCommand(context),
+                    "dictionary new": new Commands.DictionaryNewCommand(context),
+                    "dictionary new end": new Commands.DictionaryNewEndCommand(context),
+                    "dictionary new start": new Commands.DictionaryNewStartCommand(context),
+                    "dictionary pair": new Commands.DictionaryPairCommand(context),
+                    "dictionary type": new Commands.DictionaryTypeCommand(context),
                     "else if start": new Commands.ElseIfStartCommand(context),
                     "else start": new Commands.ElseStartCommand(context),
                     "file end": new Commands.FileEndCommand(context),
@@ -5413,6 +5715,7 @@ var GLS;
                     "value": new Commands.ValueCommand(context),
                     "variable": new Commands.VariableCommand(context),
                     "variable inline": new Commands.VariableInlineCommand(context),
+                    "variable start": new Commands.VariableStartCommand(context),
                     "while end": new Commands.WhileEndCommand(context),
                     "while start": new Commands.WhileStartCommand(context)
                 };
@@ -5506,6 +5809,9 @@ var GLS;
             var command = this.trimEndCharacters(section).trim();
             var lineResults = this.parseCommand(command);
             var line = lineResults.commandResults[0].text;
+            for (var i = 1; i < lineResults.commandResults.length; i += 1) {
+                line += "\n" + lineResults.commandResults[i].text;
+            }
             return line;
         };
         /**
@@ -5689,6 +5995,58 @@ var GLS;
         return ConversionContext;
     })();
     GLS.ConversionContext = ConversionContext;
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="Command.ts" />
+/// <reference path="LineResults.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for initializing a new dictionary.
+         */
+        var DictionaryNewCommand = (function (_super) {
+            __extends(DictionaryNewCommand, _super);
+            function DictionaryNewCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * Renders the command for a language with the given parameters.
+             *
+             * @param parameters   The command's name, followed by any parameters.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: (keyType, valueType).
+             */
+            DictionaryNewCommand.prototype.render = function (parameters) {
+                this.requireParametersLength(parameters, 2);
+                if (!this.language.properties.dictionaries.initializeAsNew) {
+                    return Commands.LineResults.newSingleLine("{}", false);
+                }
+                var output = "new ";
+                output += this.language.properties.dictionaries.className;
+                if (this.language.properties.classes.generics.used) {
+                    output += this.language.properties.classes.generics.left;
+                    output += this.context.convertCommon("type", parameters[1]);
+                    output += this.language.properties.classes.generics.middle;
+                    output += this.context.convertCommon("type", parameters[2]);
+                    output += this.language.properties.classes.generics.right;
+                }
+                output += "()";
+                return Commands.LineResults.newSingleLine(output, false);
+            };
+            /**
+             * Information on parameters this command takes in.
+             */
+            DictionaryNewCommand.parameters = [
+                new Commands.Parameters.SingleParameter("keyType", "The type of the keys.", true),
+                new Commands.Parameters.SingleParameter("valueType", "The type of the values", true)
+            ];
+            return DictionaryNewCommand;
+        })(Commands.Command);
+        Commands.DictionaryNewCommand = DictionaryNewCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
 })(GLS || (GLS = {}));
 
 if (typeof module !== "undefined") {
