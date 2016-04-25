@@ -101,47 +101,68 @@ var GLS;
         (function (Properties) {
             "use strict";
             /**
+             * Where native operations are called from.
+             */
+            (function (NativeCallScope) {
+                /**
+                 * Called as a member of the calling object.
+                 */
+                NativeCallScope[NativeCallScope["Member"] = 0] = "Member";
+                /**
+                 * Called as an operator on or with the calling object.
+                 */
+                NativeCallScope[NativeCallScope["Operator"] = 1] = "Operator";
+                /**
+                 * Called as a global static.
+                 */
+                NativeCallScope[NativeCallScope["Static"] = 2] = "Static";
+            })(Properties.NativeCallScope || (Properties.NativeCallScope = {}));
+            var NativeCallScope = Properties.NativeCallScope;
+            /**
+             * How native operations are called.
+             */
+            (function (NativeCallType) {
+                /**
+                 * An operator floating to the left of its caller.
+                 */
+                NativeCallType[NativeCallType["FloatingLeft"] = 0] = "FloatingLeft";
+                /**
+                 * An operator floating to the right of its caller.
+                 */
+                NativeCallType[NativeCallType["FloatingRight"] = 1] = "FloatingRight";
+                /**
+                 * An operation that exists as a function.
+                 */
+                NativeCallType[NativeCallType["Function"] = 2] = "Function";
+                /**
+                 * An operation as a single property.
+                 */
+                NativeCallType[NativeCallType["Property"] = 3] = "Property";
+            })(Properties.NativeCallType || (Properties.NativeCallType = {}));
+            var NativeCallType = Properties.NativeCallType;
+            /**
              * Metadata on how to perform a native call, such as Array::push.
              */
             var NativeCallProperties = (function () {
-                function NativeCallProperties() {
+                /**
+                 * Initializes a new instance of the NativeCallProperties class.
+                 *
+                 * @param name   What this is called.
+                 * @param scope   Where this is called from.
+                 * @param type   How this is called.
+                 */
+                function NativeCallProperties(name, scope, type) {
+                    this.name = name;
+                    this.scope = scope;
+                    this.type = type;
                 }
-                /**
-                 * @param name   What the native call is called.
-                 * @returns A new NativeCallProperties describing a member function.
-                 */
-                NativeCallProperties.NewMemberFunction = function (name) {
-                    var properties = new NativeCallProperties();
-                    properties.name = name;
-                    properties.asFunction = true;
-                    return properties;
-                };
-                /**
-                 * @param name   What the native call is called.
-                 * @returns A new NativeCallProperties describing a member propertiy.
-                 */
-                NativeCallProperties.NewMemberProperty = function (name) {
-                    var properties = new NativeCallProperties();
-                    properties.name = name;
-                    return properties;
-                };
-                /**
-                 * @param name   What the native call is called.
-                 * @returns A new NativeCallProperties describing a static function.
-                 */
-                NativeCallProperties.NewStaticFunction = function (name) {
-                    var properties = new NativeCallProperties();
-                    properties.name = name;
-                    properties.asStatic = true;
-                    return properties;
-                };
                 return NativeCallProperties;
             })();
             Properties.NativeCallProperties = NativeCallProperties;
         })(Properties = Languages.Properties || (Languages.Properties = {}));
     })(Languages = GLS.Languages || (GLS.Languages = {}));
 })(GLS || (GLS = {}));
-/// <reference path="NativeCallProperties" />
+/// <reference path="NativeCallProperties.ts" />
 var GLS;
 (function (GLS) {
     var Languages;
@@ -231,6 +252,7 @@ var GLS;
         })(Properties = Languages.Properties || (Languages.Properties = {}));
     })(Languages = GLS.Languages || (GLS.Languages = {}));
 })(GLS || (GLS = {}));
+/// <reference path="NativeCallProperties.ts" />
 var GLS;
 (function (GLS) {
     var Languages;
@@ -829,7 +851,7 @@ var GLS;
                 arrays.className = "Array";
                 arrays.initializeAsNew = true;
                 arrays.initializeByType = true;
-                arrays.length = Languages.Properties.NativeCallProperties.NewMemberProperty("Length");
+                arrays.length = new Languages.Properties.NativeCallProperties("Length", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Property);
             };
             /**
              * Generates metadata on booleans.
@@ -896,6 +918,8 @@ var GLS;
              */
             CSharp.prototype.generateDictionaryProperties = function (dictionaries) {
                 dictionaries.className = "Dictionary";
+                dictionaries.containsKey = new Languages.Properties.NativeCallProperties("ContainsKey", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
+                dictionaries.keys = new Languages.Properties.NativeCallProperties("Keys", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Property);
                 dictionaries.initializeAsNew = true;
                 dictionaries.initializeEnd = "}";
                 dictionaries.initializePairComma = ",";
@@ -903,7 +927,6 @@ var GLS;
                 dictionaries.initializePairMiddle = ", ";
                 dictionaries.initializePairRight = " }";
                 dictionaries.initializeStart = "\n{";
-                dictionaries.keyChecker = "ContainsKey";
                 dictionaries.typeLeft = "<";
                 dictionaries.typeMiddle = ", ";
                 dictionaries.typeRight = ">";
@@ -942,7 +965,7 @@ var GLS;
              */
             CSharp.prototype.generateListProperties = function (lists) {
                 lists.className = "List";
-                lists.push = Languages.Properties.NativeCallProperties.NewMemberFunction("Add");
+                lists.push = new Languages.Properties.NativeCallProperties("Add", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on loops.
@@ -985,8 +1008,8 @@ var GLS;
             CSharp.prototype.generateStringProperties = function (strings) {
                 _super.prototype.generateStringProperties.call(this, strings);
                 strings.className = "string";
-                strings.index = Languages.Properties.NativeCallProperties.NewMemberFunction("IndexOf");
-                strings.length = Languages.Properties.NativeCallProperties.NewMemberProperty("Length");
+                strings.index = new Languages.Properties.NativeCallProperties("IndexOf", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
+                strings.length = new Languages.Properties.NativeCallProperties("Length", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Property);
             };
             /**
              * Generates metadata on style.
@@ -1082,7 +1105,7 @@ var GLS;
                 arrays.className = "Array";
                 arrays.initializeAsNew = true;
                 arrays.initializeByType = true;
-                arrays.length = Languages.Properties.NativeCallProperties.NewMemberProperty("length()");
+                arrays.length = new Languages.Properties.NativeCallProperties("length", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on booleans.
@@ -1152,6 +1175,8 @@ var GLS;
              */
             Java.prototype.generateDictionaryProperties = function (dictionaries) {
                 dictionaries.className = "HashMap";
+                dictionaries.containsKey = new Languages.Properties.NativeCallProperties("containsKey", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
+                dictionaries.keys = new Languages.Properties.NativeCallProperties("keySet", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
                 dictionaries.initializeAsNew = true;
                 dictionaries.initializeEnd = "}}";
                 dictionaries.initializePairComma = "";
@@ -1159,7 +1184,6 @@ var GLS;
                 dictionaries.initializePairLeft = "put(";
                 dictionaries.initializePairMiddle = ", ";
                 dictionaries.initializePairRight = ");";
-                dictionaries.keyChecker = "containsKey";
                 dictionaries.typeLeft = "<";
                 dictionaries.typeMiddle = ", ";
                 dictionaries.typeRight = ">";
@@ -1198,7 +1222,7 @@ var GLS;
              */
             Java.prototype.generateListProperties = function (lists) {
                 lists.className = "ArrayList";
-                lists.push = Languages.Properties.NativeCallProperties.NewMemberFunction("add");
+                lists.push = new Languages.Properties.NativeCallProperties("add", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on loops.
@@ -1241,8 +1265,8 @@ var GLS;
             Java.prototype.generateStringProperties = function (strings) {
                 _super.prototype.generateStringProperties.call(this, strings);
                 strings.className = "string";
-                strings.index = Languages.Properties.NativeCallProperties.NewMemberFunction("indexOf");
-                strings.length = Languages.Properties.NativeCallProperties.NewMemberProperty("length()");
+                strings.index = new Languages.Properties.NativeCallProperties("indexOf", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
+                strings.length = new Languages.Properties.NativeCallProperties("length", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on style.
@@ -1376,6 +1400,7 @@ var GLS;
              * @param dictionaries   The property container for metadata on dictionaries.
              */
             PythonicLanguage.prototype.generateDictionaryProperties = function (dictionaries) {
+                dictionaries.containsKey = new Languages.Properties.NativeCallProperties(" in ", Languages.Properties.NativeCallScope.Operator, Languages.Properties.NativeCallType.FloatingLeft);
                 dictionaries.initializeEnd = "}";
                 dictionaries.initializePairComma = ",";
                 dictionaries.initializePairLeft = "";
@@ -1538,7 +1563,7 @@ var GLS;
              */
             Python.prototype.generateArrayProperties = function (arrays) {
                 arrays.className = "list";
-                arrays.length = Languages.Properties.NativeCallProperties.NewStaticFunction("len");
+                arrays.length = new Languages.Properties.NativeCallProperties("len", Languages.Properties.NativeCallScope.Static, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on booleans.
@@ -1609,6 +1634,7 @@ var GLS;
             Python.prototype.generateDictionaryProperties = function (dictionaries) {
                 _super.prototype.generateDictionaryProperties.call(this, dictionaries);
                 dictionaries.className = "dict";
+                dictionaries.keys = new Languages.Properties.NativeCallProperties("keys", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates general metadata.
@@ -1636,7 +1662,7 @@ var GLS;
              */
             Python.prototype.generateListProperties = function (lists) {
                 _super.prototype.generateListProperties.call(this, lists);
-                lists.push = Languages.Properties.NativeCallProperties.NewMemberFunction("append");
+                lists.push = new Languages.Properties.NativeCallProperties("append", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on loops.
@@ -1691,8 +1717,8 @@ var GLS;
             Python.prototype.generateStringProperties = function (strings) {
                 _super.prototype.generateStringProperties.call(this, strings);
                 strings.className = "string";
-                strings.index = Languages.Properties.NativeCallProperties.NewMemberFunction("index");
-                strings.length = Languages.Properties.NativeCallProperties.NewStaticFunction("len");
+                strings.index = new Languages.Properties.NativeCallProperties("index", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
+                strings.length = new Languages.Properties.NativeCallProperties("len", Languages.Properties.NativeCallScope.Static, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on variables.
@@ -1754,7 +1780,7 @@ var GLS;
              */
             Ruby.prototype.generateArrayProperties = function (arrays) {
                 arrays.className = "Array";
-                arrays.length = Languages.Properties.NativeCallProperties.NewMemberProperty("length");
+                arrays.length = new Languages.Properties.NativeCallProperties("length", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Property);
             };
             /**
              * Generates metadata on booleans.
@@ -1825,6 +1851,7 @@ var GLS;
             Ruby.prototype.generateDictionaryProperties = function (dictionaries) {
                 _super.prototype.generateDictionaryProperties.call(this, dictionaries);
                 dictionaries.className = "hash";
+                dictionaries.keys = new Languages.Properties.NativeCallProperties("keys", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Property);
             };
             /**
              * Generates general metadata.
@@ -1852,7 +1879,7 @@ var GLS;
              */
             Ruby.prototype.generateListProperties = function (lists) {
                 _super.prototype.generateListProperties.call(this, lists);
-                lists.push = Languages.Properties.NativeCallProperties.NewMemberFunction("push");
+                lists.push = new Languages.Properties.NativeCallProperties("push", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on loops.
@@ -1895,8 +1922,8 @@ var GLS;
             Ruby.prototype.generateStringProperties = function (strings) {
                 _super.prototype.generateStringProperties.call(this, strings);
                 strings.className = "string";
-                strings.index = Languages.Properties.NativeCallProperties.NewMemberFunction("index");
-                strings.length = Languages.Properties.NativeCallProperties.NewMemberProperty("length");
+                strings.index = new Languages.Properties.NativeCallProperties("index", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
+                strings.length = new Languages.Properties.NativeCallProperties("length", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Property);
             };
             /**
              * Generates metadata on style.
@@ -1969,7 +1996,7 @@ var GLS;
              */
             TypeScript.prototype.generateArrayProperties = function (arrays) {
                 arrays.className = "Array";
-                arrays.length = Languages.Properties.NativeCallProperties.NewMemberProperty("length");
+                arrays.length = new Languages.Properties.NativeCallProperties("length", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Property);
             };
             /**
              * Generates metadata on booleans.
@@ -2049,6 +2076,8 @@ var GLS;
              */
             TypeScript.prototype.generateDictionaryProperties = function (dictionaries) {
                 dictionaries.className = "Object";
+                dictionaries.containsKey = new Languages.Properties.NativeCallProperties("hasOwnProperty", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
+                dictionaries.keys = new Languages.Properties.NativeCallProperties("Object.keys", Languages.Properties.NativeCallScope.Static, Languages.Properties.NativeCallType.Function);
                 dictionaries.initializeEnd = "}";
                 dictionaries.initializePairComma = ",";
                 dictionaries.initializePairLeft = "";
@@ -2058,7 +2087,6 @@ var GLS;
                 dictionaries.typeLeft = "{ [i: ";
                 dictionaries.typeMiddle = "]: ";
                 dictionaries.typeRight = " }";
-                dictionaries.keyChecker = "hasOwnProperty";
             };
             /**
              * Generates metadata on exceptions.
@@ -2097,7 +2125,7 @@ var GLS;
              */
             TypeScript.prototype.generateListProperties = function (lists) {
                 lists.asArray = true;
-                lists.push = Languages.Properties.NativeCallProperties.NewMemberFunction("push");
+                lists.push = new Languages.Properties.NativeCallProperties("push", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
             };
             /**
              * Generates metadata on loops.
@@ -2165,8 +2193,8 @@ var GLS;
             TypeScript.prototype.generateStringProperties = function (strings) {
                 _super.prototype.generateStringProperties.call(this, strings);
                 strings.className = "String";
-                strings.index = Languages.Properties.NativeCallProperties.NewMemberFunction("indexOf");
-                strings.length = Languages.Properties.NativeCallProperties.NewMemberProperty("length");
+                strings.index = new Languages.Properties.NativeCallProperties("indexOf", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Function);
+                strings.length = new Languages.Properties.NativeCallProperties("length", Languages.Properties.NativeCallScope.Member, Languages.Properties.NativeCallType.Property);
             };
             /**
              * Generates metadata on variables.
@@ -2362,187 +2390,6 @@ var GLS;
         })(Parameters = Commands.Parameters || (Commands.Parameters = {}));
     })(Commands = GLS.Commands || (GLS.Commands = {}));
 })(GLS || (GLS = {}));
-/// <reference path="../Languages/Language.ts" />
-/// <reference path="../ConversionContext.ts" />
-/// <reference path="LineResults.ts" />
-/// <reference path="Parameters/Parameter.ts" />
-var GLS;
-(function (GLS) {
-    var Commands;
-    (function (Commands) {
-        "use strict";
-        /**
-         * Abstract base class for commands that may be rendered into language code.
-         */
-        var Command = (function () {
-            /**
-             * Initializes a new instance of the Command class.
-             *
-             * @param context   The driving context for converting the command.
-             */
-            function Command(context) {
-                this.context = context;
-                this.language = context.getLanguage();
-            }
-            /**
-             * @returns Whether this command's lines should end with a semicolon.
-             */
-            Command.prototype.getAddsSemicolon = function () {
-                return this.addsSemicolon;
-            };
-            /**
-             * @returns Information on parameters this command takes in.
-             */
-            Command.prototype.getParameters = function () {
-                return Command.defaultParameters;
-            };
-            /**
-             * Adds a portion of raw syntax that may contain endlines.
-             *
-             * @param lines   In-progress line(s) of code in the rendering language.
-             * @param extra   Raw syntax to add to the lines.
-             * @param indentation   How much indentation the last line should be.
-             */
-            Command.prototype.addLineEnder = function (lines, extra, indentation) {
-                var currentLine = lines[lines.length - 1];
-                var endlineIndex = extra.indexOf("\n");
-                if (endlineIndex === -1) {
-                    currentLine.text += extra;
-                    currentLine.indentation = indentation;
-                    return;
-                }
-                var currentIndex = 0;
-                while (endlineIndex !== -1) {
-                    var component = extra.substring(currentIndex, endlineIndex);
-                    currentLine.text += component;
-                    currentIndex = endlineIndex;
-                    currentLine = new Commands.CommandResult("", 0);
-                    lines.push(currentLine);
-                    endlineIndex = extra.indexOf("\n", currentIndex + 1);
-                }
-                if (currentIndex !== -1) {
-                    currentLine.text = extra.substring(currentIndex + 1);
-                }
-                lines[lines.length - 1].indentation = indentation;
-            };
-            /**
-             * Throws an error if an incorrect number of parameters are passed.
-             *
-             * @param parameters   Parameters passed to a command.
-             * @param minimum   The allowed number of parameters.
-             */
-            Command.prototype.requireParametersLength = function (parameters, amount) {
-                if (parameters.length - 1 !== amount) {
-                    throw new Error("Not the right amount of parameters: expected " + amount + " but got " + (parameters.length - 1) + ".");
-                }
-            };
-            /**
-             * Throws an error if not enough parameters are passed.
-             *
-             * @param parameters   Parameters passed to a command.
-             * @param minimum   The minimum allowed number of parameters.
-             */
-            Command.prototype.requireParametersLengthMinimum = function (parameters, minimum) {
-                if (parameters.length - 1 < minimum) {
-                    throw new Error("Not enough arguments: expected at least " + minimum + " but got " + (parameters.length - 1) + ".");
-                }
-            };
-            /**
-             * Throws an error if too many parameters are passed.
-             *
-             * @param parameters   Parameters passed to a command.
-             * @param minimum   The minimum allowed number of parameters.
-             */
-            Command.prototype.requireParametersLengthMaximum = function (parameters, maximum) {
-                if (parameters.length - 1 > maximum) {
-                    throw new Error("Too many arguments: expected fewer than " + maximum + " but got " + (parameters.length - 1) + ".");
-                }
-            };
-            /**
-             * Throws an error if not enough or too many parameters are passed.
-             *
-             * @param parameters   Parameters passed to a command.
-             * @param maximum   The maximum allowed number of parameters.
-             * @param minimum   The minimum allowed number of parameters.
-             */
-            Command.prototype.requireParametersLengthRange = function (parameters, minimum, maximum) {
-                this.requireParametersLengthMinimum(parameters, minimum);
-                this.requireParametersLengthMaximum(parameters, maximum);
-            };
-            /**
-             * Throws an error if an odd number of parameters are passed.
-             *
-             * @param parameters   Parameters passed to a command.
-             */
-            Command.prototype.requireParametersLengthEven = function (parameters) {
-                if ((parameters.length % 2 - 1) !== 0) {
-                    throw new Error("Expected parameters to be even, but got " + (parameters.length - 1) + ".");
-                }
-            };
-            /**
-             * Throws an error if an even number of parameters are passed.
-             *
-             * @param parameters   Parameters passed to a command.
-             */
-            Command.prototype.requireParametersLengthOdd = function (parameters) {
-                if ((parameters.length - 1) % 2 === 0) {
-                    throw new Error("Expected parameters to be odd, but got " + (parameters.length - 1) + ".");
-                }
-            };
-            /**
-             * Default information on parameters a command takes in (none).
-             */
-            Command.defaultParameters = [];
-            return Command;
-        })();
-        Commands.Command = Command;
-    })(Commands = GLS.Commands || (GLS.Commands = {}));
-})(GLS || (GLS = {}));
-/// <reference path="../Languages/Language.ts" />
-/// <reference path="CommandResult.ts" />
-var GLS;
-(function (GLS) {
-    var Commands;
-    (function (Commands) {
-        "use strict";
-        /**
-         * Constants used for creating commands.
-         */
-        var CommandStrings = (function () {
-            function CommandStrings() {
-            }
-            /**
-             * Generates a raw string of GLS syntax for a command and parameters.
-             *
-             * @param inputs   A command name followed by any number of parameters.
-             * @returns A raw string of GLS syntax for the command and parameters.
-             */
-            CommandStrings.generateRawCommand = function (inputs) {
-                if (inputs.length === 0) {
-                    throw new Error("At least one parameter is required.");
-                }
-                if (inputs.length === 1) {
-                    return inputs[0];
-                }
-                return inputs[0] + " : " + inputs.slice(1).join(" ");
-            };
-            /**
-             * Raw name of the ArrayInitialize command.
-             */
-            CommandStrings.ArrayInitializeCommandName = "array initialize";
-            /**
-             * Raw name of the Literal command.
-             */
-            CommandStrings.LiteralCommandName = "literal";
-            /**
-             * Raw name of the Type command.
-             */
-            CommandStrings.TypeCommandName = "type";
-            return CommandStrings;
-        })();
-        Commands.CommandStrings = CommandStrings;
-    })(Commands = GLS.Commands || (GLS.Commands = {}));
-})(GLS || (GLS = {}));
 /// <reference path="Parameter.ts" />
 /// <reference path="SingleParameter.ts" />
 var GLS;
@@ -2604,6 +2451,257 @@ var GLS;
         })(Parameters = Commands.Parameters || (Commands.Parameters = {}));
     })(Commands = GLS.Commands || (GLS.Commands = {}));
 })(GLS || (GLS = {}));
+/// <reference path="Parameter.ts" />
+/// <reference path="SingleParameter.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        var Parameters;
+        (function (Parameters) {
+            "use strict";
+            /**
+             * Summary of parameter restrictions for a command.
+             */
+            var Restrictions = (function () {
+                /**
+                 * Initializes a new instance of the Restrictions class.
+                 *
+                 * @param parameters   Descriptions of parameters passed to a command.
+                 */
+                function Restrictions(parameters) {
+                    /**
+                     * The minimum number of allowed parameters.
+                     */
+                    this.minimum = 0;
+                    /**
+                     * The maximum number of allowed parameters.
+                     */
+                    this.maximum = 0;
+                    /**
+                     * Known RepeatingParameters lengths above the minimum.
+                     */
+                    this.intervals = [];
+                    for (var i = 0; i < parameters.length; i += 1) {
+                        var parameter = parameters[i];
+                        if (parameter instanceof Parameters.SingleParameter) {
+                            this.addSingleParameter(parameter);
+                        }
+                        else if (parameter instanceof Parameters.RepeatingParameters) {
+                            this.addRepeatingParameters(parameter);
+                        }
+                    }
+                }
+                /**
+                 *
+                 * @remarks Having multiple intervals results in none being checked.
+                 * @todo Implement checking multiple intervals.
+                 */
+                Restrictions.prototype.checkValidity = function (inputs) {
+                    this.checkBasicRange(inputs);
+                    if (this.intervals.length === 1) {
+                        this.checkIntervalRange(inputs);
+                    }
+                };
+                /**
+                 * Checks that command inputs are within the expected length range.
+                 *
+                 * @param inputs   Input parameters passed to a command.
+                 */
+                Restrictions.prototype.checkBasicRange = function (inputs) {
+                    var inputsLength = inputs.length - 1;
+                    if (inputsLength >= this.minimum && inputsLength <= this.maximum) {
+                        return;
+                    }
+                    var descriptor = "" + this.stringifyNumber(this.minimum);
+                    if (this.maximum !== this.minimum) {
+                        descriptor += " to " + this.stringifyNumber(this.maximum);
+                    }
+                    descriptor += " parameter";
+                    if (this.minimum === 1) {
+                        if (this.maximum !== 1) {
+                            descriptor += "(s)";
+                        }
+                    }
+                    else {
+                        descriptor += "s";
+                    }
+                    throw new Error("'" + inputs[0] + "' expects " + descriptor + " but got " + inputsLength + ".");
+                };
+                /**
+                 * Checks that command inputs match an extpected length interval.
+                 *
+                 * @param inputs   Input parameters passed to a command.
+                 */
+                Restrictions.prototype.checkIntervalRange = function (inputs) {
+                    var remaining = inputs.length - this.minimum;
+                    if (remaining % this.intervals.length !== 0) {
+                        throw new Error("'" + inputs[0] + "' expects extra parameters to be a multiple of " + this.intervals[0] + ", not " + inputs.length + ".");
+                    }
+                };
+                /**
+                 * @param number   A number of parameters.
+                 * @returns A sentence-ready description of the number.
+                 */
+                Restrictions.prototype.stringifyNumber = function (number) {
+                    if (number === Infinity) {
+                        return "infinite";
+                    }
+                    return number.toString();
+                };
+                /**
+                 * Marks a single parameter's restrictions.
+                 *
+                 * @param parameter   A description of a parameter.
+                 */
+                Restrictions.prototype.addSingleParameter = function (parameter) {
+                    if (parameter.required) {
+                        this.minimum += 1;
+                    }
+                    this.maximum += 1;
+                };
+                /**
+                 * Marks a repeating parameter's restrictions.
+                 *
+                 * @param parameter   A description of a parameter.
+                 */
+                Restrictions.prototype.addRepeatingParameters = function (parameter) {
+                    this.intervals.push(parameter.parameters.length);
+                    this.maximum = Infinity;
+                };
+                return Restrictions;
+            })();
+            Parameters.Restrictions = Restrictions;
+        })(Parameters = Commands.Parameters || (Commands.Parameters = {}));
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="../ConversionContext.ts" />
+/// <reference path="LineResults.ts" />
+/// <reference path="Parameters/Parameter.ts" />
+/// <reference path="Parameters/Restrictions.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * Abstract base class for commands that may be rendered into language code.
+         */
+        var Command = (function () {
+            /**
+             * Initializes a new instance of the Command class.
+             *
+             * @param context   The driving context for converting the command.
+             */
+            function Command(context) {
+                this.context = context;
+                this.language = context.getLanguage();
+                this.parameterRestrictions = new Commands.Parameters.Restrictions(this.getParameters());
+            }
+            /**
+             * @returns Whether this command's lines should end with a semicolon.
+             */
+            Command.prototype.getAddsSemicolon = function () {
+                return this.addsSemicolon;
+            };
+            /**
+             * @returns Information on parameters this command takes in.
+             */
+            Command.prototype.getParameters = function () {
+                return Command.defaultParameters;
+            };
+            /**
+             * Checks if parameters are valid, throwing an error if not.
+             *
+             * @param parameters   The command's name, followed by any parameters.
+             */
+            Command.prototype.checkParameterValidity = function (parameters) {
+                this.parameterRestrictions.checkValidity(parameters);
+            };
+            /**
+             * Adds a portion of raw syntax that may contain endlines.
+             *
+             * @param lines   In-progress line(s) of code in the rendering language.
+             * @param extra   Raw syntax to add to the lines.
+             * @param indentation   How much indentation the last line should be.
+             */
+            Command.prototype.addLineEnder = function (lines, extra, indentation) {
+                var currentLine = lines[lines.length - 1];
+                var endlineIndex = extra.indexOf("\n");
+                if (endlineIndex === -1) {
+                    currentLine.text += extra;
+                    currentLine.indentation = indentation;
+                    return;
+                }
+                var currentIndex = 0;
+                while (endlineIndex !== -1) {
+                    var component = extra.substring(currentIndex, endlineIndex);
+                    currentLine.text += component;
+                    currentIndex = endlineIndex;
+                    currentLine = new Commands.CommandResult("", 0);
+                    lines.push(currentLine);
+                    endlineIndex = extra.indexOf("\n", currentIndex + 1);
+                }
+                if (currentIndex !== -1) {
+                    currentLine.text = extra.substring(currentIndex + 1);
+                }
+                lines[lines.length - 1].indentation = indentation;
+            };
+            /**
+             * Default information on parameters a command takes in (none).
+             */
+            Command.defaultParameters = [];
+            return Command;
+        })();
+        Commands.Command = Command;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="CommandResult.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * Constants used for creating commands.
+         */
+        var CommandStrings = (function () {
+            function CommandStrings() {
+            }
+            /**
+             * Generates a raw string of GLS syntax for a command and parameters.
+             *
+             * @param inputs   A command name followed by any number of parameters.
+             * @returns A raw string of GLS syntax for the command and parameters.
+             */
+            CommandStrings.generateRawCommand = function (inputs) {
+                if (inputs.length === 0) {
+                    throw new Error("At least one parameter is required.");
+                }
+                if (inputs.length === 1) {
+                    return inputs[0];
+                }
+                return inputs[0] + " : " + inputs.slice(1).join(" ");
+            };
+            /**
+             * Raw name of the ArrayInitialize command.
+             */
+            CommandStrings.ArrayInitializeCommandName = "array initialize";
+            /**
+             * Raw name of the Literal command.
+             */
+            CommandStrings.LiteralCommandName = "literal";
+            /**
+             * Raw name of the Type command.
+             */
+            CommandStrings.TypeCommandName = "type";
+            return CommandStrings;
+        })();
+        Commands.CommandStrings = CommandStrings;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
 /// <reference path="../Languages/Language.ts" />
 /// <reference path="Command.ts" />
 /// <reference path="LineResults.ts" />
@@ -2638,7 +2736,6 @@ var GLS;
              * @remarks Usage: (type[, item, ...]).
              */
             ArrayInitializeCommand.prototype.render = function (parameters) {
-                this.requireParametersLengthMinimum(parameters, 1);
                 var typeName = this.context.convertCommon("type", parameters[1]), output = "";
                 if (this.language.properties.arrays.initializeAsNew) {
                     output += "new ";
@@ -2701,6 +2798,13 @@ var GLS;
             function NativeCallCommand(context) {
                 _super.call(this, context);
                 this.nativeCallProperties = this.retrieveNativeCallProperties();
+                this.scopeRenderers = (_a = {},
+                    _a[GLS.Languages.Properties.NativeCallScope.Member] = this.renderAsMember.bind(this),
+                    _a[GLS.Languages.Properties.NativeCallScope.Operator] = this.renderAsOperator.bind(this),
+                    _a[GLS.Languages.Properties.NativeCallScope.Static] = this.renderAsStatic.bind(this),
+                    _a
+                );
+                var _a;
             }
             /**
              * Renders the command for a language with the given parameters.
@@ -2711,29 +2815,8 @@ var GLS;
              * @remarks Usage: (name[, parameters, ...]).
              */
             NativeCallCommand.prototype.render = function (parameters) {
-                if (this.nativeCallProperties.asStatic) {
-                    return this.renderAsStatic(parameters);
-                }
-                return this.renderAsMember(parameters);
-            };
-            /**
-             * Renders the native call as a static.
-             *
-             * @param parameters   The command's name, followed by any number of
-             *                     items to initialize in the Array.
-             * @returns Line(s) of code in the language.
-             * @remarks Usage: (name[, parameters, ...]).
-             */
-            NativeCallCommand.prototype.renderAsStatic = function (parameters) {
-                this.requireParametersLengthMinimum(parameters, 1);
-                var result = "";
-                result += this.nativeCallProperties.name;
-                result += "(" + parameters[1];
-                for (var i = 2; i < parameters.length; i += 1) {
-                    result += ", " + parameters[i];
-                }
-                result += ")";
-                return Commands.LineResults.newSingleLine(result, true);
+                var scope = this.nativeCallProperties.scope;
+                return this.scopeRenderers[scope](parameters);
             };
             /**
              * Renders the native call as a member.
@@ -2744,13 +2827,12 @@ var GLS;
              * @remarks Usage: (name[, parameters, ...]).
              */
             NativeCallCommand.prototype.renderAsMember = function (parameters) {
-                this.requireParametersLengthMinimum(parameters, 1);
                 var result = "";
                 result += parameters[1] + ".";
                 result += this.nativeCallProperties.name;
-                if (this.nativeCallProperties.asFunction) {
+                if (this.nativeCallProperties.type === GLS.Languages.Properties.NativeCallType.Function) {
                     result += "(";
-                    if (parameters.length >= 2) {
+                    if (parameters.length > 2) {
                         result += parameters[2];
                         for (var i = 3; i < parameters.length; i += 1) {
                             result += ", " + parameters[i];
@@ -2758,6 +2840,46 @@ var GLS;
                     }
                     result += ")";
                 }
+                return Commands.LineResults.newSingleLine(result, true);
+            };
+            /**
+             * Renders the native call as an operator.
+             *
+             * @param parameters   The command's name, followed by any number of
+             *                     items to initialize in the Array.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: (container, operand)
+             */
+            NativeCallCommand.prototype.renderAsOperator = function (parameters) {
+                var result = "";
+                if (this.nativeCallProperties.type === GLS.Languages.Properties.NativeCallType.FloatingLeft) {
+                    result += parameters[2];
+                    result += this.nativeCallProperties.name;
+                    result += parameters[1];
+                }
+                else {
+                    result += parameters[1];
+                    result += this.nativeCallProperties.name;
+                    result += parameters[2];
+                }
+                return Commands.LineResults.newSingleLine(result, true);
+            };
+            /**
+             * Renders the native call as a static.
+             *
+             * @param parameters   The command's name, followed by any number of
+             *                     items to initialize in the Array.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: (name[, parameters, ...]).
+             */
+            NativeCallCommand.prototype.renderAsStatic = function (parameters) {
+                var result = "";
+                result += this.nativeCallProperties.name;
+                result += "(" + parameters[1];
+                for (var i = 2; i < parameters.length; i += 1) {
+                    result += ", " + parameters[i];
+                }
+                result += ")";
                 return Commands.LineResults.newSingleLine(result, true);
             };
             return NativeCallCommand;
@@ -2832,7 +2954,6 @@ var GLS;
              * @remarks Usage: ().
              */
             BreakCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 var output = this.language.properties.loops.break;
                 return Commands.LineResults.newSingleLine(output, true);
             };
@@ -3071,7 +3192,6 @@ var GLS;
              * @returns Line(s) of code in the language.
              */
             CommentDocTagCommand.prototype.renderXmlDoc = function (parameters) {
-                this.requireParametersLengthMinimum(parameters, 2);
                 var lineStart = this.language.properties.comments.docLineStart, tagRaw = parameters[1], tag = this.parseTag(tagRaw), commandResults = [], contentsRaw;
                 var starter = lineStart + "<" + tag;
                 if (this.language.properties.comments.docTagsWithParameters.hasOwnProperty(tagRaw)) {
@@ -3101,7 +3221,6 @@ var GLS;
              * @returns Line(s) of code in the language.
              */
             CommentDocTagCommand.prototype.renderJsDoc = function (parameters) {
-                this.requireParametersLengthMinimum(parameters, 2);
                 var tagRaw = parameters[1], tagParsed = this.parseTag(tagRaw), tag = tagParsed + this.language.properties.comments.docTagEnd, contentsRaw;
                 if (tagParsed === "\0") {
                     tag = this.language.properties.comments.docTagStart;
@@ -3233,7 +3352,7 @@ var GLS;
             CommentDocTagCommand.parameters = [
                 new Commands.Parameters.SingleParameter("tag", "The name of the tag.", true),
                 new Commands.Parameters.SingleParameter("parameter", "An optional descriptor for the tag.", false),
-                new Commands.Parameters.SingleParameter("comments", "Comments regarding the tag.", false)
+                new Commands.Parameters.RepeatingParameters("Comments regarding the tag", [])
             ];
             return CommentDocTagCommand;
         })(Commands.Command);
@@ -3316,7 +3435,6 @@ var GLS;
              * @remarks Usage: ().
              */
             ContinueCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 var output = this.language.properties.loops.continue;
                 return Commands.LineResults.newSingleLine(output, true);
             };
@@ -3358,7 +3476,6 @@ var GLS;
              * @remarks Usage: (string, string[, string, ...])
              */
             ConcatenateCommand.prototype.render = function (parameters) {
-                this.requireParametersLengthMinimum(parameters, 2);
                 var result = parameters[1];
                 for (var i = 2; i < parameters.length; i += 1) {
                     result += this.language.properties.strings.concatenate + parameters[i];
@@ -3378,6 +3495,140 @@ var GLS;
             return ConcatenateCommand;
         })(Commands.Command);
         Commands.ConcatenateCommand = ConcatenateCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Properties/NativeCallProperties.ts" />
+/// <reference path="NativeCallCommand.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for a retrieving the length of an string.
+         */
+        var DictionaryContainsKeyCommand = (function (_super) {
+            __extends(DictionaryContainsKeyCommand, _super);
+            function DictionaryContainsKeyCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * @returns Information on parameters this command takes in.
+             */
+            DictionaryContainsKeyCommand.prototype.getParameters = function () {
+                return DictionaryContainsKeyCommand.parameters;
+            };
+            /**
+             * @returns Metadata on how to perform the native call.
+             */
+            DictionaryContainsKeyCommand.prototype.retrieveNativeCallProperties = function () {
+                return this.language.properties.dictionaries.containsKey;
+            };
+            /**
+             * Information on parameters this command takes in.
+             */
+            DictionaryContainsKeyCommand.parameters = [
+                new Commands.Parameters.SingleParameter("dictionary", "A dictionary to check for key membership.", true),
+                new Commands.Parameters.SingleParameter("key", "A key to check for membership in the dictionary.", true)
+            ];
+            return DictionaryContainsKeyCommand;
+        })(Commands.NativeCallCommand);
+        Commands.DictionaryContainsKeyCommand = DictionaryContainsKeyCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Properties/NativeCallProperties.ts" />
+/// <reference path="NativeCallCommand.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for a retrieving the keys of a dictionary.
+         */
+        var DictionaryKeysCommand = (function (_super) {
+            __extends(DictionaryKeysCommand, _super);
+            function DictionaryKeysCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * @returns Information on parameters this command takes in.
+             */
+            DictionaryKeysCommand.prototype.getParameters = function () {
+                return DictionaryKeysCommand.parameters;
+            };
+            /**
+             * @returns Metadata on how to perform the native call.
+             */
+            DictionaryKeysCommand.prototype.retrieveNativeCallProperties = function () {
+                return this.language.properties.dictionaries.keys;
+            };
+            /**
+             * Information on parameters this command takes in.
+             */
+            DictionaryKeysCommand.parameters = [
+                new Commands.Parameters.SingleParameter("dictionary", "A dictionary to retrieve the keys of.", true)
+            ];
+            return DictionaryKeysCommand;
+        })(Commands.NativeCallCommand);
+        Commands.DictionaryKeysCommand = DictionaryKeysCommand;
+    })(Commands = GLS.Commands || (GLS.Commands = {}));
+})(GLS || (GLS = {}));
+/// <reference path="../Languages/Language.ts" />
+/// <reference path="Command.ts" />
+/// <reference path="LineResults.ts" />
+var GLS;
+(function (GLS) {
+    var Commands;
+    (function (Commands) {
+        "use strict";
+        /**
+         * A command for initializing a new dictionary.
+         */
+        var DictionaryNewCommand = (function (_super) {
+            __extends(DictionaryNewCommand, _super);
+            function DictionaryNewCommand() {
+                _super.apply(this, arguments);
+            }
+            /**
+             * @returns Information on parameters this command takes in.
+             */
+            DictionaryNewCommand.prototype.getParameters = function () {
+                return DictionaryNewCommand.parameters;
+            };
+            /**
+             * Renders the command for a language with the given parameters.
+             *
+             * @param parameters   The command's name, followed by any parameters.
+             * @returns Line(s) of code in the language.
+             * @remarks Usage: (keyType, valueType).
+             */
+            DictionaryNewCommand.prototype.render = function (parameters) {
+                if (!this.language.properties.dictionaries.initializeAsNew) {
+                    return Commands.LineResults.newSingleLine("{}", false);
+                }
+                var output = "new ";
+                output += this.language.properties.dictionaries.className;
+                if (this.language.properties.classes.generics.used) {
+                    output += this.language.properties.classes.generics.left;
+                    output += this.context.convertCommon("type", parameters[1]);
+                    output += this.language.properties.classes.generics.middle;
+                    output += this.context.convertCommon("type", parameters[2]);
+                    output += this.language.properties.classes.generics.right;
+                }
+                output += "()";
+                return Commands.LineResults.newSingleLine(output, false);
+            };
+            /**
+             * Information on parameters this command takes in.
+             */
+            DictionaryNewCommand.parameters = [
+                new Commands.Parameters.SingleParameter("keyType", "The type of the keys.", true),
+                new Commands.Parameters.SingleParameter("valueType", "The type of the values", true)
+            ];
+            return DictionaryNewCommand;
+        })(Commands.Command);
+        Commands.DictionaryNewCommand = DictionaryNewCommand;
     })(Commands = GLS.Commands || (GLS.Commands = {}));
 })(GLS || (GLS = {}));
 /// <reference path="../Languages/Language.ts" />
@@ -3404,7 +3655,6 @@ var GLS;
              * @remarks Usage: ().
              */
             DictionaryNewEndCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 var ender = this.language.properties.dictionaries.initializeEnd;
                 return new Commands.LineResults([new Commands.CommandResult(ender, -1)], true);
             };
@@ -3430,6 +3680,12 @@ var GLS;
                 _super.apply(this, arguments);
             }
             /**
+             * @returns Information on parameters this command takes in.
+             */
+            DictionaryNewStartCommand.prototype.getParameters = function () {
+                return DictionaryNewStartCommand.parameters;
+            };
+            /**
              * Renders the command for a language with the given parameters.
              *
              * @param parameters   The command's name, followed by any parameters.
@@ -3437,7 +3693,6 @@ var GLS;
              * @remarks Usage: (keyType, valueType).
              */
             DictionaryNewStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 2);
                 if (!this.language.properties.dictionaries.initializeAsNew) {
                     return Commands.LineResults.newSingleLine("{", false);
                 }
@@ -3476,6 +3731,12 @@ var GLS;
                 _super.apply(this, arguments);
             }
             /**
+             * @returns Information on parameters this command takes in.
+             */
+            DictionaryPairCommand.prototype.getParameters = function () {
+                return DictionaryPairCommand.parameters;
+            };
+            /**
              * Renders the command for a language with the given parameters.
              *
              * @param parameters   The command's name, followed by any parameters.
@@ -3483,7 +3744,6 @@ var GLS;
              * @remarks Usage: (keyType, valueType[, comma]).
              */
             DictionaryPairCommand.prototype.render = function (parameters) {
-                this.requireParametersLengthRange(parameters, 2, 3);
                 var results = "";
                 results += this.language.properties.dictionaries.initializePairLeft;
                 results += this.renderKey(parameters[1]);
@@ -3546,6 +3806,12 @@ var GLS;
                 _super.apply(this, arguments);
             }
             /**
+             * @returns Information on parameters this command takes in.
+             */
+            DictionaryTypeCommand.prototype.getParameters = function () {
+                return DictionaryTypeCommand.parameters;
+            };
+            /**
              * Renders the command for a language with the given parameters.
              *
              * @param parameters   The command's name, followed by any parameters.
@@ -3553,7 +3819,6 @@ var GLS;
              * @remarks Usage: (keyType, valueType).
              */
             DictionaryTypeCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 2);
                 var output = "";
                 if (this.language.properties.dictionaries.initializeAsNew) {
                     output += this.language.properties.dictionaries.className;
@@ -3612,7 +3877,6 @@ var GLS;
              * @remarks Usage: (conditional).
              */
             ElseIfStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 var lines = [new Commands.CommandResult("", -1)], line;
                 if (!this.language.properties.style.separateBraceLines) {
                     lines[0].text = "\0";
@@ -3661,7 +3925,6 @@ var GLS;
              * @remarks Usage: ().
              */
             ElseStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 var lines = [new Commands.CommandResult("", -1)], indentation;
                 if (!this.language.properties.style.separateBraceLines) {
                     lines[0].text = "\0";
@@ -3716,7 +3979,6 @@ var GLS;
              * @remarks Usage: (fileName).
              */
             FileEndCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 var output = [], source = this.language.properties.style.fileEndLines;
                 for (var i = 0; i < source.length; i += 1) {
                     output.push(new Commands.CommandResult(source[i].replace("{0}", parameters[1]), 0));
@@ -3767,7 +4029,6 @@ var GLS;
              * @remarks Usage: (fileName).
              */
             FileStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 var output = [], source = this.language.properties.style.fileStartLines;
                 for (var i = 0; i < source.length; i += 1) {
                     output.push(new Commands.CommandResult(source[i].replace("{0}", parameters[1]), 0));
@@ -3812,7 +4073,6 @@ var GLS;
              * @remarks Usage: ().
              */
             ForEachEndCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 var ender = this.language.properties.loops.forEachEnd;
                 return new Commands.LineResults([new Commands.CommandResult(ender, -1)], false);
             };
@@ -3854,7 +4114,6 @@ var GLS;
              * @remarks Usage: (container, keyName, keyType).
              */
             ForEachKeyStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 3);
                 if (this.language.properties.loops.forEachAsMethod) {
                     return this.renderForEachAsMethod(parameters);
                 }
@@ -3948,7 +4207,6 @@ var GLS;
              * @remarks Usage: (container, pairName, keyName, keyType, valueName, valueType).
              */
             ForEachPairStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 6);
                 if (this.language.properties.loops.forEachAsMethod) {
                     return this.renderForEachAsMethod(parameters);
                 }
@@ -4120,7 +4378,6 @@ var GLS;
              * @remarks Usage: (name, type, start, end).
              */
             ForNumbersStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 4);
                 var starter;
                 if (this.language.properties.loops.rangedForLoops) {
                     starter = this.renderStartRanged(parameters);
@@ -4205,7 +4462,6 @@ var GLS;
              * @remarks Usage: ().
              */
             BlockEndCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 var ender = this.language.properties.conditionals.end;
                 if (ender === "\0") {
                     return Commands.LineResults.newBlockLine("\0", -1);
@@ -4288,8 +4544,6 @@ var GLS;
              * @remarks Usage: (name, returnType[, parameterName, parameterType, ...]).
              */
             FunctionStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLengthMinimum(parameters, 2);
-                this.requireParametersLengthEven(parameters);
                 var returnType = this.context.convertCommon("type", parameters[2]), declaration = "", output;
                 if (this.language.properties.functions.explicitReturns && !this.language.properties.functions.returnTypeAfterName) {
                     declaration += returnType;
@@ -4395,7 +4649,6 @@ var GLS;
              * @remarks Usage: (conditional).
              */
             IfStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 var line = this.language.properties.conditionals.if;
                 line += this.language.properties.conditionals.startLeft;
                 line += parameters[1];
@@ -4447,7 +4700,6 @@ var GLS;
              * @remarks Usage: (container, index).
              */
             IndexCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 2);
                 return Commands.LineResults.newSingleLine(parameters[1] + "[" + parameters[2] + "]", false);
             };
             /**
@@ -4500,7 +4752,6 @@ var GLS;
                     parameters[0] = "array initialize";
                     return this.context.convertParsed(parameters);
                 }
-                this.requireParametersLengthMinimum(parameters, 1);
                 var typeNameRaw = "list<" + parameters[1] + ">", typeName = this.context.convertCommon("type", typeNameRaw), output = "new " + typeName;
                 if (parameters.length > 2) {
                     output += " { ";
@@ -4675,7 +4926,6 @@ var GLS;
              * @remarks Usage: ().
              */
             MainEndCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 var output = [], source = this.language.properties.style.mainEndLines;
                 for (var i = 0; i < source.length; i += 1) {
                     output.push(new Commands.CommandResult(source[i], 0));
@@ -4714,7 +4964,6 @@ var GLS;
              * @remarks Usage: ().
              */
             MainStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 var output = [], source = this.language.properties.style.mainStartLines;
                 for (var i = 0; i < source.length; i += 1) {
                     output.push(new Commands.CommandResult(source[i], 0));
@@ -4762,7 +5011,6 @@ var GLS;
              * @remarks Usage: (value).
              */
             NotCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 var not = this.language.properties.operators.not;
                 return Commands.LineResults.newSingleLine(not + parameters[1], false);
             };
@@ -4807,8 +5055,6 @@ var GLS;
              * @remarks Usage: (value, operator, value[, operator, value, ...]).
              */
             OperationCommand.prototype.render = function (parameters) {
-                this.requireParametersLengthMinimum(parameters, 3);
-                this.requireParametersLengthOdd(parameters);
                 var result = this.context.convertCommon("value", parameters[1]);
                 for (var i = 2; i < parameters.length; i += 2) {
                     result += " " + this.context.convertCommon("operator", parameters[i]);
@@ -4863,7 +5109,6 @@ var GLS;
              * @remarks Usage: (operator).
              */
             OperatorCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 return Commands.LineResults.newSingleLine(this.convertOperator(parameters[1]), false);
             };
             /**
@@ -5144,7 +5389,6 @@ var GLS;
              * @remarks Usage: ().
              */
             ThisCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 0);
                 return Commands.LineResults.newSingleLine(this.language.properties.classes.this, false);
             };
             return ThisCommand;
@@ -5185,7 +5429,6 @@ var GLS;
              * @remarks Usage: (type).
              */
             TypeCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 return Commands.LineResults.newSingleLine(this.convertType(parameters[1]), false);
             };
             /**
@@ -5293,7 +5536,6 @@ var GLS;
              * @remarks Usage: (value).
              */
             ValueCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 return Commands.LineResults.newSingleLine(this.convertValue(parameters[1]), false);
             };
             /**
@@ -5352,7 +5594,6 @@ var GLS;
              * @remarks Usage: (name, type[, value]).
              */
             VariableCommand.prototype.render = function (parameters) {
-                this.requireParametersLengthRange(parameters, 2, 3);
                 if (parameters.length === 3 && !this.language.properties.variables.declarationRequired) {
                     return Commands.LineResults.newSingleLine("\0", false);
                 }
@@ -5368,7 +5609,7 @@ var GLS;
             VariableCommand.parameters = [
                 new Commands.Parameters.SingleParameter("name", "The name of the variable.", true),
                 new Commands.Parameters.SingleParameter("type", "The type of the variable.", true),
-                new Commands.Parameters.SingleParameter("value", "The starting value of the variable.", true)
+                new Commands.Parameters.SingleParameter("value", "The starting value of the variable.", false)
             ];
             return VariableCommand;
         })(Commands.Command);
@@ -5408,7 +5649,6 @@ var GLS;
              * @remarks Usage: (name, type[, value]).
              */
             VariableInlineCommand.prototype.render = function (parameters) {
-                this.requireParametersLengthRange(parameters, 2, 3);
                 if (parameters.length === 3 && !this.language.properties.variables.declarationRequired) {
                     return Commands.LineResults.newSingleLine("\0", false);
                 }
@@ -5449,7 +5689,7 @@ var GLS;
             VariableInlineCommand.parameters = [
                 new Commands.Parameters.SingleParameter("name", "The name of the variable.", true),
                 new Commands.Parameters.SingleParameter("type", "The type of the variable.", true),
-                new Commands.Parameters.SingleParameter("value", "The starting value of the variable.", true)
+                new Commands.Parameters.SingleParameter("value", "The starting value of the variable.", false)
             ];
             return VariableInlineCommand;
         })(Commands.Command);
@@ -5489,7 +5729,6 @@ var GLS;
              * @remarks Usage: (name, type, value).
              */
             VariableStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 3);
                 // Languages like C# will give the last value in parameters including a "\n"
                 var newParameters = ["variable"];
                 for (var i = 1; i < parameters.length; i += 1) {
@@ -5575,7 +5814,6 @@ var GLS;
              * @remarks Usage: (conditional).
              */
             WhileStartCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 1);
                 var line = this.language.properties.conditionals.while;
                 line += this.language.properties.conditionals.startLeft;
                 line += parameters[1];
@@ -5609,6 +5847,9 @@ var GLS;
 /// <reference path="CommentLineCommand.ts" />
 /// <reference path="ContinueCommand.ts" />
 /// <reference path="ConcatenateCommand.ts" />
+/// <reference path="DictionaryContainsKeyCommand.ts" />
+/// <reference path="DictionaryKeysCommand.ts" />
+/// <reference path="DictionaryNewCommand.ts" />
 /// <reference path="DictionaryNewEndCommand.ts" />
 /// <reference path="DictionaryNewStartCommand.ts" />
 /// <reference path="DictionaryPairCommand.ts" />
@@ -5677,6 +5918,8 @@ var GLS;
                     "comment line": new Commands.CommentLineCommand(context),
                     "concatenate": new Commands.ConcatenateCommand(context),
                     "continue": new Commands.ContinueCommand(context),
+                    "dictionary contains key": new Commands.DictionaryContainsKeyCommand(context),
+                    "dictionary keys": new Commands.DictionaryKeysCommand(context),
                     "dictionary new": new Commands.DictionaryNewCommand(context),
                     "dictionary new end": new Commands.DictionaryNewEndCommand(context),
                     "dictionary new start": new Commands.DictionaryNewStartCommand(context),
@@ -5746,7 +5989,9 @@ var GLS;
              * @returns Line(s) of code in the language.
              */
             CommandsBag.prototype.renderCommand = function (parameters) {
-                return this.getCommand(parameters[0]).render(parameters);
+                var command = this.getCommand(parameters[0]);
+                command.checkParameterValidity(parameters);
+                return command.render(parameters);
             };
             return CommandsBag;
         })();
@@ -5995,58 +6240,6 @@ var GLS;
         return ConversionContext;
     })();
     GLS.ConversionContext = ConversionContext;
-})(GLS || (GLS = {}));
-/// <reference path="../Languages/Language.ts" />
-/// <reference path="Command.ts" />
-/// <reference path="LineResults.ts" />
-var GLS;
-(function (GLS) {
-    var Commands;
-    (function (Commands) {
-        "use strict";
-        /**
-         * A command for initializing a new dictionary.
-         */
-        var DictionaryNewCommand = (function (_super) {
-            __extends(DictionaryNewCommand, _super);
-            function DictionaryNewCommand() {
-                _super.apply(this, arguments);
-            }
-            /**
-             * Renders the command for a language with the given parameters.
-             *
-             * @param parameters   The command's name, followed by any parameters.
-             * @returns Line(s) of code in the language.
-             * @remarks Usage: (keyType, valueType).
-             */
-            DictionaryNewCommand.prototype.render = function (parameters) {
-                this.requireParametersLength(parameters, 2);
-                if (!this.language.properties.dictionaries.initializeAsNew) {
-                    return Commands.LineResults.newSingleLine("{}", false);
-                }
-                var output = "new ";
-                output += this.language.properties.dictionaries.className;
-                if (this.language.properties.classes.generics.used) {
-                    output += this.language.properties.classes.generics.left;
-                    output += this.context.convertCommon("type", parameters[1]);
-                    output += this.language.properties.classes.generics.middle;
-                    output += this.context.convertCommon("type", parameters[2]);
-                    output += this.language.properties.classes.generics.right;
-                }
-                output += "()";
-                return Commands.LineResults.newSingleLine(output, false);
-            };
-            /**
-             * Information on parameters this command takes in.
-             */
-            DictionaryNewCommand.parameters = [
-                new Commands.Parameters.SingleParameter("keyType", "The type of the keys.", true),
-                new Commands.Parameters.SingleParameter("valueType", "The type of the values", true)
-            ];
-            return DictionaryNewCommand;
-        })(Commands.Command);
-        Commands.DictionaryNewCommand = DictionaryNewCommand;
-    })(Commands = GLS.Commands || (GLS.Commands = {}));
 })(GLS || (GLS = {}));
 
 if (typeof module !== "undefined") {

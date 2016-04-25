@@ -139,36 +139,67 @@ declare namespace GLS.Languages.Properties {
 }
 declare namespace GLS.Languages.Properties {
     /**
+     * Where native operations are called from.
+     */
+    enum NativeCallScope {
+        /**
+         * Called as a member of the calling object.
+         */
+        Member = 0,
+        /**
+         * Called as an operator on or with the calling object.
+         */
+        Operator = 1,
+        /**
+         * Called as a global static.
+         */
+        Static = 2,
+    }
+    /**
+     * How native operations are called.
+     */
+    enum NativeCallType {
+        /**
+         * An operator floating to the left of its caller.
+         */
+        FloatingLeft = 0,
+        /**
+         * An operator floating to the right of its caller.
+         */
+        FloatingRight = 1,
+        /**
+         * An operation that exists as a function.
+         */
+        Function = 2,
+        /**
+         * An operation as a single property.
+         */
+        Property = 3,
+    }
+    /**
      * Metadata on how to perform a native call, such as Array::push.
      */
     class NativeCallProperties {
         /**
-         * Whether this is used as a function, rather than a property.
-         */
-        asFunction: boolean;
-        /**
-         * Whether this is a static function, rather than a member.
-         */
-        asStatic: boolean;
-        /**
-         * How this is called in the language.
+         * What this is called.
          */
         name: string;
         /**
-         * @param name   What the native call is called.
-         * @returns A new NativeCallProperties describing a member function.
+         * Where this is called from.
          */
-        static NewMemberFunction(name: string): NativeCallProperties;
+        scope: NativeCallScope;
         /**
-         * @param name   What the native call is called.
-         * @returns A new NativeCallProperties describing a member propertiy.
+         * How this is called.
          */
-        static NewMemberProperty(name: string): NativeCallProperties;
+        type: NativeCallType;
         /**
-         * @param name   What the native call is called.
-         * @returns A new NativeCallProperties describing a static function.
+         * Initializes a new instance of the NativeCallProperties class.
+         *
+         * @param name   What this is called.
+         * @param scope   Where this is called from.
+         * @param type   How this is called.
          */
-        static NewStaticFunction(name: string): NativeCallProperties;
+        constructor(name: string, scope: NativeCallScope, type: NativeCallType);
     }
 }
 declare namespace GLS.Languages.Properties {
@@ -389,9 +420,17 @@ declare namespace GLS.Languages.Properties {
      */
     class DictionaryProperties {
         /**
+         * How to determine if a key exists in a dictionary.
+         */
+        containsKey: NativeCallProperties;
+        /**
          * The name of the dictionary class.
          */
         className: string;
+        /**
+         * How to retrieve all keys from a dictionary as an array.
+         */
+        keys: NativeCallProperties;
         /**
          * Whether dictionaries are initialized as class instances using "new".
          */
@@ -420,10 +459,6 @@ declare namespace GLS.Languages.Properties {
          * How to start initializing a new dictionary's values.
          */
         initializeStart: string;
-        /**
-         * The name of the function to check if a key exists.
-         */
-        keyChecker: string;
         /**
          * How to start displaying types in a dictionary type.
          */
@@ -1890,125 +1925,6 @@ declare namespace GLS.Commands.Parameters {
         constructor(description: string);
     }
 }
-declare namespace GLS.Commands {
-    /**
-     * Abstract base class for commands that may be rendered into language code.
-     */
-    abstract class Command {
-        /**
-         * Default information on parameters a command takes in (none).
-         */
-        private static defaultParameters;
-        /**
-         * The driving context for converting the command.
-         */
-        protected context: ConversionContext;
-        /**
-         * A language to convert raw code into.
-         */
-        protected language: Languages.Language;
-        /**
-         * Whether this command'slines should end with a semicolon.
-         */
-        protected addsSemicolon: boolean;
-        /**
-         * Initializes a new instance of the Command class.
-         *
-         * @param context   The driving context for converting the command.
-         */
-        constructor(context: ConversionContext);
-        /**
-         * @returns Whether this command's lines should end with a semicolon.
-         */
-        getAddsSemicolon(): boolean;
-        /**
-         * @returns Information on parameters this command takes in.
-         */
-        getParameters(): Parameters.Parameter[];
-        /**
-         * Renders the command for a language with the given parameters.
-         *
-         * @param parameters   The command's name, followed by any parameters.
-         * @returns Line(s) of code in the language.
-         */
-        abstract render(parameters: string[]): LineResults;
-        /**
-         * Adds a portion of raw syntax that may contain endlines.
-         *
-         * @param lines   In-progress line(s) of code in the rendering language.
-         * @param extra   Raw syntax to add to the lines.
-         * @param indentation   How much indentation the last line should be.
-         */
-        protected addLineEnder(lines: CommandResult[], extra: string, indentation: any): void;
-        /**
-         * Throws an error if an incorrect number of parameters are passed.
-         *
-         * @param parameters   Parameters passed to a command.
-         * @param minimum   The allowed number of parameters.
-         */
-        protected requireParametersLength(parameters: string[], amount: number): void;
-        /**
-         * Throws an error if not enough parameters are passed.
-         *
-         * @param parameters   Parameters passed to a command.
-         * @param minimum   The minimum allowed number of parameters.
-         */
-        protected requireParametersLengthMinimum(parameters: string[], minimum: number): void;
-        /**
-         * Throws an error if too many parameters are passed.
-         *
-         * @param parameters   Parameters passed to a command.
-         * @param minimum   The minimum allowed number of parameters.
-         */
-        protected requireParametersLengthMaximum(parameters: string[], maximum: number): void;
-        /**
-         * Throws an error if not enough or too many parameters are passed.
-         *
-         * @param parameters   Parameters passed to a command.
-         * @param maximum   The maximum allowed number of parameters.
-         * @param minimum   The minimum allowed number of parameters.
-         */
-        protected requireParametersLengthRange(parameters: string[], minimum: number, maximum: number): void;
-        /**
-         * Throws an error if an odd number of parameters are passed.
-         *
-         * @param parameters   Parameters passed to a command.
-         */
-        protected requireParametersLengthEven(parameters: string[]): void;
-        /**
-         * Throws an error if an even number of parameters are passed.
-         *
-         * @param parameters   Parameters passed to a command.
-         */
-        protected requireParametersLengthOdd(parameters: string[]): void;
-    }
-}
-declare namespace GLS.Commands {
-    /**
-     * Constants used for creating commands.
-     */
-    class CommandStrings {
-        /**
-         * Raw name of the ArrayInitialize command.
-         */
-        static ArrayInitializeCommandName: string;
-        /**
-         * Raw name of the Literal command.
-         */
-        static LiteralCommandName: string;
-        /**
-         * Raw name of the Type command.
-         */
-        static TypeCommandName: string;
-        /**
-         * Generates a raw string of GLS syntax for a command and parameters.
-         *
-         * @param inputs   A command name followed by any number of parameters.
-         * @returns A raw string of GLS syntax for the command and parameters.
-         */
-        static generateRawCommand(inputs: string[]): string;
-    }
-}
 declare namespace GLS.Commands.Parameters {
     /**
      * Some number of repeating parameters.
@@ -2049,6 +1965,154 @@ declare namespace GLS.Commands.Parameters {
         constructor(name: string, description: string, required: boolean);
     }
 }
+declare namespace GLS.Commands.Parameters {
+    /**
+     * Summary of parameter restrictions for a command.
+     */
+    class Restrictions {
+        /**
+         * The minimum number of allowed parameters.
+         */
+        private minimum;
+        /**
+         * The maximum number of allowed parameters.
+         */
+        private maximum;
+        /**
+         * Known RepeatingParameters lengths above the minimum.
+         */
+        private intervals;
+        /**
+         * Initializes a new instance of the Restrictions class.
+         *
+         * @param parameters   Descriptions of parameters passed to a command.
+         */
+        constructor(parameters: Parameter[]);
+        /**
+         *
+         * @remarks Having multiple intervals results in none being checked.
+         * @todo Implement checking multiple intervals.
+         */
+        checkValidity(inputs: string[]): void;
+        /**
+         * Checks that command inputs are within the expected length range.
+         *
+         * @param inputs   Input parameters passed to a command.
+         */
+        private checkBasicRange(inputs);
+        /**
+         * Checks that command inputs match an extpected length interval.
+         *
+         * @param inputs   Input parameters passed to a command.
+         */
+        private checkIntervalRange(inputs);
+        /**
+         * @param number   A number of parameters.
+         * @returns A sentence-ready description of the number.
+         */
+        private stringifyNumber(number);
+        /**
+         * Marks a single parameter's restrictions.
+         *
+         * @param parameter   A description of a parameter.
+         */
+        private addSingleParameter(parameter);
+        /**
+         * Marks a repeating parameter's restrictions.
+         *
+         * @param parameter   A description of a parameter.
+         */
+        private addRepeatingParameters(parameter);
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * Abstract base class for commands that may be rendered into language code.
+     */
+    abstract class Command {
+        /**
+         * Default information on parameters a command takes in (none).
+         */
+        private static defaultParameters;
+        /**
+         * The driving context for converting the command.
+         */
+        protected context: ConversionContext;
+        /**
+         * A language to convert raw code into.
+         */
+        protected language: Languages.Language;
+        /**
+         * Whether this command'slines should end with a semicolon.
+         */
+        protected addsSemicolon: boolean;
+        /**
+         * Validity checker for provided parameters.
+         */
+        private parameterRestrictions;
+        /**
+         * Initializes a new instance of the Command class.
+         *
+         * @param context   The driving context for converting the command.
+         */
+        constructor(context: ConversionContext);
+        /**
+         * @returns Whether this command's lines should end with a semicolon.
+         */
+        getAddsSemicolon(): boolean;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * Checks if parameters are valid, throwing an error if not.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         */
+        checkParameterValidity(parameters: string[]): void;
+        /**
+         * Renders the command for a language with the given parameters.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         * @returns Line(s) of code in the language.
+         */
+        abstract render(parameters: string[]): LineResults;
+        /**
+         * Adds a portion of raw syntax that may contain endlines.
+         *
+         * @param lines   In-progress line(s) of code in the rendering language.
+         * @param extra   Raw syntax to add to the lines.
+         * @param indentation   How much indentation the last line should be.
+         */
+        protected addLineEnder(lines: CommandResult[], extra: string, indentation: any): void;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * Constants used for creating commands.
+     */
+    class CommandStrings {
+        /**
+         * Raw name of the ArrayInitialize command.
+         */
+        static ArrayInitializeCommandName: string;
+        /**
+         * Raw name of the Literal command.
+         */
+        static LiteralCommandName: string;
+        /**
+         * Raw name of the Type command.
+         */
+        static TypeCommandName: string;
+        /**
+         * Generates a raw string of GLS syntax for a command and parameters.
+         *
+         * @param inputs   A command name followed by any number of parameters.
+         * @returns A raw string of GLS syntax for the command and parameters.
+         */
+        static generateRawCommand(inputs: string[]): string;
+    }
+}
 declare namespace GLS.Commands {
     /**
      * A command for initializing a new array.
@@ -2079,6 +2143,10 @@ declare namespace GLS.Commands {
      */
     abstract class NativeCallCommand extends Command {
         /**
+         *
+         */
+        private scopeRenderers;
+        /**
          * Metadata on how to perform the native call.
          */
         protected nativeCallProperties: Languages.Properties.NativeCallProperties;
@@ -2102,15 +2170,6 @@ declare namespace GLS.Commands {
          */
         protected abstract retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
         /**
-         * Renders the native call as a static.
-         *
-         * @param parameters   The command's name, followed by any number of
-         *                     items to initialize in the Array.
-         * @returns Line(s) of code in the language.
-         * @remarks Usage: (name[, parameters, ...]).
-         */
-        private renderAsStatic(parameters);
-        /**
          * Renders the native call as a member.
          *
          * @param parameters   The command's name, followed by any number of
@@ -2119,6 +2178,24 @@ declare namespace GLS.Commands {
          * @remarks Usage: (name[, parameters, ...]).
          */
         private renderAsMember(parameters);
+        /**
+         * Renders the native call as an operator.
+         *
+         * @param parameters   The command's name, followed by any number of
+         *                     items to initialize in the Array.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (container, operand)
+         */
+        private renderAsOperator(parameters);
+        /**
+         * Renders the native call as a static.
+         *
+         * @param parameters   The command's name, followed by any number of
+         *                     items to initialize in the Array.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (name[, parameters, ...]).
+         */
+        private renderAsStatic(parameters);
     }
 }
 declare namespace GLS.Commands {
@@ -2388,6 +2465,67 @@ declare namespace GLS.Commands {
 }
 declare namespace GLS.Commands {
     /**
+     * A command for a retrieving the length of an string.
+     */
+    class DictionaryContainsKeyCommand extends NativeCallCommand {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * @returns Metadata on how to perform the native call.
+         */
+        protected retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for a retrieving the keys of a dictionary.
+     */
+    class DictionaryKeysCommand extends NativeCallCommand {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * @returns Metadata on how to perform the native call.
+         */
+        protected retrieveNativeCallProperties(): Languages.Properties.NativeCallProperties;
+    }
+}
+declare namespace GLS.Commands {
+    /**
+     * A command for initializing a new dictionary.
+     */
+    class DictionaryNewCommand extends Command {
+        /**
+         * Information on parameters this command takes in.
+         */
+        private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
+         * Renders the command for a language with the given parameters.
+         *
+         * @param parameters   The command's name, followed by any parameters.
+         * @returns Line(s) of code in the language.
+         * @remarks Usage: (keyType, valueType).
+         */
+        render(parameters: string[]): LineResults;
+    }
+}
+declare namespace GLS.Commands {
+    /**
      * A command for the end of a new dictionary.
      */
     class DictionaryNewEndCommand extends Command {
@@ -2411,6 +2549,10 @@ declare namespace GLS.Commands {
          */
         private static parameters;
         /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
+        /**
          * Renders the command for a language with the given parameters.
          *
          * @param parameters   The command's name, followed by any parameters.
@@ -2429,6 +2571,10 @@ declare namespace GLS.Commands {
          * Information on parameters this command takes in.
          */
         private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
         /**
          * Renders the command for a language with the given parameters.
          *
@@ -2456,6 +2602,10 @@ declare namespace GLS.Commands {
          * Information on parameters this command takes in.
          */
         private static parameters;
+        /**
+         * @returns Information on parameters this command takes in.
+         */
+        getParameters(): Parameters.Parameter[];
         /**
          * Renders the command for a language with the given parameters.
          *
@@ -3481,24 +3631,5 @@ declare namespace GLS {
          * @returns An all-spaces String of length = amount * 4.
          */
         private generateTabs(amount);
-    }
-}
-declare namespace GLS.Commands {
-    /**
-     * A command for initializing a new dictionary.
-     */
-    class DictionaryNewCommand extends Command {
-        /**
-         * Information on parameters this command takes in.
-         */
-        private static parameters;
-        /**
-         * Renders the command for a language with the given parameters.
-         *
-         * @param parameters   The command's name, followed by any parameters.
-         * @returns Line(s) of code in the language.
-         * @remarks Usage: (keyType, valueType).
-         */
-        render(parameters: string[]): LineResults;
     }
 }
