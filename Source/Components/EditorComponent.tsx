@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import CommandsListComponent from "./Commands/CommandsListComponent";
+import { CommandsListComponent } from "./Commands/CommandsListComponent";
 
 /**
  * Properties for an EditorComponent.

@@ -3,22 +3,22 @@
 
 import * as React from "react";
 
-import Parameters = GLS.Commands.Parameters;
-import Parameter = Parameters.Parameter;
-import RepeatingParameters = Parameters.RepeatingParameters;
-import SingleParameter = Parameters.SingleParameter;
+import { Command } from "Commands/Command";
+import { Parameter } from "Commands/Parameters/Parameter";
+import { RepeatingParameters } from "Commands/Parameters/RepeatingParameters";
+import { SingleParameter } from "Commands/Parameters/SingleParameter";
 
-interface ICommandComponentProps {
-    command: GLS.Commands.Command;
+export interface ICommandComponentProps {
+    command: Command;
     name: string;
 }
 
-interface ICommandComponentState { }
+export interface ICommandComponentState { }
 
 /**
  * A real-time GLS Preview component.
  */
-export default class CommandComponent extends React.Component<ICommandComponentProps, ICommandComponentState> {
+export class CommandComponent extends React.Component<ICommandComponentProps, ICommandComponentState> {
     public render(): JSX.Element {
         return (
             <div className="command">

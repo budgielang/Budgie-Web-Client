@@ -6,6 +6,14 @@ import * as Highlight from "highlight.js";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
+import { ConversionContext } from "Conversions/ConversionContext";
+import { Language } from "Languages/Language";
+import { CSharp } from "Languages/CSharp";
+import { Java } from "Languages/Java";
+import { Python } from "Languages/Python";
+import { Ruby } from "Languages/Ruby";
+import { TypeScript } from "Languages/TypeScript";
+
 /**
  * Properties for an PreviewComponent.
  */
@@ -28,7 +36,7 @@ interface IPreviewComponentState {
     /**
      * The driving GLS context to produce output code.
      */
-    conversionContext: GLS.ConversionContext;
+    conversionContext: ConversionContext;
 
     /**
      * Any error that occured while converting.
@@ -50,12 +58,12 @@ export default class PreviewComponent extends React.Component<IPreviewComponentP
      * 
      * @todo Embed this dictionary into GLS itself.
      */
-    private static Languages: { [i: string]: GLS.Languages.Language } = {
-        CSharp: new GLS.Languages.CSharp(),
-        Java: new GLS.Languages.Java(),
-        Python: new GLS.Languages.Python(),
-        Ruby: new GLS.Languages.Ruby(),
-        TypeScript: new GLS.Languages.TypeScript()
+    private static Languages: { [i: string]: Language } = {
+        CSharp: new CSharp(),
+        Java: new Java(),
+        Python: new Python(),
+        Ruby: new Ruby(),
+        TypeScript: new TypeScript()
     };
 
     /**
@@ -92,7 +100,11 @@ export default class PreviewComponent extends React.Component<IPreviewComponentP
      * Highlights code in the DOM node using highlightjs.
      */
     private highlightCode(): void {
-        hljs.highlightBlock(ReactDOM.findDOMNode(this).querySelector("code"));
+        let domNode: Element = ReactDOM.findDOMNode(this);
+        let codeBlock = domNode.querySelector("code");
+
+        // Todo: Remove old highlighting parent?
+        hljs.highlightBlock(codeBlock);
     }
 
     /**
@@ -178,7 +190,7 @@ export default class PreviewComponent extends React.Component<IPreviewComponentP
      * @param languageName   The name of the language.
      * @returns A new GLS conversion context for the language.
      */
-    private createNewConversionContext(languageName: string): GLS.ConversionContext {
-        return new GLS.ConversionContext(PreviewComponent.Languages[languageName]);
+    private createNewConversionContext(languageName: string): ConversionContext {
+        return new ConversionContext(PreviewComponent.Languages[languageName]);
     }
 }

@@ -1,4 +1,4 @@
-var Samples = {
+const Samples = {
     Default: [
         `comment block start`,
         `comment block : GLS ((General Language Syntax)) is a single syntax`,

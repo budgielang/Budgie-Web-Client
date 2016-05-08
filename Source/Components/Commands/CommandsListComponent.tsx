@@ -3,19 +3,22 @@
 
 import * as React from "react";
 
-import CommandComponent from "./CommandComponent";
+import { Command } from "Commands/Command";
+import { CommandsBag } from "Commands/CommandsBag";
+import { ConversionContext } from "Conversions/ConversionContext";
+import { TypeScript } from "Languages/TypeScript";
+
+import { CommandComponent } from "./CommandComponent";
 
 /**
  * Properties for a CommandsListComponent.
  */
-interface ICommandsListProps {
-    
-}
+export interface ICommandsListProps { }
 
 /**
  * State for a CommandsListComponent.
  */
-interface ICommandsListState {
+export interface ICommandsListState {
     /**
      * A user-given filter on which commands to show. 
      */
@@ -25,26 +28,26 @@ interface ICommandsListState {
 /**
  * A real-time GLS Preview component.
  */
-export default class CommandsListComponent extends React.Component<ICommandsListProps, ICommandsListState> {
+export class CommandsListComponent extends React.Component<ICommandsListProps, ICommandsListState> {
     /**
      * 
      */
-    private language: GLS.Languages.TypeScript = new GLS.Languages.TypeScript();
+    private language: TypeScript = new TypeScript();
 
     /**
      * 
      */
-    private conversionContext: GLS.ConversionContext = new GLS.ConversionContext(this.language);
+    private conversionContext: ConversionContext = new ConversionContext(this.language);
 
     /**
      * 
      */
-    private commandsBag: GLS.Commands.CommandsBag = new GLS.Commands.CommandsBag(this.conversionContext);
+    private commandsBag: CommandsBag = new CommandsBag(this.conversionContext);
 
     /**
      * 
      */
-    private commands: { [i: string]: GLS.Commands.Command } = this.commandsBag.getCommands();
+    private commands: { [i: string]: Command } = this.commandsBag.getCommands();
 
     /**
      * 
