@@ -144,7 +144,7 @@ const Samples = {
         `            break`,
         `        while end`,
         `        `,
-        `        comment line : For ((range)`,
+        `        comment line : For ((range))`,
         `        for numbers start : i int 0 10`,
         `            print : i`,
         `        for numbers end`,
