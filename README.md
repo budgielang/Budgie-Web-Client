@@ -13,7 +13,10 @@ Run the following commands to initialize your environment.
 npm install -g bower
 npm install -g typescript
 npm install -g typings
+
 npm install
+bower install
+typings install
 ```
 
 To compile, use TypeScript:
