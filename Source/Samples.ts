@@ -166,7 +166,42 @@ const Samples = {
         `comment line : Coming soon!`
     ],
     Classes: [
-        `comment line : Coming soon!`
+        `comment block start`,
+        `comment block : GLS ((General Language Syntax)) is a single syntax`,
+        `comment block : that compiles into common OOP languages.`,
+        `comment block : ---`,
+        `comment block : Write code in the editor,`,
+        `comment block : and see the language output in real time!`,
+        `comment block end`,
+        ``,
+        `file start : Program`,
+        `    class start : Person`,
+        `        comment doc start`,
+        `        comment doc tag : summary The person's name.`,
+        `        comment doc end`,
+        `        member variable declare : private name string`,
+        `        `,
+        `        comment doc start`,
+        `        comment doc tag : summary The person's age.`,
+        `        comment doc end`,
+        `        member variable declare : private age float`,
+        `        `,
+        `        comment doc start`,
+        `        comment doc tag : parameter name The person's name.`,
+        `        comment doc tag : parameter age The person's age.`,
+        `        comment doc end`,
+        `        constructor start : Person name string age float`,
+        `            operation : { member variable : private { this } name } equals name`,
+        `            operation : { member variable : private { this } age} equals age`,
+        `        constructor end`,
+        `    class end`,
+        `    `,
+        `    comment line : Coming soon: member functions`,
+        `    `,
+        `    main start`,
+        `        comment line : Coming soon: instances`,
+        `    main end`,
+        `file end : Program`
     ]
 };
 
