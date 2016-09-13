@@ -86,8 +86,8 @@ export default class WebClientComponent extends React.Component<IWebClientCompon
                         onChange={newValue => this.receiveNewEditorValue(newValue)} />
                 </section>
                 <section id="PreviewSection">
-                    <select 
-                        className="preview-language-selector" 
+                    <select
+                        className="preview-language-selector"
                         value={this.state.outputLanguage}
                         onChange={event => this.receiveNewOutputLanguage(event)}>
                         <option value="CSharp">CSharp</option>

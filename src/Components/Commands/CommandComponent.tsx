@@ -1,12 +1,9 @@
-/// <reference path="../../../typings/browser/ambient/react/index.d.ts" />
-/// <reference path="../../../References/GLS.d.ts" />
-
 import * as React from "react";
 
-import { Command } from "Commands/Command";
-import { Parameter } from "Commands/Parameters/Parameter";
-import { RepeatingParameters } from "Commands/Parameters/RepeatingParameters";
-import { SingleParameter } from "Commands/Parameters/SingleParameter";
+import { Command } from "gls/src/Commands/Command";
+import { Parameter } from "gls/src/Commands/Parameters/Parameter";
+import { RepeatingParameters } from "gls/src/Commands/Parameters/RepeatingParameters";
+import { SingleParameter } from "gls/src/Commands/Parameters/SingleParameter";
 
 export interface ICommandComponentProps {
     command: Command;

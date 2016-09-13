@@ -19,7 +19,8 @@
     "tests"
   ],
   "dependencies": {
-    "react": "^0.14.8"
+    "react": "^0.14.8",
+    "nprogress": "^0.2.0"
   },
   "devDependencies": {
     "react": "^0.14.8",

@@ -14,8 +14,8 @@ npm install -g bower
 npm install -g typescript
 npm install -g typings
 
-npm install
 bower install
+npm install
 typings install
 ```
 

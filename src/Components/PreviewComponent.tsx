@@ -1,18 +1,18 @@
 /// <reference path="../../typings/browser/ambient/highlightjs/index.d.ts" />
 /// <reference path="../../typings/browser/ambient/react/index.d.ts" />
-/// <reference path="../../References/GLS.d.ts" />
+/// <reference path="../../typings/browser/ambient/react-dom/index.d.ts" />
 
 import * as Highlight from "highlight.js";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { ConversionContext } from "Conversions/ConversionContext";
-import { Language } from "Languages/Language";
-import { CSharp } from "Languages/CSharp";
-import { Java } from "Languages/Java";
-import { Python } from "Languages/Python";
-import { Ruby } from "Languages/Ruby";
-import { TypeScript } from "Languages/TypeScript";
+import { ConversionContext } from "gls/src/Conversions/ConversionContext";
+import { Language } from "gls/src/Languages/Language";
+import { CSharp } from "gls/src/Languages/CSharp";
+import { Java } from "gls/src/Languages/Java";
+import { Python } from "gls/src/Languages/Python";
+import { Ruby } from "gls/src/Languages/Ruby";
+import { TypeScript } from "gls/src/Languages/TypeScript";
 
 /**
  * Properties for an PreviewComponent.

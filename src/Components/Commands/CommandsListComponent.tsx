@@ -1,12 +1,9 @@
-/// <reference path="../../../typings/browser/ambient/react/index.d.ts" />
-/// <reference path="../../../References/GLS.d.ts" />
-
 import * as React from "react";
 
-import { Command } from "Commands/Command";
-import { CommandsBag } from "Commands/CommandsBag";
-import { ConversionContext } from "Conversions/ConversionContext";
-import { TypeScript } from "Languages/TypeScript";
+import { Command } from "gls/src/Commands/Command";
+import { CommandsBag } from "gls/src/Commands/CommandsBag";
+import { ConversionContext } from "gls/src/Conversions/ConversionContext";
+import { TypeScript } from "gls/src/Languages/TypeScript";
 
 import { CommandComponent } from "./CommandComponent";
 
@@ -52,7 +49,7 @@ export class CommandsListComponent extends React.Component<ICommandsListProps, I
     /**
      * 
      */
-    public state: ICommandsListState = { 
+    public state: ICommandsListState = {
         filter: ""
     };
 
@@ -101,6 +98,6 @@ export class CommandsListComponent extends React.Component<ICommandsListProps, I
     private onFilterChange(event: React.FormEvent): void {
         this.setState({
             filter: (event.target as HTMLInputElement).value.toLowerCase()
-        })
+        });
     }
 }

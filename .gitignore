@@ -1,5 +1,6 @@
-Source/**/*.js
-Source/**/*.js.map
+src/**/*.js
+src/**/*.js.map
+!src/main.js
 bower_components
 node_modules/
 typings
