@@ -1,9 +1,9 @@
 {
-  "name": "GLS",
+  "name": "gls-web-client",
   "description": "TypeScript web editor for GLS.",
   "main": "index.js",
   "authors": [
-    "[object Object]"
+    "joshuakgoldberg@outlook.com"
   ],
   "license": "MIT",
   "moduleType": [

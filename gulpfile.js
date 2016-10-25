@@ -38,12 +38,12 @@ gulp.task("tslint", () => {
 });
 
 gulp.task("watch", () => {
-    gulp.watch(["src/**/*.ts", "src/**/*.tsx"], ["tsc", "lint", "browserify"]);
+    gulp.watch(["src/**/*.ts", "src/**/*.tsx"], ["tsc", "tslint", "browserify"]);
 });
 
 gulp.task("default", callback => {
     runSequence(
-        ["tsc", "lint"],
+        ["tsc", "tslint"],
         ["browserify"],
         callback);
 });
