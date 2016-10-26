@@ -9,7 +9,6 @@
   "moduleType": [
     "amd"
   ],
-  "homepage": "",
   "private": true,
   "ignore": [
     "**/.*",
@@ -24,7 +23,6 @@
   },
   "devDependencies": {
     "react": "^0.14.8",
-    "requirejs": "^2.2.0",
-    "highlightjs": "^9.2.0"
+    "requirejs": "^2.2.0"
   }
 }
