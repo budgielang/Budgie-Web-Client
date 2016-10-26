@@ -1,7 +1,7 @@
 require.config({
     baseUrl: "..",
     paths: {
-        "gls/src": "node_modules/gls/dist/amd",
+        "gls/src": "node_modules/general-language-syntax/dist/amd",
         "react": "node_modules/react/dist/react", // .min",
         "react-dom": "node_modules/react-dom/dist/react-dom", // .min",
         "vs": "node_modules/monaco-editor/dev/vs"
