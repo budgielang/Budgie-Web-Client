@@ -62,7 +62,22 @@ export interface IMonacoComponentProps {
 /**
  * 
  */
-export class MonacoComponent extends React.Component<IMonacoComponentProps, any> {
+interface IMonacoComponentState {
+    /**
+     * 
+     */
+    currentValue?: string;
+
+    /**
+     * 
+     */
+    loading?: boolean;
+}
+
+/**
+ * 
+ */
+export class MonacoComponent extends React.Component<IMonacoComponentProps, IMonacoComponentState> {
     /**
      * Default properties for the component.
      */
@@ -82,16 +97,6 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
     /**
      * 
      */
-    private loading: boolean;
-
-    /**
-     * 
-     */
-    private currentValue: string;
-
-    /**
-     * 
-     */
     private preventTriggerChangeEvent: boolean;
 
     /**
@@ -107,8 +112,10 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
     public constructor(props: IMonacoComponentProps) {
         super(props);
 
-        this.loading = true;
-        this.currentValue = props.value;
+        this.state = {
+            loading: true,
+            currentValue: props.value
+        };
     }
 
     /**
@@ -117,7 +124,7 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
      * @returns The rendered component.
      */
     public render(): JSX.Element {
-        return this.loading
+        return this.state.loading
             ? this.renderLoading()
             : this.renderLoaded();
     }
@@ -175,7 +182,7 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
             return;
         }
 
-        if (nextProps.value === this.currentValue) {
+        if (nextProps.value === this.state.currentValue) {
             return;
         }
 
@@ -195,17 +202,23 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
      * Trigger when the editor mounted.
      */
     private editorDidMount(editor, monaco) {
-        const { onChange } = this.props;
-
+        this.setState({
+            loading: false
+        });
         this.props.editorDidMount(editor, monaco);
-        editor.onDidChangeModelContent(event => {
+
+        editor.onDidChangeModelContent((event: any): void => {
             const value = editor.getValue();
-            // Only invoking when user input changed
+
+            // Only invoke onChange when user input changed
             if (!this.preventTriggerChangeEvent) {
-                onChange(value, event);
+                this.props.onChange(value, event);
             }
+
             // Always refer to the latest value
-            this.currentValue = value;
+            this.setState({
+                currentValue: value
+            });
         });
     }
 
@@ -229,10 +242,9 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
             throw new Error("Monaco failed to load.");
         }
 
-        this.loading = false;
-
         // Before initializing monaco editor
         this.editorWillMount(monaco);
+
         this.editor = monaco.editor.create(
             (this.refs as any).container,
             (Object as any).assign(
@@ -241,8 +253,6 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
 
         // After initializing monaco editor
         this.editorDidMount(this.editor, monaco);
-
-        this.forceUpdate();
     }
 
     /**
