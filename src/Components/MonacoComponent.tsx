@@ -169,6 +169,12 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
      * @param nextProps   A new set of properties.
      */
     public componentWillUpdate(nextProps: IMonacoComponentProps): void {
+        if (nextProps.language !== this.props.language) {
+            this.destroyMonaco();
+            this.initializeMonaco(nextProps);
+            return;
+        }
+
         if (nextProps.value === this.currentValue) {
             return;
         }
@@ -215,10 +221,9 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
     /**
      * 
      */
-    private initializeMonaco() {
-        const value = this.props.value !== null ? this.props.value : this.props.defaultValue;
-        const { language, theme, options } = this.props;
-        const containerElement = (this.refs as any).container;
+    private initializeMonaco(props: IMonacoComponentProps = this.props) {
+        const value = props.value || props.defaultValue;
+        const { language, theme, options } = props;
 
         if (typeof monaco === "undefined") {
             throw new Error("Monaco failed to load.");
@@ -229,7 +234,7 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
         // Before initializing monaco editor
         this.editorWillMount(monaco);
         this.editor = monaco.editor.create(
-            containerElement,
+            (this.refs as any).container,
             (Object as any).assign(
                 { value, language, theme },
                 options));
@@ -244,9 +249,12 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
      * Disposes of the editor.
      */
     private destroyMonaco() {
-        if (typeof this.editor !== "undefined") {
-            this.editor.dispose();
+        if (typeof this.editor === "undefined") {
+            return;
         }
+
+        this.editor.dispose();
+        (this.refs as any).container.innerHTML = "";
     }
 
     /**

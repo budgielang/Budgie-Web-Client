@@ -119,7 +119,7 @@ export default class PreviewComponent extends React.Component<IPreviewComponentP
         return (
             <MonacoComponent
                 value={outputLines.join("\n")}
-                language={this.props.languageName} />);
+                language={this.props.languageName.toLowerCase()} />);
     }
 
     /**
