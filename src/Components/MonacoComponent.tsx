@@ -82,6 +82,11 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
     /**
      * 
      */
+    private loading: boolean;
+
+    /**
+     * 
+     */
     private currentValue: string;
 
     /**
@@ -102,6 +107,7 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
     public constructor(props: IMonacoComponentProps) {
         super(props);
 
+        this.loading = true;
         this.currentValue = props.value;
     }
 
@@ -111,16 +117,34 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
      * @returns The rendered component.
      */
     public render(): JSX.Element {
-        const { width, height } = this.props;
-        const fixedWidth = width.toString().indexOf("%") !== -1 ? width : `${width}px`;
-        const fixedHeight = height.toString().indexOf("%") !== -1 ? height : `${height}px`;
-        const style = {
-            width: fixedWidth,
-            height: fixedHeight,
-        };
+        return this.loading
+            ? this.renderLoading()
+            : this.renderLoaded();
+    }
 
+    /**
+     * 
+     */
+    public renderLoading(): JSX.Element {
         return (
-            <div ref="container" style={style} className="react-monaco-editor-container"></div>);
+            <div
+                className="react-monaco-editor-container monaco-loading"
+                ref="container"
+                style={{width: "100%", height: "100%" }}>
+                <span>loading editor...</span>
+            </div>);
+    }
+
+    /**
+     * 
+     */
+    public renderLoaded(): JSX.Element {
+        return (
+            <div
+                className= "react-monaco-editor-container"
+                ref="container"
+                style={{width: "100%", height: "100%" }}>
+            </div>);
     }
 
     /**
@@ -189,8 +213,10 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
         const containerElement = (this.refs as any).container;
 
         if (typeof monaco === "undefined") {
-            return;
+            throw new Error("Monaco failed to load.");
         }
+
+        this.loading = false;
 
         // Before initializing monaco editor
         this.editorWillMount(monaco);
@@ -202,6 +228,8 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
 
         // After initializing monaco editor
         this.editorDidMount(this.editor, monaco);
+
+        this.forceUpdate();
     }
 
     /**

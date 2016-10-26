@@ -62,6 +62,5 @@ export default class EditorComponent extends React.Component<IEditorComponentPro
      */
     private receiveNewValue(value: string): void {
         this.props.onChange(value.trim().split("\n"));
-        event.stopPropagation();
     }
 }
