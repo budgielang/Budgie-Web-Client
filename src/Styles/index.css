@@ -168,5 +168,6 @@ textarea.editor-textarea {
 .monaco-loading span {
     align-self: center;
     width: 100%;
+    color: #777;
     text-align: center;
 }

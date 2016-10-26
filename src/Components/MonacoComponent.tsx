@@ -152,6 +152,7 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
      */
     public componentDidMount() {
         this.afterViewInit();
+        window.addEventListener("resize", this.updateDimensions);
     }
 
     /**
@@ -159,6 +160,7 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
      */
     public componentWillUnmount() {
         this.destroyMonaco();
+        window.removeEventListener("resize", this.updateDimensions);
     }
 
     /**
@@ -201,12 +203,18 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
         });
     }
 
+    /**
+     * 
+     */
     private afterViewInit() {
         (window as any).require(["vs/editor/editor.main"], () => {
             this.initializeMonaco();
         });
     }
 
+    /**
+     * 
+     */
     private initializeMonaco() {
         const value = this.props.value !== null ? this.props.value : this.props.defaultValue;
         const { language, theme, options } = this.props;
@@ -240,4 +248,11 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, any>
             this.editor.dispose();
         }
     }
+
+    /**
+     * Reacts to a window resize by re-computing the editor layout.
+     */
+    private updateDimensions = (): void => {
+        this.editor.layout();
+    };
 }
