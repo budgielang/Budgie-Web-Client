@@ -3,11 +3,12 @@
 import * as React from "react";
 
 import { CommandsListComponent } from "./Commands/CommandsListComponent";
+import { MonacoComponent } from "./MonacoComponent";
 
 /**
  * Properties for an EditorComponent.
  */
-interface IEditorComponentProps {
+export interface IEditorComponentProps {
     /**
      * The initial starting text value for the editor.
      */
@@ -36,9 +37,9 @@ export default class EditorComponent extends React.Component<IEditorComponentPro
     public render(): JSX.Element {
         return (
             <div className="component editor-component">
-                <textarea
-                    className="editor-textarea"
+                <MonacoComponent
                     defaultValue={this.props.defaultValue}
+                    language="none"
                     onChange={event => this.receiveNewValue(event)} />
                 {this.renderCommandsList()}
             </div>);
@@ -57,10 +58,9 @@ export default class EditorComponent extends React.Component<IEditorComponentPro
      * Intercepts a textarea change event and passes it, with its split lines,
      * to props.
      * 
-     * @param event   The triggering event.
+     * @param value   The new value.
      */
-    private receiveNewValue(event: React.FormEvent): void {
-        this.props.onChange((event.target as HTMLTextAreaElement).value.trim().split("\n"));
-        event.stopPropagation();
+    private receiveNewValue(value: string): void {
+        this.props.onChange(value.trim().split("\n"));
     }
 }

@@ -3,7 +3,8 @@ require.config({
     paths: {
         "gls/src": "node_modules/gls/dist/amd",
         "react": "node_modules/react/dist/react", // .min",
-        "react-dom": "node_modules/react-dom/dist/react-dom" // .min"
+        "react-dom": "node_modules/react-dom/dist/react-dom", // .min",
+        "vs": "node_modules/monaco-editor/dev/vs"
     }
 });
 

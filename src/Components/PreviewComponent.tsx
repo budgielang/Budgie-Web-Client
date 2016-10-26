@@ -1,8 +1,6 @@
-/// <reference path="../../typings/browser/ambient/highlightjs/index.d.ts" />
 /// <reference path="../../typings/browser/ambient/react/index.d.ts" />
 /// <reference path="../../typings/browser/ambient/react-dom/index.d.ts" />
 
-import * as Highlight from "highlight.js";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
@@ -13,6 +11,8 @@ import { Java } from "gls/src/Languages/Java";
 import { Python } from "gls/src/Languages/Python";
 import { Ruby } from "gls/src/Languages/Ruby";
 import { TypeScript } from "gls/src/Languages/TypeScript";
+
+import { MonacoComponent } from "./MonacoComponent";
 
 /**
  * Properties for an PreviewComponent.
@@ -90,21 +90,10 @@ export default class PreviewComponent extends React.Component<IPreviewComponentP
      */
     public render(): JSX.Element {
         return (
-            <div className="component preview-component highlight">
+            <div className="component preview-component">
                 {this.renderErrorBar(this.state.error)}
                 {this.renderOutputLines(this.state.outputLines)}
             </div>);
-    }
-
-    /**
-     * Highlights code in the DOM node using highlightjs.
-     */
-    private highlightCode(): void {
-        let domNode: Element = ReactDOM.findDOMNode(this);
-        let codeBlock = domNode.querySelector("code");
-
-        // Todo: Remove old highlighting parent?
-        hljs.highlightBlock(codeBlock);
     }
 
     /**
@@ -128,11 +117,9 @@ export default class PreviewComponent extends React.Component<IPreviewComponentP
      */
     private renderOutputLines(outputLines: string[]): JSX.Element {
         return (
-            <pre>
-                <code className={`language-${this.props.languageName.toLowerCase()}`}>
-                    {outputLines.join("\n")}
-                </code>
-            </pre>);
+            <MonacoComponent
+                value={outputLines.join("\n")}
+                language={this.props.languageName.toLowerCase()} />);
     }
 
     /**
@@ -142,20 +129,6 @@ export default class PreviewComponent extends React.Component<IPreviewComponentP
      */
     private componentWillReceiveProps(nextProps: IPreviewComponentProps): void {
         this.setState(this.generateStateFromProps(nextProps));
-    }
-
-    /**
-     * Handler to highlight code when the component mounts.
-     */
-    private componentDidMount(): void {
-        this.highlightCode();
-    }
-
-    /**
-     * Handler to highlight code whenthe component unmounts.
-     */
-    private componentDidUpdate(): void {
-        this.highlightCode();
     }
 
     /**

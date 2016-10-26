@@ -157,3 +157,17 @@ textarea.editor-textarea {
     padding: 11px 14px 0;
     border-bottom: 1px solid rgb(240, 175, 175);
 }
+
+
+/* Monaco editors */
+
+.monaco-loading {
+    display: flex;
+}
+
+.monaco-loading span {
+    align-self: center;
+    width: 100%;
+    color: #777;
+    text-align: center;
+}
