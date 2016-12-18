@@ -1,33 +1,24 @@
+import { observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 
 import { Samples } from "../../samples";
+import { IAppProps } from "../app";
 import { MonacoTextArea } from "../monacotextarea";
 import { DropdownTextMenu } from "./dropdowntextmenu";
-
-/**
- * Properties for a GlsTextArea component.
- */
-export interface IProps {
-    /**
-     * Raw lines of GLS syntax.
-     */
-    sourceLines: string[];
-}
 
 /**
  * Component for a GLS text area.
  */
 @observer
-export class GlsTextArea extends React.Component<IProps, void> {
+export class GlsTextArea extends React.Component<IAppProps, void> {
     /**
      * @returns The rendered component.
      */
     public render(): JSX.Element {
-        console.log("initial source lines", this.props.sourceLines);
         return (
             <MonacoTextArea
-                defaultValue={this.props.sourceLines.join("\n")}
+                defaultValue={this.props.app.sourceLines.join("\n")}
                 language="none"
                 onChange={event => this.receiveNewValue(event)} />);
     }
@@ -38,6 +29,7 @@ export class GlsTextArea extends React.Component<IProps, void> {
      * @param value   The new value.
      */
     private receiveNewValue(value: string): void {
-        console.log("Got", value.split("\n"));
+        this.props.app.sourceLines = observable(value.trim().split("\n"));
+        this.props.app.usingSample = false;
     }
 }

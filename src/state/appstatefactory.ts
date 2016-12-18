@@ -11,7 +11,7 @@ class AppState implements IAppState {
      * Which language to convert GLS syntax into.
      */
     @observable
-    public outputLanguage: string;
+    public language: string;
 
     /**
      * The most recently selected sample code.
@@ -24,12 +24,18 @@ class AppState implements IAppState {
      */
     @observable
     public sourceLines: string[];
+
+    /**
+     * Raw lines of GLS syntax from the editor component.
+     */
+    @observable
+    public usingSample: boolean;
 }
 
 /**
  * Creates IAppState instances.
  */
-export class AppStateFactory {
+export class AppStateFactory<T> {
     /**
      * Default storage key for the storage wrapper.
      */
@@ -39,9 +45,10 @@ export class AppStateFactory {
      * Default values for the global application state.
      */
     private static readonly defaults: Partial<IAppState> = {
-        outputLanguage: "CSharp",
+        language: "CSharp",
         sampleName: "default",
-        sourceLines: []
+        sourceLines: [],
+        usingSample: true
     };
 
     /**
@@ -52,8 +59,7 @@ export class AppStateFactory {
     /**
      * Initializes a new instance of the AppStateFactory class.
      * 
-     * @param storagePrefix   Key prefix for storage keys.
-     * @param storage   Wrapper for persistent items kept in a Storage object.
+     * @param storageWrapper   Wrapper for persistent items kept in a Storage object.
      */
     public constructor(storageWrapper: IStorageWrapper = new StorageWrapper(AppStateFactory.storageKey)) {
         this.storageWrapper = storageWrapper;

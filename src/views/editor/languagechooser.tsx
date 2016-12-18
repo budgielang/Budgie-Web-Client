@@ -3,22 +3,13 @@ import { observer } from "mobx-react";
 import * as React from "react";
 
 import { DropdownTextMenu } from "./dropdowntextmenu";
-
-/**
- * Properties for a LanguageChooser component.
- */
-export interface IProps {
-    /**
-     * Which language to convert GLS syntax into.
-     */
-    language: string;
-}
+import { IAppProps } from "../app";
 
 /**
  * Component for a language chooser.
  */
 @observer
-export class LanguageChooser extends React.Component<IProps, void> {
+export class LanguageChooser extends React.Component<IAppProps, void> {
     /**
      * All available GLS language names.
      */
@@ -30,7 +21,17 @@ export class LanguageChooser extends React.Component<IProps, void> {
     public render(): JSX.Element {
         return (
             <DropdownTextMenu
-                defaultValue={this.props.language}
+                defaultValue={this.props.app.language}
+                onChange={this.onChange}
                 options={LanguageChooser.languageNames} />);
     }
+
+    /**
+     * Handles a new value from the text menu.
+     * 
+     * @param sampleName   A new sample name from the text menu.
+     */
+    private onChange = (language: string): void => {
+        this.props.app.language = language;
+    };
 }

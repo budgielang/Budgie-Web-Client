@@ -19,17 +19,18 @@ export interface IAppProps {
  * Component for the entire application.
  */
 @observer
-export class App extends React.Component<IAppState, void> {
+export class App extends React.Component<IAppProps, void> {
     /**
      * @returns The rendered component.
      */
     public render(): JSX.Element {
+        (window as any).durp = this.props;
         return (
             <div>
                 <Editor {...this.props} />
                 <Preview
-                    outputLanguage={this.props.outputLanguage}
-                    sourceLines={this.props.sourceLines} />
+                    outputLanguage={this.props.app.language}
+                    sourceLines={this.props.app.sourceLines} />
             </div>);
     }
 }

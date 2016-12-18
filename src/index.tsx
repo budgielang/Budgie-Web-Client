@@ -8,7 +8,7 @@ const stateFactory = new AppStateFactory();
 const app = document.getElementById("app");
 
 ReactDOM.render(
-    <App {...stateFactory.createInitialState()} />,
+    <App app={stateFactory.createInitialState()} />,
     app);
 
 (window as any).NProgress.done();

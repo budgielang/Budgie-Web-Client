@@ -88,7 +88,7 @@ export class StorageWrapper implements IStorageWrapper {
         key = this.generateStorageKey(key);
 
         if (this.storage.getItem(key) === null) {
-            this.storage[key] = value;
+            this.storage[key] = JSON.stringify(value);
         }
     }
 

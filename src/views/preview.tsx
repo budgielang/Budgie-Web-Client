@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
@@ -49,6 +50,7 @@ interface IState {
 /**
  * A real-time GLS Preview component.
  */
+@observer
 export class Preview extends React.Component<IProps, IState> {
     /**
      * Languages keyed by their friendly names.

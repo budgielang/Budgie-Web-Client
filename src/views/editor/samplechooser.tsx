@@ -3,23 +3,14 @@ import { observer } from "mobx-react";
 import * as React from "react";
 
 import { Samples } from "../../samples";
+import { IAppProps } from "../app";
 import { DropdownTextMenu } from "./dropdowntextmenu";
-
-/**
- * Properties for a SampleChooser component.
- */
-export interface IProps {
-    /**
-     * Which sample to convert GLS syntax into.
-     */
-    sample: string;
-}
 
 /**
  * Component for a Sample chooser.
  */
 @observer
-export class SampleChooser extends React.Component<IProps, void> {
+export class SampleChooser extends React.Component<IAppProps, void> {
     /**
      * Names of the available samples.
      */
@@ -32,6 +23,17 @@ export class SampleChooser extends React.Component<IProps, void> {
         return (
             <DropdownTextMenu
                 defaultValue={SampleChooser.sampleKeys[0]}
+                onChange={this.onChange}
                 options={SampleChooser.sampleKeys} />);
     }
+
+    /**
+     * Handles a new value from the text menu.
+     * 
+     * @param sampleName   A new sample name from the text menu.
+     */
+    private onChange = (sampleName: keyof typeof Samples): void => {
+        this.props.app.sampleName = sampleName;
+        this.props.app.sourceLines = Samples[sampleName];
+    };
 }

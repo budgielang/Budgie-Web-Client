@@ -1,20 +1,18 @@
-import { observer } from "mobx-react";
 import * as React from "react";
 
+/**
+ * Props for a DropdownTextMenu component.
+ */
 export interface IProps {
     defaultValue: string;
+    onChange: (newValue: string) => void;
     options: string[];
 }
 
-export interface IState {
-
-}
-
 /**
- * 
+ * Component for a dropdown text menu.
  */
-@observer
-export class DropdownTextMenu extends React.Component<IProps, IState> {
+export class DropdownTextMenu extends React.Component<IProps, void> {
     /**
      * @returns The rendered component.
      */
@@ -23,8 +21,15 @@ export class DropdownTextMenu extends React.Component<IProps, IState> {
             (option: string): JSX.Element => <option value={option}>{option}</option>);
 
         return (
-            <select defaultValue={this.props.defaultValue}>
+            <select onChange={this.onChange} defaultValue={this.props.defaultValue}>
                 {options}
             </select>);
     }
+
+    /**
+     * 
+     */
+    private onChange = (event: React.FormEvent<HTMLSelectElement>): void => {
+        this.props.onChange(event.currentTarget.value);
+    };
 }
