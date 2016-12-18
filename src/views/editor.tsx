@@ -17,9 +17,11 @@ export class Editor extends React.Component<IAppProps, void> {
     public render(): JSX.Element {
         return (
             <section className="editor">
-                <OptionsBar app={this.props.app} />
-                <GlsTextArea app={this.props.app} />
-                <GlsCommandsList />
+                <div className="component">
+                    <OptionsBar app={this.props.app} />
+                    <GlsTextArea app={this.props.app} />
+                    <GlsCommandsList />
+                </div>
             </section>);
     }
 }

@@ -16,6 +16,7 @@ export class OptionsBar extends React.Component<IAppProps, void> {
     public render(): JSX.Element {
         return (
             <div className="options-bar">
+                <label>Choose a language:</label>
                 <LanguageChooser app={this.props.app} />
                 <SampleChooser app={this.props.app} />
             </div>);

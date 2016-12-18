@@ -36,7 +36,7 @@ export class List extends React.Component<IProps, IState> {
      * State for the component.
      */
     public state: IState = {
-        filter: "comment"
+        filter: ""
     };
 
     /**
@@ -46,9 +46,10 @@ export class List extends React.Component<IProps, IState> {
      */
     public render(): JSX.Element {
         return (
-            <li className="commands-list">
+            <div className="commands-list">
+                <h1>Available Commands</h1>
                 {this.renderCommands()}
-            </li>);
+            </div>);
     }
 
     /**

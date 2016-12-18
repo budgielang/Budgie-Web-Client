@@ -26,7 +26,7 @@ export class App extends React.Component<IAppProps, void> {
     public render(): JSX.Element {
         (window as any).durp = this.props;
         return (
-            <div>
+            <div className="app">
                 <Editor {...this.props} />
                 <Preview
                     outputLanguage={this.props.app.language}

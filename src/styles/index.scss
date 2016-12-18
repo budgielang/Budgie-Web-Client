@@ -1,25 +1,117 @@
-html, body {
+html, body, section, #app, .app, .component {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
+    box-sizing: border-box;
 }
 
-#app.loading {
+.loading {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-style: italic;
+    text-align: center;
+
+    span {
+        margin-left: .35em;
+    }
 
     &:before {
         content: "loading";
         display: block;
-        font-style: italic;
-        text-align: center;
+    }
+
+    &:after {
+        content: "...";
+        display: "inline";
     }
 }
- 
-.preview-component {
-    height: 350px;
+
+
+/* Macro positioning */
+
+.app {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+section {
+    flex: 1;
+    align-self: stretch;
+    position: relative;
+    width: 50%;
+}
+
+.component {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+
+/* Options bar */
+
+.options-bar {
+    height: 35px;
+    text-align: right;
+
+    label {
+        padding-right: 7px;
+        font-style: italic;
+    }
+
+    select {
+        height: 100%;
+    }
+}
+
+
+/* Commands list */
+
+.commands-list {
+    padding: 0 7px;
+    max-height: 700px;
+    overflow-y: scroll;
+
+    .commands-header {
+        padding-top: 7px;
+    } 
+
+    input {
+        position: absolute;
+        right: 24px;
+        bottom: 7px;
+        float: right;
+        padding-left: 3px;
+        font-size: 1em;
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    .command:not(:last-of-type) {
+        margin-bottom: 21px;
+    }
+
+    .command h3 {
+        margin: 0;
+    }
+
+    .parameters .parameter:not(:last-of-type):after {
+        content: ", ";
+    }
+
+    .repeating-parameters:before {
+        content: "[";
+    }
+
+    .repeating-parameters:after {
+        content: ", ...]";
+    }
 }

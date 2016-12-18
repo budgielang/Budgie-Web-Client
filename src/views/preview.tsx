@@ -4,11 +4,7 @@ import * as ReactDOM from "react-dom";
 
 import { ConversionContext } from "general-language-syntax/dist/amd/Conversions/ConversionContext";
 import { Language } from "general-language-syntax/dist/amd/Languages/Language";
-import { CSharp } from "general-language-syntax/dist/amd/Languages/CSharp";
-import { Java } from "general-language-syntax/dist/amd/Languages/Java";
-import { Python } from "general-language-syntax/dist/amd/Languages/Python";
-import { Ruby } from "general-language-syntax/dist/amd/Languages/Ruby";
-import { TypeScript } from "general-language-syntax/dist/amd/Languages/TypeScript";
+import { LanguagesBag } from "general-language-syntax/dist/amd/Languages/LanguagesBag";
 
 import { MonacoTextArea } from "./monacotextarea";
 
@@ -57,13 +53,7 @@ export class Preview extends React.Component<IProps, IState> {
      * 
      * @todo Embed this dictionary into GLS itself.
      */
-    private static Languages: { [i: string]: Language } = {
-        CSharp: new CSharp(),
-        Java: new Java(),
-        Python: new Python(),
-        Ruby: new Ruby(),
-        TypeScript: new TypeScript()
-    };
+    private static languagesBag: LanguagesBag = new LanguagesBag();
 
     /**
      * Initializes a new instance of the Preview class.
@@ -89,10 +79,10 @@ export class Preview extends React.Component<IProps, IState> {
      */
     public render(): JSX.Element {
         return (
-            <div className="component preview-component">
+            <section className="preview">
                 {this.renderErrorBar(this.state.error)}
                 {this.renderOutputLines(this.state.outputLines)}
-            </div>);
+            </section>);
     }
 
     /**
@@ -138,7 +128,7 @@ export class Preview extends React.Component<IProps, IState> {
      * @returns A new state from the props.
      */
     private generateStateFromProps(props: IProps): IState {
-        let state: IState = {
+        const state: IState = {
             conversionContext: this.state.conversionContext,
             error: "",
             outputLines: this.state.outputLines
@@ -160,10 +150,10 @@ export class Preview extends React.Component<IProps, IState> {
     /**
      * Creates a new GLS conversion context for a language.
      * 
-     * @param outputLanguage   The name of the language.
+     * @param language   The name of the language.
      * @returns A new GLS conversion context for the language.
      */
-    private createNewConversionContext(outputLanguage: string): ConversionContext {
-        return new ConversionContext(Preview.Languages[outputLanguage]);
+    private createNewConversionContext(language: string): ConversionContext {
+        return new ConversionContext(Preview.languagesBag.getLanguage(language));
     }
 }

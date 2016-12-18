@@ -138,10 +138,10 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
     public renderLoading(): JSX.Element {
         return (
             <div
-                className="react-monaco-editor-container monaco-loading"
+                className="react-monaco-editor-container loading"
                 ref="container"
                 style={{width: "100%", height: "100%" }}>
-                <span>loading editor...</span>
+                <span>editor</span>
             </div>);
     }
 

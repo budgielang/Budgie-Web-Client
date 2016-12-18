@@ -18,7 +18,7 @@ export class GlsTextArea extends React.Component<IAppProps, void> {
     public render(): JSX.Element {
         return (
             <MonacoTextArea
-                defaultValue={this.props.app.sourceLines.join("\n")}
+                value={this.props.app.sourceLines.join("\n")}
                 language="none"
                 onChange={event => this.receiveNewValue(event)} />);
     }
