@@ -3,16 +3,30 @@
     <head>
         <meta charset="utf-8">
         <title>GLS Web Client</title>
-        
-        <link href="Styles/index.css" rel="stylesheet" />
-        <link href="../bower_components/nprogress/nprogress.css" rel="stylesheet" />
-        <link href="../bower_components/highlightjs/styles/vs.css" rel="stylesheet" />
+
+        <link href="../node_modules/nprogress/nprogress.css" rel="stylesheet" />
+        <link href="styles/index.css" rel="stylesheet" />
     </head>
     <body>
         <div id="app" class="loading"></div>
 
-        <script type="text/javascript" src="../bower_components/highlightjs/highlight.pack.js"></script>
-        <script type="text/javascript" src="../bower_components/nprogress/nprogress.js"></script>
-        <script type="text/javascript" data-main="main" src="../bower_components/requirejs/require.js"></script>
+        <script type="text/javascript" src="../node_modules/nprogress/nprogress.js"></script>
+        <script data-main="index" src="../node_modules/requirejs/require.js"></script>
+        <script>
+            NProgress.start();
+
+            requirejs.config({
+                paths: {
+                    "mobx": "../node_modules/mobx/lib/mobx.umd.min",
+                    "mobx-react": "../node_modules/mobx-react/index",
+                    "react": "../node_modules/react/dist/react.min",
+                    "react-dom": "../node_modules/react-dom/dist/react-dom.min"
+                }
+            });
+
+            requirejs.onResourceLoad = function () {
+                NProgress.inc();
+            };
+        </script>
     </body>
 </html>
