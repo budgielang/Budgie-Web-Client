@@ -1,7 +1,4 @@
-src/**/*.js
-src/**/*.js.map
-!src/main.js
+lib/**/*
 bower_components
 node_modules/
-typings
 npm-debug.log

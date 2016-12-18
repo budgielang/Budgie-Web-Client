@@ -1,1 +1,0 @@
-#app.loading,body,html{width:100%;height:100%}body,html{margin:0;padding:0}#app.loading{display:flex;justify-content:center;align-items:center}#app.loading:before{content:"loading";display:block;font-style:italic;text-align:center}
