@@ -17,10 +17,18 @@
 
             requirejs.config({
                 paths: {
+                    // Todo for GLS: make a single outfile (TypeScript supports it now!)
+                    "general-language-syntax/dist/amd": "../node_modules/general-language-syntax/dist/amd/",
+                    "general-language-syntax": "../node_modules/general-language-syntax/dist/amd/Gls",
+                    "Commands": "../node_modules/general-language-syntax/dist/amd/Commands/",
+                    "Conversions": "../node_modules/general-language-syntax/dist/amd/Conversions/",
+                    "Languages": "../node_modules/general-language-syntax/dist/amd/Languages/",
+                    "gls/src": "node_modules/general-language-syntax/dist/amd",
                     "mobx": "../node_modules/mobx/lib/mobx.umd.min",
                     "mobx-react": "../node_modules/mobx-react/index",
                     "react": "../node_modules/react/dist/react.min",
-                    "react-dom": "../node_modules/react-dom/dist/react-dom.min"
+                    "react-dom": "../node_modules/react-dom/dist/react-dom.min",
+                    "vs": "../node_modules/monaco-editor/dev/vs"
                 }
             });
 

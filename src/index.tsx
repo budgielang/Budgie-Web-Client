@@ -2,13 +2,13 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { AppStateFactory } from "./state/appstatefactory";
-import { AppView } from "./views/appview";
+import { App } from "./views/app";
 
 const stateFactory = new AppStateFactory();
 const app = document.getElementById("app");
 
 ReactDOM.render(
-    <AppView app={stateFactory.createInitialState()} />,
+    <App {...stateFactory.createInitialState()} />,
     app);
 
 (window as any).NProgress.done();

@@ -39,7 +39,7 @@ export class AppStateFactory {
      * Default values for the global application state.
      */
     private static readonly defaults: Partial<IAppState> = {
-        outputLanguage: "C#",
+        outputLanguage: "CSharp",
         sampleName: "default",
         sourceLines: []
     };
@@ -81,6 +81,9 @@ export class AppStateFactory {
      */
     private proxyAppState(appState: IAppState): IAppState {
         return new Proxy(appState, {
+            get: <T>(appState: IAppState, key: string): T => {
+                return appState[key];
+            },
             set: <T>(appState: IAppState, key: string, value: T): true => {
                 this.storageWrapper.setItem(key, value);
                 appState[key] = value;
