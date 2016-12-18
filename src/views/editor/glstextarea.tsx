@@ -18,9 +18,12 @@ export class GlsTextArea extends React.Component<IAppProps, void> {
     public render(): JSX.Element {
         return (
             <MonacoTextArea
-                value={this.props.app.sourceLines.join("\n")}
                 language="none"
-                onChange={event => this.receiveNewValue(event)} />);
+                onChange={event => this.receiveNewValue(event)}
+                options={{
+                    scrollBeyondLastLine: false
+                }}
+                value={this.props.app.sourceLines.join("\n")} />);
     }
 
     /**

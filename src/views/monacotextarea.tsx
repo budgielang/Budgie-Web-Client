@@ -34,17 +34,12 @@ export interface IProps {
     /**
      * 
      */
-    options?: any;
+    options?: monaco.editor.IEditorOptions;
 
     /**
      * 
      */
     onChange?: Function;
-
-    /**
-     * Whether the editor should be read only.
-     */
-    readOnly?: boolean;
 
     /**
      * 

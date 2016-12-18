@@ -108,7 +108,10 @@ export class Preview extends React.Component<IProps, IState> {
         return (
             <MonacoTextArea
                 language={this.props.outputLanguage.toLowerCase()}
-                readOnly={true}
+                options={{
+                    readOnly: true,
+                    scrollBeyondLastLine: false
+                }}
                 value={outputLines.join("\n")} />);
     }
 
