@@ -27,7 +27,9 @@ export class DropdownTextMenu extends React.Component<IProps, void> {
     }
 
     /**
+     * Handles a new value being triggered from the select.
      * 
+     * @param event   The triggering event.
      */
     private onChange = (event: React.FormEvent<HTMLSelectElement>): void => {
         this.props.onChange(event.currentTarget.value);

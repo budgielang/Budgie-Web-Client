@@ -40,20 +40,22 @@ export class List extends React.Component<IProps, IState> {
     };
 
     /**
-     * Renders the component.
-     * 
      * @returns The rendered component.
      */
     public render(): JSX.Element {
         return (
             <div className="commands-list">
+                <input
+                    onChange={this.onChange}
+                    placeholder="filter commands"
+                    type="text" />
                 <h1>Available Commands</h1>
                 {this.renderCommands()}
             </div>);
     }
 
     /**
-     * 
+     * @returns The rendered command components.
      */
     private renderCommands(): JSX.Element[] {
         return Object.keys(this.commands)
@@ -66,7 +68,18 @@ export class List extends React.Component<IProps, IState> {
     }
 
     /**
+     * Handles the filter input giving a new filter.
      * 
+     * @param event   The triggering event.
+     */
+    private onChange = (event: React.FormEvent<HTMLInputElement>): void => {
+        this.setState({
+            filter: event.currentTarget.value
+        });
+    }
+
+    /**
+     * @returns All available commands.
      */
     private static getCommands(): { [i: string]: Command } {
         const conversionContext: ConversionContext = new ConversionContext(new TypeScript());
