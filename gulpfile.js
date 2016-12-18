@@ -52,7 +52,8 @@ gulp.task("tsc", () => {
     return merge([
         output.dts.pipe(gulp.dest("lib")),
         output.js
-            .pipe(uglify())
+            // Removed because Uglify doesn't support ES6 (but I like Proxies a lot!)
+            // .pipe(uglify())
             .pipe(sourcemaps.write())
             .pipe(gulp.dest("lib"))
     ]);
@@ -69,7 +70,7 @@ gulp.task("tslint", () => {
         .pipe(tslint.report());
 });
 
-gulp.task("watch", ["build"], () => {
+gulp.task("watch", () => {
     gulp.watch(
         "src/**/*.html",
         ["html"]);
@@ -80,7 +81,7 @@ gulp.task("watch", ["build"], () => {
 
     gulp.watch(
         ["src/**/*.ts", "src/**/*.tsx"],
-        ["tsc", "tslint"]);
+        ["tsc"]);
 });
 
 gulp.task("default", ["watch"]);

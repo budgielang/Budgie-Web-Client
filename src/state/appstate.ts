@@ -1,24 +1,19 @@
-import { observable } from "mobx";
-
+/**
+ * Global state for the entire application.
+ */
 export interface IAppState {
-    source: string;
-}
+    /**
+     * Which language to convert GLS syntax into.
+     */
+    outputLanguage: string;
 
-class AppState implements IAppState {
-    @observable
-    public source: string = "lulz";
+    /**
+     * The most recently selected sample code.
+     */
+    sampleName: string;
 
-    public constructor() {
-        setInterval(
-            (): void => {
-                this.source += " lulz";
-            },
-            1000);
-    }
-}
-
-export class AppStateFactory {
-    public createInitialState(): IAppState {
-        return new AppState();
-    }
+    /**
+     * Raw lines of GLS syntax from the editor component.
+     */
+    sourceLines: string[];
 }

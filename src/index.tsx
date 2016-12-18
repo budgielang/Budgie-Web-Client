@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { AppStateFactory } from "./state/appstate";
+import { AppStateFactory } from "./state/appstatefactory";
 import { AppView } from "./views/appview";
 
 const stateFactory = new AppStateFactory();

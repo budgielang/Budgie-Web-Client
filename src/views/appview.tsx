@@ -10,6 +10,6 @@ interface IAppViewProps {
 @observer
 export class AppView extends React.Component<IAppViewProps, void> {
     public render(): JSX.Element {
-        return <div>{this.props.app.source}</div>;
+        return <div>{this.props.app.sourceLines.join("  ...   ")}</div>;
     }
 }
