@@ -2,14 +2,28 @@ import { Gls } from "general-language-syntax";
 import { observer } from "mobx-react";
 import * as React from "react";
 
-import { DropdownTextMenu } from "./dropdowntextmenu";
-import { IAppProps } from "../app";
+import { DropdownTextMenu } from "../shared/dropdowntextmenu";
+
+/**
+ * Props for a LanguageChooser component.
+ */
+export interface IProps {
+    /**
+     * Current language name.
+     */
+    language: string;
+
+    /**
+     * Handler for a new language.
+     */
+    onChange(language: string): void;
+}
 
 /**
  * Component for a language chooser.
  */
 @observer
-export class LanguageChooser extends React.Component<IAppProps, void> {
+export class LanguageChooser extends React.Component<IProps, void> {
     /**
      * All available GLS language names.
      */
@@ -21,7 +35,7 @@ export class LanguageChooser extends React.Component<IAppProps, void> {
     public render(): JSX.Element {
         return (
             <DropdownTextMenu
-                defaultValue={this.props.app.language}
+                defaultValue={this.props.language}
                 onChange={this.onChange}
                 options={LanguageChooser.languageNames} />);
     }
@@ -31,7 +45,5 @@ export class LanguageChooser extends React.Component<IAppProps, void> {
      * 
      * @param sampleName   A new sample name from the text menu.
      */
-    private onChange = (language: string): void => {
-        this.props.app.language = language;
-    };
+    private readonly onChange = (language: string): void => this.props.onChange(language);
 }

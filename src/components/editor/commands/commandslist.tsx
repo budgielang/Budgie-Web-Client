@@ -1,19 +1,18 @@
-import { Command } from "general-language-syntax/dist/amd/Commands/Command";
+import { Command as GlsCommand } from "general-language-syntax/dist/amd/Commands/Command";
 import { CommandsBag } from "general-language-syntax/dist/amd/Commands/CommandsBag";
 import { ConversionContext } from "general-language-syntax/dist/amd/Conversions/ConversionContext";
 import { TypeScript } from "general-language-syntax/dist/amd/Languages/TypeScript";
-import { observer } from "mobx-react";
 import * as React from "react";
 
-import { CommandView } from "./commandview";
+import { Command } from "./command";
 
 /**
- * Properties for a List component.
+ * Properties for a CommandsList component.
  */
 export interface IProps { }
 
 /**
- * State for a List component.
+ * State for a CommandsList component.
  */
 export interface IState {
     /**
@@ -25,12 +24,11 @@ export interface IState {
 /**
  * Component for a filterable list of GLS commands.
  */
-@observer
-export class List extends React.Component<IProps, IState> {
+export class CommandsList extends React.Component<IProps, IState> {
     /**
      * Commands to be listed.
      */
-    private commands: { [i: string]: Command } = List.getCommands();
+    private commands: { [i: string]: GlsCommand } = CommandsList.getCommands();
 
     /**
      * State for the component.
@@ -61,7 +59,7 @@ export class List extends React.Component<IProps, IState> {
         return Object.keys(this.commands)
             .filter((key: string): boolean => !this.state.filter || key.toLowerCase().indexOf(this.state.filter) !== -1)
             .map((key: string): JSX.Element => (
-                <CommandView
+                <Command
                     command={this.commands[key]}
                     key={key}
                     name={key} />));
@@ -81,7 +79,7 @@ export class List extends React.Component<IProps, IState> {
     /**
      * @returns All available commands.
      */
-    private static getCommands(): { [i: string]: Command } {
+    private static getCommands(): { [i: string]: GlsCommand } {
         const conversionContext: ConversionContext = new ConversionContext(new TypeScript());
         const commandsBag: CommandsBag = new CommandsBag(conversionContext);
 

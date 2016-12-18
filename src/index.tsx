@@ -1,14 +1,17 @@
+import { useStrict } from "mobx";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { AppStateFactory } from "./state/appstatefactory";
-import { App } from "./views/app";
+import { AppStoreFactory } from "./components/appstorefactory";
+import { App } from "./components/app";
 
-const stateFactory = new AppStateFactory();
+useStrict(true);
+
+const storeFactory: AppStoreFactory = new AppStoreFactory();
 const app = document.getElementById("app");
 
 ReactDOM.render(
-    <App app={stateFactory.createInitialState()} />,
+    <App store={storeFactory.create()} />,
     app);
 
 (window as any).NProgress.done();

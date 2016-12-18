@@ -4,8 +4,21 @@ import * as React from "react";
  * Props for a DropdownTextMenu component.
  */
 export interface IProps {
+    /**
+     * Default displayed value.
+     */
     defaultValue: string;
-    onChange: (newValue: string) => void;
+
+    /**
+     * Callback when the value changes.
+     * 
+     * @param newValue   The new value.
+     */
+    onChange(newValue: string): void;
+
+    /**
+     * Displayed value options.
+     */
     options: string[];
 }
 

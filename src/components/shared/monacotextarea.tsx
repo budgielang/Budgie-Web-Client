@@ -1,4 +1,4 @@
-/// <reference path="../../node_modules/monaco-editor/monaco.d.ts" />
+/// <reference path="../../../node_modules/monaco-editor/monaco.d.ts" />
 
 import * as React from "react";
 
@@ -39,7 +39,7 @@ export interface IProps {
     /**
      * 
      */
-    onChange?: Function;
+    onChange?: (newValue: string) => void;
 
     /**
      * 
@@ -79,7 +79,7 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
     /**
      * Default properties for the component.
      */
-    private static defaultProps: IProps = {
+    public static defaultProps: IProps = {
         width: "100%",
         height: "100%",
         value: null,
@@ -205,12 +205,12 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
         });
         this.props.editorDidMount(editor, monaco);
 
-        editor.onDidChangeModelContent((event: any): void => {
+        editor.onDidChangeModelContent((): void => {
             const value = editor.getValue();
 
             // Only invoke onChange when user input changed
             if (!this.preventTriggerChangeEvent) {
-                this.props.onChange(value, event);
+                this.props.onChange(value);
             }
 
             // Always refer to the latest value

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 
-import { IAppState } from "../state/appstate";
+import { AppStore } from "./appstore";
 import { Editor } from "./editor";
 import { Preview } from "./preview";
 
@@ -12,7 +12,7 @@ export interface IAppProps {
     /**
      * Global state for the entire application.
      */
-    app: IAppState;
+    store: AppStore;
 }
 
 /**
@@ -27,10 +27,8 @@ export class App extends React.Component<IAppProps, void> {
         (window as any).durp = this.props;
         return (
             <div className="app">
-                <Editor {...this.props} />
-                <Preview
-                    outputLanguage={this.props.app.language}
-                    sourceLines={this.props.app.sourceLines} />
+                <Editor store={this.props.store.editor} />
+                <Preview store={this.props.store.preview} />
             </div>);
     }
 }

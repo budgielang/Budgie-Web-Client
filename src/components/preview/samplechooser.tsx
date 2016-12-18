@@ -2,15 +2,29 @@ import { Gls } from "general-language-syntax";
 import { observer } from "mobx-react";
 import * as React from "react";
 
+import { DropdownTextMenu } from "../shared/dropdowntextmenu";
 import { Samples } from "../../samples";
-import { IAppProps } from "../app";
-import { DropdownTextMenu } from "./dropdowntextmenu";
+
+/**
+ * Props for a Sample component.
+ */
+export interface IProps {
+    /**
+     * Current sample name.
+     */
+    sample: string;
+
+    /**
+     * Handler for a new sample.
+     */
+    onChange(sample: string): void;
+}
 
 /**
  * Component for a Sample chooser.
  */
 @observer
-export class SampleChooser extends React.Component<IAppProps, void> {
+export class SampleChooser extends React.Component<IProps, void> {
     /**
      * Names of the available samples.
      */
@@ -32,8 +46,5 @@ export class SampleChooser extends React.Component<IAppProps, void> {
      * 
      * @param sampleName   A new sample name from the text menu.
      */
-    private onChange = (sampleName: keyof typeof Samples): void => {
-        this.props.app.sampleName = sampleName;
-        this.props.app.sourceLines = Samples[sampleName];
-    };
+    private readonly onChange = (language: string): void => this.props.onChange(language);
 }
