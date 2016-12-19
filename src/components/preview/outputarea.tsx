@@ -26,7 +26,6 @@ export class OutputArea extends React.Component<IProps, void> {
     public render(): JSX.Element {
         return (
             <div className="gls-output-area">
-                Language: {this.props.store.optionsBar.language}
                 {this.renderErrorBar(this.props.store.conversionResult.error)}
                 {this.renderOutputLines(this.props.store.conversionResult.outputLines)}
             </div>);
@@ -57,7 +56,7 @@ export class OutputArea extends React.Component<IProps, void> {
                 language={this.props.store.optionsBar.language.toLowerCase()}
                 options={{
                     readOnly: true,
-                    scrollBeyondLastLine: false
+                    // scrollBeyondLastLine: false
                 }}
                 value={outputLines.join("\n")} />);
     }

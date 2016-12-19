@@ -1,3 +1,4 @@
+import { StorageWrapper } from "../storage/storageWrapper";
 import { InputAreaStore } from "./editor/inputareastore";
 import { OptionsBarStore } from "./preview/optionsbarstore";
 import { OutputAreaStore } from "./preview/outputareastore";
@@ -13,11 +14,14 @@ export class AppStoreFactory {
      * @returns A new instance of the AppStore class.
      */
     public create() {
-        const inputArea = new InputAreaStore();
-        const outputArea = new OutputAreaStore(inputArea, new OptionsBarStore());
+        const storageWrapper = new StorageWrapper("gls-web-client");
+
+        const inputArea = new InputAreaStore(storageWrapper);
+        const optionsBar = new OptionsBarStore(storageWrapper);
+        const outputArea = new OutputAreaStore(inputArea, optionsBar);
 
         return new AppStore(
             new EditorStore(inputArea),
-            new PreviewStore(new OptionsBarStore(), inputArea, outputArea));
+            new PreviewStore(optionsBar, inputArea, outputArea));
     }
 }

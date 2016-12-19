@@ -36,7 +36,7 @@ export class SampleChooser extends React.Component<IProps, void> {
     public render(): JSX.Element {
         return (
             <DropdownTextMenu
-                defaultValue={SampleChooser.sampleKeys[0]}
+                defaultValue={this.props.sample}
                 onChange={this.onChange}
                 options={SampleChooser.sampleKeys} />);
     }
