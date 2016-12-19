@@ -33,9 +33,17 @@ export class OptionsBarStore {
      * @param sample   A new sample name the user is editing from.
      */
     @action
-    public readonly setSample = (sample: string): void => {
+    public readonly setSample = (sample: string = this.sample): void => {
         this.sample = sample;
     };
+
+    /**
+     * Resets to the current sample.
+     */
+    @action
+    public readonly reset = (): void => {
+        this.sample = this.sample;
+    }
 
     /**
      * Wrapper for persistent items kept in a Storage object.

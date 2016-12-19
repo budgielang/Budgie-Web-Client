@@ -21,7 +21,7 @@ export interface IProps {
 }
 
 /**
- * Component for a Sample chooser.
+ * Component for a sample chooser.
  */
 @observer
 export class SampleChooser extends React.Component<IProps, void> {

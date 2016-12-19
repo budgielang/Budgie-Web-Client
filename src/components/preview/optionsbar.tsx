@@ -30,9 +30,15 @@ export class OptionsBar extends React.Component<IProps, void> {
                 <LanguageChooser
                     language={this.props.store.language}
                     onChange={this.props.store.setLanguage} />
+
+                <label>Reset to a sample:</label>
                 <SampleChooser
                     sample={this.props.store.sample}
                     onChange={this.props.store.setSample} />
+
+                <button onClick={this.props.store.reset}>
+                    reset
+                </button>
             </div>);
     }
 }
