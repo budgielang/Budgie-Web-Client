@@ -1,3 +1,5 @@
+$options-bar-height: 35px;
+
 html, body, section, #app, .app, .component {
     margin: 0;
     padding: 0;
@@ -54,22 +56,6 @@ section {
 }
 
 
-/* Options bar */
-
-.options-bar {
-    height: 35px;
-
-    label {
-        padding-right: 7px;
-        font-style: italic;
-    }
-
-    select {
-        height: 100%;
-    }
-}
-
-
 /* Commands list */
 
 .commands-list {
@@ -113,5 +99,30 @@ section {
 
     .repeating-parameters:after {
         content: ", ...]";
+    }
+}
+
+
+/* Output area */
+
+.gls-output-area {
+    height: calc(100% - #{$options-bar-height});
+}
+
+
+/* Options bar */
+
+.options-bar {
+    padding: 3px 1.4em;
+    height: $options-bar-height;
+    box-sizing: border-box;
+
+    label {
+        padding-right: 7px;
+        font-style: italic;
+    }
+
+    select {
+        height: 100%;
     }
 }
