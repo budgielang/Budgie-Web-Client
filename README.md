@@ -1,6 +1,7 @@
 # GLS Web Client
 
-A web editor for GLS.
+A web client for previewing [GLS](https://github.com/highschoolhacking/gls).
+Preview it at https://aka.ms/gls-demo.
 
 
 ## Development
@@ -10,19 +11,14 @@ Development is done using [Node.js](https://nodejs.org/en/).
 Run the following commands to initialize your environment.
 
 ```cmd
-npm install -g bower
-npm install -g typescript
-npm install -g typings
-
-bower install
+npm install -g gulp
 npm install
-typings install
 ```
 
-To compile, use TypeScript:
+To compile, use Gulp:
 
 ```cmd
-tsc
+gulp 
 ```
 
-To continuously compile, use `tsc -w`.
+To continuously compile, use `gulp watch`.

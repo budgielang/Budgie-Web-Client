@@ -60,7 +60,7 @@ export interface IProps {
 /**
  * 
  */
-interface IState {
+export interface IState {
     /**
      * 
      */

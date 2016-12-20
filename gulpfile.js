@@ -4,6 +4,12 @@ const gulp = require("gulp");
 
 gulp.task("build", ["html", "sass", "tsc", "tslint"]);
 
+gulp.task("clean", () => {
+    const del = require("del");
+
+    return del("lib/**/*");
+})
+
 gulp.task("html", () => {
     const htmlmin = require("gulp-htmlmin");
 
@@ -52,8 +58,7 @@ gulp.task("tsc", () => {
     return merge([
         output.dts.pipe(gulp.dest("lib")),
         output.js
-            // Removed because Uglify doesn't support ES6 (but I like Proxies a lot!)
-            // .pipe(uglify())
+            .pipe(uglify())
             .pipe(sourcemaps.write())
             .pipe(gulp.dest("lib"))
     ]);
@@ -84,4 +89,4 @@ gulp.task("watch", () => {
         ["tsc"]);
 });
 
-gulp.task("default", ["watch"]);
+gulp.task("default", ["build"]);

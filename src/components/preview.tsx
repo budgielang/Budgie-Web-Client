@@ -8,7 +8,7 @@ import { PreviewStore } from "./previewstore";
 /**
  * Properties for a Preview component.
  */
-interface IProps {
+export interface IProps {
     /**
      * Store for a Preview component.
      */
