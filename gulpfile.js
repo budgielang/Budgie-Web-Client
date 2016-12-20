@@ -1,34 +1,72 @@
 "use strict";
 
-const browserify = require("browserify");
-const buffer = require("vinyl-buffer");
-const fs = require("fs");
 const gulp = require("gulp");
-const runSequence = require("run-sequence");
-const source = require("vinyl-source-stream");
-const ts = require("gulp-typescript");
-const tslint = require("gulp-tslint");
-const uglify = require("gulp-uglify");
 
-gulp.task("browserify", () => {
-    return browserify("src/main.js")
-        .bundle()
-        .pipe(source("main.js"))
-        .pipe(buffer())
-        .pipe(uglify())
-        .pipe(gulp.dest("src/site/scripts/bundled"));
+gulp.task("build", ["html", "sass", "tsc", "tslint"]);
+
+gulp.task("clean", () => {
+    const del = require("del");
+
+    return del("lib/**/*");
+})
+
+gulp.task("html", () => {
+    const htmlmin = require("gulp-htmlmin");
+
+    return gulp.src("src/**/*.html")
+        .pipe(htmlmin({
+            collapseWhitespace: true,
+            minifyJS: true
+        }))
+        .pipe(gulp.dest("lib"));
 });
 
-gulp.task("tsc", () => {
-    const tsProject = ts.createProject("tsconfig.json");
+gulp.task("sass", () => {
+    const sass = require("gulp-sass");
+    const cleanCss = require("gulp-clean-css");
 
-    return tsProject
+    return gulp.src("src/**/*.scss")
+        .pipe(sass())
+        .pipe(cleanCss())
+        .pipe(gulp.dest("lib"));
+});
+
+gulp.task("stylelint", () => {
+    const stylelint = require("stylelint");
+
+    return gulp.src("src/**/*.scss")
+        .pipe(stylelint({
+            reporters: [
+                { formatter: "string", console: true }
+            ]
+        }));
+});
+
+
+gulp.task("tsc", () => {
+    const merge = require("merge2");
+    const sourcemaps = require("gulp-sourcemaps");
+    const ts = require("gulp-typescript");
+    const uglify = require("gulp-uglify");
+
+    const project = ts.createProject("tsconfig.json");
+    const output = project
         .src()
-        .pipe(ts(tsProject))
-        .js.pipe(gulp.dest("src"));
+        .pipe(sourcemaps.init())
+        .pipe(project());
+
+    return merge([
+        output.dts.pipe(gulp.dest("lib")),
+        output.js
+            .pipe(uglify())
+            .pipe(sourcemaps.write())
+            .pipe(gulp.dest("lib"))
+    ]);
 });
 
 gulp.task("tslint", () => {
+    const tslint = require("gulp-tslint");
+
     return gulp
         .src(["src/**/*.ts", "src/**/*.tsx", "!src/**/*.d.ts"])
         .pipe(tslint({
@@ -38,12 +76,17 @@ gulp.task("tslint", () => {
 });
 
 gulp.task("watch", () => {
-    gulp.watch(["src/**/*.ts", "src/**/*.tsx"], ["tsc", "tslint", "browserify"]);
+    gulp.watch(
+        "src/**/*.html",
+        ["html"]);
+
+    gulp.watch(
+        "src/**/*.scss",
+        ["sass"]);
+
+    gulp.watch(
+        ["src/**/*.ts", "src/**/*.tsx"],
+        ["tsc"]);
 });
 
-gulp.task("default", callback => {
-    runSequence(
-        ["tsc", "tslint"],
-        ["browserify"],
-        callback);
-});
+gulp.task("default", ["build"]);

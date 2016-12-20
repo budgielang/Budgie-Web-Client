@@ -1,0 +1,177 @@
+$bar-height: 35px;
+$standard-padding: 7px;
+
+html, body, section, #app, .app, .component {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.loading {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-style: italic;
+    text-align: center;
+
+    span {
+        margin-left: .35em;
+    }
+
+    &:before {
+        content: "loading";
+        display: block;
+    }
+
+    &:after {
+        content: "...";
+        display: "inline";
+    }
+}
+
+
+/* Macro positioning */
+
+.app {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+section {
+    flex: 1;
+    align-self: stretch;
+    position: relative;
+    width: 50%;
+}
+
+.component {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+
+/* Commands list */
+
+.commands-list {
+    padding: 0 $standard-padding $standard-padding $standard-padding;
+    height: 700px;
+    overflow-y: scroll;
+    font-size: 1.17em;
+
+    .commands-header {
+        padding-top: $standard-padding;
+    } 
+
+    input {
+        left: $standard-padding;
+        bottom: $standard-padding;
+        font-size: 1em;
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    .command:not(:last-of-type) {
+        margin-bottom: 21px;
+    }
+
+    .command h3 {
+        margin: 0;
+    }
+
+    .parameters .parameter:not(:last-of-type):after {
+        content: ", ";
+    }
+
+    .repeating-parameters:before {
+        content: "[";
+    }
+
+    .repeating-parameters:after {
+        content: ", ...]";
+    }
+}
+
+
+/* Output area */
+
+.gls-output-area {
+    height: calc(100% - #{$bar-height});
+}
+
+.preview-error-bar {
+    padding: 0 14px;
+    width: 100%;
+    height: 0;
+    background: rgb(255, 247, 247);
+    overflow: hidden;
+    transition: all 117ms;
+    font-family: monospace;
+    font-style: italic;
+}
+
+.preview-error-bar.error-bar-full {
+    height: 2em;
+    padding: 11px 14px 0;
+    border-bottom: 1px solid rgb(240, 175, 175);
+}
+
+.preview .component {
+    top: 0;
+    bottom: $bar-height - $standard-padding * 2;
+    padding-bottom: $bar-height - $standard-padding * 2;
+}
+
+
+/* Options bars */
+
+.options-bar {
+    box-sizing: border-box;
+
+    label {
+        padding: 0 .35em 0 1.4em;
+        font-style: italic;
+    }
+
+    select, button, input {
+        height: 100%;
+        min-height: $bar-height;
+    }
+
+    button {
+        margin-left: 1.4em;
+    }
+}
+
+.input-bar {
+    padding-left: $standard-padding;
+    text-align: right;
+
+    .sub-bar {
+        padding: $standard-padding;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .commands-filter {
+        float: left;
+        padding-left: 0;
+    }
+
+    .samples-commands {
+        float: right;
+        padding-top: ($standard-padding * 1.5);
+    }
+}
+
+.output-bar {
+    padding: ($standard-padding * 1.5) $standard-padding $standard-padding $standard-padding;
+}

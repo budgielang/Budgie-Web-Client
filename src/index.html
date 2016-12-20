@@ -3,16 +3,38 @@
     <head>
         <meta charset="utf-8">
         <title>GLS Web Client</title>
-        
-        <link href="Styles/index.css" rel="stylesheet" />
-        <link href="../bower_components/nprogress/nprogress.css" rel="stylesheet" />
-        <link href="../bower_components/highlightjs/styles/vs.css" rel="stylesheet" />
+
+        <link href="../node_modules/nprogress/nprogress.css" rel="stylesheet" />
+        <link href="styles/index.css" rel="stylesheet" />
     </head>
     <body>
         <div id="app" class="loading"></div>
 
-        <script type="text/javascript" src="../bower_components/highlightjs/highlight.pack.js"></script>
-        <script type="text/javascript" src="../bower_components/nprogress/nprogress.js"></script>
-        <script type="text/javascript" data-main="main" src="../bower_components/requirejs/require.js"></script>
+        <script type="text/javascript" src="../node_modules/nprogress/nprogress.js"></script>
+        <script data-main="index" src="../node_modules/requirejs/require.js"></script>
+        <script>
+            NProgress.start();
+
+            requirejs.config({
+                paths: {
+                    // Todo for GLS: make a single outfile (TypeScript supports it now!)
+                    "general-language-syntax/dist/amd": "../node_modules/general-language-syntax/dist/amd/",
+                    "general-language-syntax": "../node_modules/general-language-syntax/dist/amd/Gls",
+                    "Commands": "../node_modules/general-language-syntax/dist/amd/Commands/",
+                    "Conversions": "../node_modules/general-language-syntax/dist/amd/Conversions/",
+                    "Languages": "../node_modules/general-language-syntax/dist/amd/Languages/",
+                    "gls/src": "node_modules/general-language-syntax/dist/amd",
+                    "mobx": "../node_modules/mobx/lib/mobx.umd.min",
+                    "mobx-react": "../node_modules/mobx-react/index",
+                    "react": "../node_modules/react/dist/react.min",
+                    "react-dom": "../node_modules/react-dom/dist/react-dom.min",
+                    "vs": "../node_modules/monaco-editor/dev/vs"
+                }
+            });
+
+            requirejs.onResourceLoad = function () {
+                NProgress.inc();
+            };
+        </script>
     </body>
 </html>

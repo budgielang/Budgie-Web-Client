@@ -1,13 +1,11 @@
-/// <reference path="../../typings/browser/ambient/react/index.d.ts" />
-
-declare var monaco: any;
+/// <reference path="../../../node_modules/monaco-editor/monaco.d.ts" />
 
 import * as React from "react";
 
 /**
  * Properties for a Monaco editor component.
  */
-export interface IMonacoComponentProps {
+export interface IProps {
     /**
      * 
      */
@@ -36,12 +34,12 @@ export interface IMonacoComponentProps {
     /**
      * 
      */
-    options?: any;
+    options?: monaco.editor.IEditorOptions;
 
     /**
      * 
      */
-    onChange?: Function;
+    onChange?: (newValue: string) => void;
 
     /**
      * 
@@ -62,7 +60,7 @@ export interface IMonacoComponentProps {
 /**
  * 
  */
-interface IMonacoComponentState {
+export interface IState {
     /**
      * 
      */
@@ -77,11 +75,11 @@ interface IMonacoComponentState {
 /**
  * 
  */
-export class MonacoComponent extends React.Component<IMonacoComponentProps, IMonacoComponentState> {
+export class MonacoTextArea extends React.Component<IProps, IState> {
     /**
      * Default properties for the component.
      */
-    private static defaultProps: IMonacoComponentProps = {
+    public static defaultProps: IProps = {
         width: "100%",
         height: "100%",
         value: null,
@@ -102,14 +100,14 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, IMon
     /**
      * 
      */
-    private editor: any;
+    private editor: monaco.editor.IStandaloneCodeEditor;
 
     /**
-     * Initializes a new instance of the MonacoComponent class.
+     * Initializes a new instance of the MonacoTextArea class.
      * 
      * @param props   Properties for the component.
      */
-    public constructor(props: IMonacoComponentProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -135,10 +133,10 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, IMon
     public renderLoading(): JSX.Element {
         return (
             <div
-                className="react-monaco-editor-container monaco-loading"
+                className="react-monaco-editor-container loading"
                 ref="container"
                 style={{width: "100%", height: "100%" }}>
-                <span>loading editor...</span>
+                <span>editor</span>
             </div>);
     }
 
@@ -175,7 +173,7 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, IMon
      * 
      * @param nextProps   A new set of properties.
      */
-    public componentWillUpdate(nextProps: IMonacoComponentProps): void {
+    public componentWillUpdate(nextProps: IProps): void {
         if (nextProps.language !== this.props.language) {
             this.destroyMonaco();
             this.initializeMonaco(nextProps);
@@ -201,18 +199,18 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, IMon
     /**
      * Trigger when the editor mounted.
      */
-    private editorDidMount(editor, monaco) {
+    private editorDidMount(editor: monaco.editor.IStandaloneCodeEditor, monaco) {
         this.setState({
             loading: false
         });
         this.props.editorDidMount(editor, monaco);
 
-        editor.onDidChangeModelContent((event: any): void => {
+        editor.onDidChangeModelContent((): void => {
             const value = editor.getValue();
 
             // Only invoke onChange when user input changed
             if (!this.preventTriggerChangeEvent) {
-                this.props.onChange(value, event);
+                this.props.onChange(value);
             }
 
             // Always refer to the latest value
@@ -234,7 +232,7 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, IMon
     /**
      * 
      */
-    private initializeMonaco(props: IMonacoComponentProps = this.props) {
+    private initializeMonaco(props: IProps = this.props) {
         const value = props.value || props.defaultValue;
         const { language, theme, options } = props;
 
@@ -272,5 +270,5 @@ export class MonacoComponent extends React.Component<IMonacoComponentProps, IMon
      */
     private updateDimensions = (): void => {
         this.editor.layout();
-    };
+    }
 }
