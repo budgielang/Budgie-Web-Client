@@ -1,6 +1,6 @@
 import { action, observable } from "mobx";
 
-import { IStorageWrapper } from "../../storage/storageWrapper";
+import { IStorageWrapper } from "../../storage/storagewrapper";
 import { stored } from "../../storage/stored";
 import { storing } from "../../storage/storing";
 

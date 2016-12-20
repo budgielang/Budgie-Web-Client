@@ -1,4 +1,4 @@
-import { StorageWrapper } from "../storage/storageWrapper";
+import { StorageWrapper } from "../storage/storagewrapper";
 import { InputAreaStore } from "./editor/inputareastore";
 import { OptionsBarStore } from "./preview/optionsbarstore";
 import { OutputAreaStore } from "./preview/outputareastore";
