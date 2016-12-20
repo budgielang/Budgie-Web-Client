@@ -124,11 +124,16 @@ section {
     border-bottom: 1px solid rgb(240, 175, 175);
 }
 
+.preview .component {
+    top: 0;
+    bottom: $bar-height - $standard-padding * 2;
+    padding-bottom: $bar-height - $standard-padding * 2;
+}
+
 
 /* Options bars */
 
 .options-bar {
-    padding: 3px 0;;
     box-sizing: border-box;
 
     label {
@@ -138,6 +143,7 @@ section {
 
     select, button, input {
         height: 100%;
+        min-height: $bar-height;
     }
 
     button {
@@ -149,14 +155,23 @@ section {
     padding-left: $standard-padding;
     text-align: right;
 
-    .commands-filter {
-        float: left;
+    .sub-bar {
         padding: $standard-padding;
         height: 100%;
         box-sizing: border-box;
     }
+
+    .commands-filter {
+        float: left;
+        padding-left: 0;
+    }
+
+    .samples-commands {
+        float: right;
+        padding-top: ($standard-padding * 1.5);
+    }
 }
 
 .output-bar {
-    height: $bar-height;
+    padding: ($standard-padding * 1.5) $standard-padding $standard-padding $standard-padding;
 }

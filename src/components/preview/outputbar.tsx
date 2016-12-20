@@ -25,10 +25,12 @@ export class OutputBar extends React.Component<IProps, void> {
     public render(): JSX.Element {
         return (
             <div className="options-bar output-bar">
-                <label>Choose a language:</label>
-                <LanguageChooser
-                    language={this.props.store.language}
-                    onChange={this.props.store.setLanguage} />
+                <div className="sub-bar">
+                    <label>Choose a language:</label>
+                    <LanguageChooser
+                        language={this.props.store.language}
+                        onChange={this.props.store.setLanguage} />
+                </div>
             </div>);
     }
 }
