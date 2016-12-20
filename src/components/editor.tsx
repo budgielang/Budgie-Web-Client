@@ -18,6 +18,9 @@ export interface IProps {
 
 /**
  * Component for an editor.
+ * 
+ * @param props   Props for the component.
+ * @returns The rendered component.
  */
 @observer
 export class Editor extends React.Component<IProps, void> {

@@ -39,7 +39,7 @@ export class InputBarStore {
     public readonly inputArea: InputAreaStore;
 
     /**
-     * Store for a CommandSList component.
+     * Store for a CommandsList component.
      */
     public readonly commandsList: CommandsListStore;
 
@@ -57,10 +57,14 @@ export class InputBarStore {
      * Initializes a new instance of the InputBarStore class.
      * 
      * @param storageWrapper   Wrapper for persistent items kept in a Storage object.
+     * @param inputArea   Store for an InputArea component.
+     * @param commandsList   Store for a CommandsList component.
+     * @param samples   Available samples, keyed by name.
      */
-    public constructor(storageWrapper: IStorageWrapper, inputArea: InputAreaStore, samples: ISamples) {
+    public constructor(storageWrapper: IStorageWrapper, inputArea: InputAreaStore, commandsList: CommandsListStore, samples: ISamples) {
         this.storageWrapper = storageWrapper;
         this.inputArea = inputArea;
+        this.commandsList = commandsList;
         this.samples = samples;
 
         if (this.sample === "" && this.inputArea.source === "") {

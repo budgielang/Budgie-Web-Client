@@ -42,7 +42,7 @@ export class InputBar extends React.Component<IProps, void> {
      * 
      * @param event   The triggering event.
      */
-    private onFilterChange(event: React.FormEvent<HTMLInputElement>): void {
+    private onFilterChange = (event: React.FormEvent<HTMLInputElement>): void => {
         this.props.store.commandsList.setFilter(event.currentTarget.value);
     }
 }

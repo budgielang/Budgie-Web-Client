@@ -21,7 +21,7 @@ export class AppStoreFactory {
 
         const commandsList = new CommandsListStore(storageWrapper);
         const inputArea = new InputAreaStore(storageWrapper);
-        const inputBar = new InputBarStore(storageWrapper, inputArea, Samples);
+        const inputBar = new InputBarStore(storageWrapper, inputArea, commandsList, Samples);
         const outputBar = new OutputBarStore(storageWrapper);
         const outputArea = new OutputAreaStore(inputArea, outputBar);
 

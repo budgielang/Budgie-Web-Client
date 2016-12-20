@@ -1,3 +1,7 @@
+import { Command as GlsCommand } from "general-language-syntax/dist/amd/Commands/Command";
+import { CommandsBag } from "general-language-syntax/dist/amd/Commands/CommandsBag";
+import { ConversionContext } from "general-language-syntax/dist/amd/Conversions/ConversionContext";
+import { TypeScript } from "general-language-syntax/dist/amd/Languages/TypeScript";
 import { action, observable } from "mobx";
 
 import { IStorageWrapper } from "../../../storage/storagewrapper";
@@ -25,6 +29,11 @@ export class CommandsListStore {
     }
 
     /**
+     * Commands to be listed.
+     */
+    public readonly commands: { [i: string]: GlsCommand } = CommandsListStore.getCommands();
+
+    /**
      * Wrapper for persistent items kept in a Storage object.
      */
     private readonly storageWrapper: IStorageWrapper;
@@ -36,5 +45,15 @@ export class CommandsListStore {
      */
     public constructor(storageWrapper: IStorageWrapper) {
         this.storageWrapper = storageWrapper;
+    }
+
+    /**
+     * @returns All available commands.
+     */
+    private static getCommands(): { [i: string]: GlsCommand } {
+        const conversionContext: ConversionContext = new ConversionContext(new TypeScript());
+        const commandsBag: CommandsBag = new CommandsBag(conversionContext);
+
+        return commandsBag.getCommands();
     }
 }

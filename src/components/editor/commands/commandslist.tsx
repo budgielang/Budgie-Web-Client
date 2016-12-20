@@ -1,7 +1,4 @@
-import { Command as GlsCommand } from "general-language-syntax/dist/amd/Commands/Command";
-import { CommandsBag } from "general-language-syntax/dist/amd/Commands/CommandsBag";
-import { ConversionContext } from "general-language-syntax/dist/amd/Conversions/ConversionContext";
-import { TypeScript } from "general-language-syntax/dist/amd/Languages/TypeScript";
+import { observer } from "mobx-react";
 import * as React from "react";
 
 import { Command } from "./command";
@@ -20,12 +17,8 @@ export interface IProps {
 /**
  * Component for a filterable list of GLS commands.
  */
+@observer
 export class CommandsList extends React.Component<IProps, void> {
-    /**
-     * Commands to be listed.
-     */
-    private commands: { [i: string]: GlsCommand } = CommandsList.getCommands();
-
     /**
      * @returns The rendered component.
      */
@@ -41,22 +34,12 @@ export class CommandsList extends React.Component<IProps, void> {
      * @returns The rendered command components.
      */
     private renderCommands(): JSX.Element[] {
-        return Object.keys(this.commands)
+        return Object.keys(this.props.store.commands)
             .filter((key: string): boolean => key.toLowerCase().indexOf(this.props.store.filter) !== -1)
             .map((key: string): JSX.Element => (
                 <Command
-                    command={this.commands[key]}
+                    command={this.props.store.commands[key]}
                     key={key}
                     name={key} />));
-    }
-
-    /**
-     * @returns All available commands.
-     */
-    private static getCommands(): { [i: string]: GlsCommand } {
-        const conversionContext: ConversionContext = new ConversionContext(new TypeScript());
-        const commandsBag: CommandsBag = new CommandsBag(conversionContext);
-
-        return commandsBag.getCommands();
     }
 }
