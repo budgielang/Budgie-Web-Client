@@ -270,5 +270,5 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
      */
     private updateDimensions = (): void => {
         this.editor.layout();
-    };
+    }
 }

@@ -46,5 +46,5 @@ export class DropdownTextMenu extends React.Component<IProps, void> {
      */
     private onChange = (event: React.FormEvent<HTMLSelectElement>): void => {
         this.props.onChange(event.currentTarget.value);
-    };
+    }
 }

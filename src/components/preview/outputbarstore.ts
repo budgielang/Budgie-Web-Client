@@ -5,10 +5,10 @@ import { stored } from "../../storage/stored";
 import { storing } from "../../storage/storing";
 
 /**
- * Store for an options bar component.
+ * Store for an output bar component.
  */
-@storing<OptionsBarStore>(store => store.storageWrapper)
-export class OptionsBarStore {
+@storing<OutputBarStore>(store => store.storageWrapper)
+export class OutputBarStore {
     /**
      * Language the GLS syntax will compile to.
      */
@@ -27,22 +27,6 @@ export class OptionsBarStore {
     @action
     public readonly setLanguage = (language: string): void => {
         this.language = language;
-    };
-
-    /**
-     * @param sample   A new sample name the user is editing from.
-     */
-    @action
-    public readonly setSample = (sample: string = this.sample): void => {
-        this.sample = sample;
-    };
-
-    /**
-     * Resets to the current sample.
-     */
-    @action
-    public readonly reset = (): void => {
-        this.sample = this.sample;
     }
 
     /**
@@ -51,7 +35,7 @@ export class OptionsBarStore {
     private readonly storageWrapper: IStorageWrapper;
 
     /**
-     * Initializes a new instance of the OptionsBarStore class.
+     * Initializes a new instance of the OutputBarStore class.
      * 
      * @param storageWrapper   Wrapper for persistent items kept in a Storage object.
      */

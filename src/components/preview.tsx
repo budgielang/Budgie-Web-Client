@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 
-import { OptionsBar } from "./preview/optionsbar";
+import { OutputBar } from "./preview/outputbar";
 import { OutputArea } from "./preview/outputarea";
 import { PreviewStore } from "./previewstore";
 
@@ -30,7 +30,7 @@ export class Preview extends React.Component<IProps, void> {
             <section className="preview">
                 <div className="component">
                     <OutputArea store={this.props.store.outputArea} />
-                    <OptionsBar store={this.props.store.optionsBar} />
+                    <OutputBar store={this.props.store.optionsBar} />
                 </div>
         </section>);
     }

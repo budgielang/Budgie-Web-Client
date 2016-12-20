@@ -38,11 +38,11 @@ export function Parameters(props: IProps): JSX.Element {
  */
 function renderParameter(parameter: Parameter, key: number): JSX.Element {
     if (parameter instanceof SingleParameter) {
-        return <Single key={parameter.name} parameter={parameter} />
+        return <Single key={parameter.name} parameter={parameter} />;
     }
 
     if (parameter instanceof RepeatingParameters) {
-        return <Repeating key={key} parameters={parameter} />
+        return <Repeating key={key} parameters={parameter} />;
     }
 
     throw new Error("Unknown parameter type: " + parameter);

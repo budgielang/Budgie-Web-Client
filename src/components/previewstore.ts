@@ -4,7 +4,7 @@ import { LanguagesBag } from "general-language-syntax/dist/amd/Languages/Languag
 import { action, autorun, computed, observable } from "mobx";
 
 import { InputAreaStore } from "./editor/inputareastore";
-import { OptionsBarStore } from "./preview/optionsbarstore";
+import { OutputBarStore } from "./preview/outputbarstore";
 import { OutputAreaStore } from "./preview/outputareastore";
 
 /**
@@ -20,7 +20,7 @@ export class PreviewStore {
      * Store for an OptionsBar component.
      */
     @observable
-    public optionsBar: OptionsBarStore;
+    public optionsBar: OutputBarStore;
 
     /**
      * Store for a GlsInputArea component.
@@ -39,7 +39,7 @@ export class PreviewStore {
      * 
      * @param optionsBar   Store for an OptionsBar component.
      */
-    public constructor(optionsBar: OptionsBarStore, inputArea: InputAreaStore, outputArea: OutputAreaStore) {
+    public constructor(optionsBar: OutputBarStore, inputArea: InputAreaStore, outputArea: OutputAreaStore) {
         this.optionsBar = optionsBar;
         this.inputArea = inputArea;
         this.outputArea = outputArea;

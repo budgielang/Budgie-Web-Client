@@ -1,6 +1,9 @@
+import { Samples } from "../samples";
 import { StorageWrapper } from "../storage/storagewrapper";
+import { CommandsListStore } from "./editor/commands/commandsliststore";
 import { InputAreaStore } from "./editor/inputareastore";
-import { OptionsBarStore } from "./preview/optionsbarstore";
+import { InputBarStore } from "./editor/inputbarstore";
+import { OutputBarStore } from "./preview/outputbarstore";
 import { OutputAreaStore } from "./preview/outputareastore";
 import { AppStore } from "./appstore";
 import { EditorStore } from "./editorstore";
@@ -16,12 +19,14 @@ export class AppStoreFactory {
     public create() {
         const storageWrapper = new StorageWrapper("gls-web-client");
 
+        const commandsList = new CommandsListStore(storageWrapper);
         const inputArea = new InputAreaStore(storageWrapper);
-        const optionsBar = new OptionsBarStore(storageWrapper);
-        const outputArea = new OutputAreaStore(inputArea, optionsBar);
+        const inputBar = new InputBarStore(storageWrapper, inputArea, Samples);
+        const outputBar = new OutputBarStore(storageWrapper);
+        const outputArea = new OutputAreaStore(inputArea, outputBar);
 
         return new AppStore(
-            new EditorStore(inputArea),
-            new PreviewStore(optionsBar, inputArea, outputArea));
+            new EditorStore(inputArea, commandsList, inputBar),
+            new PreviewStore(outputBar, inputArea, outputArea));
     }
 }

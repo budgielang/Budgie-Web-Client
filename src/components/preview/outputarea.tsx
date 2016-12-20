@@ -53,10 +53,10 @@ export class OutputArea extends React.Component<IProps, void> {
     private renderOutputLines(outputLines: string[]): JSX.Element {
         return (
             <MonacoTextArea
-                language={this.props.store.optionsBar.language.toLowerCase()}
+                language={this.props.store.outputBar.language.toLowerCase()}
                 options={{
                     readOnly: true,
-                    // scrollBeyondLastLine: false
+                    scrollBeyondLastLine: false
                 }}
                 value={outputLines.join("\n")} />);
     }

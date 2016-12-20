@@ -1,8 +1,9 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 
-import { CommandsList } from "./editor/commands/commandslist"
+import { CommandsList } from "./editor/commands/commandslist";
 import { InputArea } from "./editor/inputarea";
+import { InputBar } from "./editor/inputbar";
 import { EditorStore } from "./editorstore";
 
 /**
@@ -28,7 +29,8 @@ export class Editor extends React.Component<IProps, void> {
             <section className="editor">
                 <div className="component">
                     <InputArea store={this.props.store.inputArea} />
-                    <CommandsList />
+                    <CommandsList store={this.props.store.commandsList} />
+                    <InputBar store={this.props.store.inputBar} />
                 </div>
             </section>);
     }

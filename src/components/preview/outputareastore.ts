@@ -3,7 +3,7 @@ import { LanguagesBag } from "general-language-syntax/dist/amd/Languages/Languag
 import { computed, observable } from "mobx";
 
 import { InputAreaStore } from "../editor/inputareastore";
-import { OptionsBarStore } from "./optionsbarstore";
+import { OutputBarStore } from "./outputbarstore";
 
 /**
  * Results from attempting a GLS conversion.
@@ -30,16 +30,16 @@ export class OutputAreaStore {
     private static languagesBag: LanguagesBag = new LanguagesBag();
 
     /**
-     * Store for a GlsInputArea component.
+     * Store for an InputArea component.
      */
     @observable
-    public glsInputArea: InputAreaStore;
+    public inputArea: InputAreaStore;
 
     /**
-     * Store for an OptionsBar component.
+     * Store for an OutputBar component.
      */
     @observable
-    public optionsBar: OptionsBarStore;
+    public outputBar: OutputBarStore;
 
     /**
      * The last known good conversion result.
@@ -56,7 +56,7 @@ export class OutputAreaStore {
         };
 
         try {
-            result.outputLines = this.conversionContext.convert(this.glsInputArea.sourceLines);
+            result.outputLines = this.conversionContext.convert(this.inputArea.sourceLines);
             this.lastGoodOutputLines = result.outputLines;
         } catch (error) {
             result.error = (error as any).message;
@@ -70,14 +70,17 @@ export class OutputAreaStore {
      */
     @computed
     private get conversionContext(): ConversionContext {
-        return new ConversionContext(OutputAreaStore.languagesBag[this.optionsBar.language]);
+        return new ConversionContext(OutputAreaStore.languagesBag[this.outputBar.language]);
     }
 
     /**
      * Initializes a new instance of the GlsOutputAreaStore class.
+     * 
+     * @param glsInputArea   Store for an InputArea component.
+     * @param outputBar   Store for an OutputBar component.
      */
-    public constructor(glsInputArea: InputAreaStore, optionsBar: OptionsBarStore) {
-        this.glsInputArea = glsInputArea;
-        this.optionsBar = optionsBar;
+    public constructor(inputArea: InputAreaStore, outputBar: OutputBarStore) {
+        this.inputArea = inputArea;
+        this.outputBar = outputBar;
     }
 }
