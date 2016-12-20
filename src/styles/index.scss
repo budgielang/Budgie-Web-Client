@@ -60,8 +60,7 @@ section {
 /* Commands list */
 
 .commands-list {
-    padding: 0 $standard-padding;
-    margin-bottom: $bar-height;
+    padding: 0 $standard-padding $standard-padding $standard-padding;
     height: 700px;
     overflow-y: scroll;
     font-size: 1.17em;
@@ -130,7 +129,6 @@ section {
 
 .options-bar {
     padding: 3px 0;;
-    height: $bar-height;
     box-sizing: border-box;
 
     label {
@@ -138,7 +136,7 @@ section {
         font-style: italic;
     }
 
-    select, button {
+    select, button, input {
         height: 100%;
     }
 
@@ -153,6 +151,12 @@ section {
 
     .commands-filter {
         float: left;
+        padding: $standard-padding;
+        height: 100%;
+        box-sizing: border-box;
     }
 }
 
+.output-bar {
+    height: $bar-height;
+}

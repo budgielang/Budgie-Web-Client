@@ -25,12 +25,20 @@ export class InputBarStore {
     public sample: string;
 
     /**
-     * @param language   A new language GLS syntax will compile into.
+     * @param language   Name of the new sample to use.
      */
     @action
     public readonly setSample = (sample: string): void => {
         this.sample = sample;
-        this.inputArea.setSource(this.samples[sample]);
+        this.resetSampleToCurrent();
+    }
+
+    /**
+     * @param language   A new language GLS syntax will compile into.
+     */
+    @action
+    public readonly resetSampleToCurrent = (): void => {
+        this.inputArea.setSource(this.samples[this.sample]);
     }
 
     /**

@@ -34,6 +34,7 @@ export class InputBar extends React.Component<IProps, void> {
                 <SampleChooser
                     sample={this.props.store.sample}
                     onChange={this.props.store.setSample} />
+                <button onClick={this.onReset}>reset</button>
             </div>);
     }
 
@@ -44,5 +45,12 @@ export class InputBar extends React.Component<IProps, void> {
      */
     private onFilterChange = (event: React.FormEvent<HTMLInputElement>): void => {
         this.props.store.commandsList.setFilter(event.currentTarget.value);
+    }
+
+    /**
+     * Resets input text to the current sample.
+     */
+    private onReset = (): void => {
+        this.props.store.resetSampleToCurrent();
     }
 }
