@@ -1,32 +1,26 @@
-function dedent(strings: TemplateStringsArray): string {
-    return strings[0].substring(strings[0].search(/\S+/));
-}
-
-export const Samples = {
-    Default: dedent`
+const headerBlurb: string = `
 comment block start
 comment block : GLS ((General Language Syntax)) is a single syntax
 comment block : that compiles into common OOP languages.
 comment block : ---
 comment block : Write code in the editor,
 comment block : and see the language output in real time!
-comment block end
+comment block end`;
 
+function prepare(strings: TemplateStringsArray): string {
+    const source = headerBlurb + "\n" + strings[0] + "\n";
+    return source.substring(source.search(/\S+/));
+}
+
+export const Samples = {
+    Default: prepare`
 file start : Program
     main start
         print : ("GLS is awesome!")
         print : ("Select a sample above to see how it works!")
     main end
 file end : Program`,
-    Variables: dedent`
-comment block start
-comment block : GLS ((General Language Syntax)) is a single syntax
-comment block : that compiles into common OOP languages.
-comment block : ---
-comment block : Write code in the editor,
-comment block : and see the language output in real time!
-comment block end
-
+    Variables: prepare`
 file start : Program
     main start
         comment line : Simple declarations
@@ -42,15 +36,7 @@ file start : Program
         variable : corge boolean true
     main end
 file end : Program`,
-    Operations: dedent`
-comment block start
-comment block : GLS ((General Language Syntax)) is a single syntax
-comment block : that compiles into common OOP languages.
-comment block : ---
-comment block : Write code in the editor,
-comment block : and see the language output in real time!
-comment block end
-
+    Operations: prepare`
 file start : Program
     main start
         variable : foo number 7
@@ -63,15 +49,7 @@ file start : Program
         
     main end
 file end : Program`,
-    Conditionals: dedent`
-comment block start
-comment block : GLS ((General Language Syntax)) is a single syntax
-comment block : that compiles into common OOP languages.
-comment block : ---
-comment block : Write code in the editor,
-comment block : and see the language output in real time!
-comment block end
-
+    Conditionals: prepare`
 file start : Program
     main start
         comment line : Conditionals
@@ -84,29 +62,13 @@ file start : Program
         if end
     main end
 file end : Program`,
-    "Arrays and Lists": dedent`
-comment block start
-comment block : GLS ((General Language Syntax)) is a single syntax
-comment block : that compiles into common OOP languages.
-comment block : ---
-comment block : Write code in the editor,
-comment block : and see the language output in real time!
-comment block end
-
+    "Arrays and Lists": prepare`
 file start : Program
     main start
-        
+        comment line : Coming soon!
     main end
 file end : Program`,
-    Dictionaries: dedent`
-comment block start
-comment block : GLS ((General Language Syntax)) is a single syntax
-comment block : that compiles into common OOP languages.
-comment block : ---
-comment block : Write code in the editor,
-comment block : and see the language output in real time!
-comment block end
-
+    Dictionaries: prepare`
 file start : Program
     main start
         comment line : Dictionary types
@@ -125,15 +87,7 @@ file start : Program
         dictionary new end
     main end
 file end : Program`,
-    Loops: dedent`
-comment block start
-comment block : GLS ((General Language Syntax)) is a single syntax
-comment block : that compiles into common OOP languages.
-comment block : ---
-comment block : Write code in the editor,
-comment block : and see the language output in real time!
-comment block end
-
+    Loops: prepare`
 file start : Program
     main start
         comment line : While
@@ -159,17 +113,9 @@ file start : Program
         for each end
     main end
 file end : Program`,
-    Lambdas: dedent`
+    Lambdas: prepare`
 comment line : Coming soon!`,
-    Classes: dedent`
-comment block start
-comment block : GLS ((General Language Syntax)) is a single syntax
-comment block : that compiles into common OOP languages.
-comment block : ---
-comment block : Write code in the editor,
-comment block : and see the language output in real time!
-comment block end
-
+    Classes: prepare`
 file start : Program
     class start : Person
         comment doc start

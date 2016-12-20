@@ -25,11 +25,12 @@ export class InputBar extends React.Component<IProps, void> {
     public render(): JSX.Element {
         return (
             <div className="options-bar input-bar">
-                <input
-                    className="commands-filter"
-                    onChange={this.onFilterChange}
-                    placeholder="filter commands"
-                    type="text" />
+                <div className="commands-filter">
+                    <input
+                        onChange={this.onFilterChange}
+                        placeholder="filter commands"
+                        type="text" />
+                </div>
                 <label>Choose a sample:</label>
                 <SampleChooser
                     sample={this.props.store.sample}
