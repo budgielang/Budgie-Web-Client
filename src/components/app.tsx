@@ -24,7 +24,6 @@ export class App extends React.Component<IAppProps, void> {
      * @returns The rendered component.
      */
     public render(): JSX.Element {
-        (window as any).durp = this.props;
         return (
             <div className="app">
                 <Editor store={this.props.store.editor} />
