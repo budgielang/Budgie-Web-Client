@@ -32,8 +32,24 @@
                 }
             });
 
-            requirejs.onResourceLoad = function () {
-                NProgress.inc();
+            var completed = 0;
+            var oldPercentage = 0;
+
+            requirejs.onResourceLoad = function (context) {
+                setTimeout(
+                    function () {
+                        if (!NProgress.status) {
+                            delete requirejs.onResourceLoad;
+                            return;
+                        }
+
+                        var newPercentage = (completed += 1) / Object.keys(context.defined).length;
+                        if (newPercentage > oldPercentage) {
+                            NProgress.set(newPercentage);
+                            oldPercentage = newPercentage;
+                        }
+                    },
+                    100);
             };
         </script>
     </body>
