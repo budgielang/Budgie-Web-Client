@@ -14,12 +14,12 @@ export interface IProps {
     /**
      * 
      */
-    editorDidMount?: Function;
+    editorDidMount?(): void;
 
     /**
      * 
      */
-    editorWillMount?: Function;
+    editorWillMount?(): void;
 
     /**
      * 
@@ -39,7 +39,7 @@ export interface IProps {
     /**
      * 
      */
-    onChange?: (newValue: string) => void;
+    onChange?(newValue: string): void;
 
     /**
      * 
@@ -54,7 +54,7 @@ export interface IProps {
     /**
      * 
      */
-    value?: string;
+    value: string;
 }
 
 /**
@@ -79,17 +79,17 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
     /**
      * Default properties for the component.
      */
-    public static defaultProps: IProps = {
-        width: "100%",
-        height: "100%",
-        value: null,
+    public static defaultProps: Partial<IProps> = {
         defaultValue: "",
+        editorDidMount: (): void => {/* no-op */},
+        editorWillMount: (): void => {/* no-op */},
+        height: "100%",
         language: "javascript",
-        theme: "vs",
+        onChange: (): void => {/* no-op */},
         options: {},
-        editorDidMount: (): void => {},
-        editorWillMount: (): void => {},
-        onChange: (): void => {}
+        theme: "vs",
+        value: undefined,
+        width: "100%",
     };
 
     /**
@@ -111,8 +111,8 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
+            currentValue: props.value,
             loading: true,
-            currentValue: props.value
         };
     }
 
@@ -177,6 +177,7 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
         if (nextProps.language !== this.props.language) {
             this.destroyMonaco();
             this.initializeMonaco(nextProps);
+
             return;
         }
 
@@ -192,8 +193,8 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
     /**
      * Trigger when the editor is about to mount.
      */
-    private editorWillMount(monaco) {
-        this.props.editorWillMount(monaco);
+    private editorWillMount() {
+        this.props.editorWillMount();
     }
 
     /**
@@ -201,9 +202,9 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
      */
     private editorDidMount(editor: monaco.editor.IStandaloneCodeEditor, monaco) {
         this.setState({
-            loading: false
+            loading: false,
         });
-        this.props.editorDidMount(editor, monaco);
+        this.props.editorDidMount();
 
         editor.onDidChangeModelContent((): void => {
             const value = editor.getValue();
@@ -215,7 +216,7 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
 
             // Always refer to the latest value
             this.setState({
-                currentValue: value
+                currentValue: value,
             });
         });
     }
@@ -241,7 +242,7 @@ export class MonacoTextArea extends React.Component<IProps, IState> {
         }
 
         // Before initializing monaco editor
-        this.editorWillMount(monaco);
+        this.editorWillMount();
 
         this.editor = monaco.editor.create(
             (this.refs as any).container,

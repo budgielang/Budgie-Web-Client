@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 
-import { OutputBar } from "./preview/outputbar";
 import { OutputArea } from "./preview/outputarea";
+import { OutputBar } from "./preview/outputbar";
 import { PreviewStore } from "./previewstore";
 
 /**

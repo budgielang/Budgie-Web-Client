@@ -1,4 +1,4 @@
-import { ConversionContext } from "general-language-syntax/dist/amd/Conversions/ConversionContext";
+import { ConversionContext } from "general-language-syntax";
 import { observer } from "mobx-react";
 import * as React from "react";
 
@@ -56,7 +56,7 @@ export class OutputArea extends React.Component<IProps, void> {
                 language={this.props.store.outputBar.language.toLowerCase()}
                 options={{
                     readOnly: true,
-                    scrollBeyondLastLine: false
+                    scrollBeyondLastLine: false,
                 }}
                 value={outputLines.join("\n")} />);
     }

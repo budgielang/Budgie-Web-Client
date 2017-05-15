@@ -52,7 +52,7 @@ export class OutputAreaStore {
     @computed
     public get conversionResult(): IConversionResult {
         const result: IConversionResult = {
-            outputLines: this.lastGoodOutputLines
+            outputLines: this.lastGoodOutputLines,
         };
 
         try {

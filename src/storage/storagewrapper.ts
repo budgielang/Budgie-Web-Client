@@ -87,6 +87,7 @@ export class StorageWrapper implements IStorageWrapper {
     public setItemDefault<T>(key: string, value: T): void {
         key = this.generateStorageKey(key);
 
+        // tslint:disable-next-line no-null-keyword
         if (this.storage.getItem(key) === null) {
             this.storage[key] = JSON.stringify(value);
         }
@@ -99,6 +100,6 @@ export class StorageWrapper implements IStorageWrapper {
      * @returns Prefix-considering storage key for the item.
      */
     private generateStorageKey(key: string): string {
-        return this.storagePrefix + "-" + key;
+        return `${this.storagePrefix}-${key}`;
     }
 }

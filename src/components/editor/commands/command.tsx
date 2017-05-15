@@ -1,4 +1,4 @@
-import { Command as GlsCommand } from "general-language-syntax/dist/amd/Commands/Command";
+import { Command as GlsCommand } from "general-language-syntax";
 import * as React from "react";
 
 import { Parameters } from "./parameters";

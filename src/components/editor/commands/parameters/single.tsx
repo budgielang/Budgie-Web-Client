@@ -1,4 +1,4 @@
-import { SingleParameter as GlsSingleParameter } from "general-language-syntax/dist/amd/Commands/Parameters/SingleParameter";
+import { SingleParameter as GlsSingleParameter } from "general-language-syntax";
 import * as React from "react";
 
 /**

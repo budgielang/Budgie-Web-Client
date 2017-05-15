@@ -1,6 +1,6 @@
-import { Parameter } from "general-language-syntax/dist/amd/Commands/Parameters/Parameter";
-import { RepeatingParameters } from "general-language-syntax/dist/amd/Commands/Parameters/RepeatingParameters";
-import { SingleParameter } from "general-language-syntax/dist/amd/Commands/Parameters/SingleParameter";
+import { Parameter } from "general-language-syntax";
+import { RepeatingParameters } from "general-language-syntax";
+import { SingleParameter } from "general-language-syntax";
 import * as React from "react";
 
 import { Repeating } from "./parameters/repeating";

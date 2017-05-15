@@ -65,14 +65,17 @@ gulp.task("tsc", () => {
 });
 
 gulp.task("tslint", () => {
-    const tslint = require("gulp-tslint");
+    var tslint = require("tslint");
+    var gulpTslint = require("gulp-tslint");
+    var program = tslint.Linter.createProgram("./tsconfig.json");
 
     return gulp
         .src(["src/**/*.ts", "src/**/*.tsx", "!src/**/*.d.ts"])
-        .pipe(tslint({
-            formatter: "verbose"
+        .pipe(gulpTslint({
+            formatter: "stylish",
+            program
         }))
-        .pipe(tslint.report());
+        .pipe(gulpTslint.report());
 });
 
 gulp.task("watch", () => {

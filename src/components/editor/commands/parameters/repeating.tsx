@@ -1,4 +1,4 @@
-import { RepeatingParameters as GlsRepeatingParameters } from "general-language-syntax/dist/amd/Commands/Parameters/RepeatingParameters";
+import { RepeatingParameters as GlsRepeatingParameters } from "general-language-syntax";
 import * as React from "react";
 
 import { Parameters as ParametersComponent } from "../parameters";

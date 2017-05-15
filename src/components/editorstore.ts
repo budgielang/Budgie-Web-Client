@@ -1,4 +1,4 @@
-import { action, computed, observable } from "mobx";
+import { observable } from "mobx";
 
 import { CommandsListStore } from "./editor/commands/commandsliststore";
 import { InputAreaStore } from "./editor/inputareastore";

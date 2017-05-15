@@ -2,8 +2,8 @@ import { useStrict } from "mobx";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { AppStoreFactory } from "./components/appstorefactory";
 import { App } from "./components/app";
+import { AppStoreFactory } from "./components/appstorefactory";
 
 useStrict(true);
 
