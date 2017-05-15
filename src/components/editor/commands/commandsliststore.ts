@@ -8,7 +8,6 @@ import { IStorageWrapper } from "../../../storage/storagewrapper";
 import { stored } from "../../../storage/stored";
 import { storing } from "../../../storage/storing";
 
-
 /**
  * Store for an input bar component.
  */
