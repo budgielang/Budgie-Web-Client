@@ -1,7 +1,4 @@
-import { Command as GlsCommand } from "general-language-syntax/dist/amd/Commands/Command";
-import { CommandsBag } from "general-language-syntax/dist/amd/Commands/CommandsBag";
-import { ConversionContext } from "general-language-syntax/dist/amd/Conversions/ConversionContext";
-import { TypeScript } from "general-language-syntax/dist/amd/Languages/TypeScript";
+import { Command as GlsCommand, CommandsBag, ConversionContext, TypeScript } from "general-language-syntax";
 import { action, observable } from "mobx";
 
 import { IStorageWrapper } from "../../../storage/storagewrapper";

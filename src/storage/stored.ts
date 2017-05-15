@@ -2,12 +2,6 @@ import { observable } from "mobx";
 
 import { IStorageWrapper } from "./storagewrapper";
 
-export interface IStoredTarget {
-    constructor: {
-        getStorageWrapper(target: IStoredTarget): IStorageWrapper;
-    };
-}
-
 /**
  * Internal observable storage for a single value.
  * 
@@ -29,7 +23,7 @@ class SingleObservableStore<TData> {
  * @returns A decorator to keep the data in sync with storage.
  */
 export function stored<TData>(defaultValue: TData) {
-    return (target: IStoredTarget, key: string): void => {
+    return (target: any, key: string): void => {
         const store = new SingleObservableStore<TData>();
 
         Object.defineProperty(target, key, {

@@ -1,5 +1,4 @@
-import { ConversionContext } from "general-language-syntax/dist/amd/Conversions/ConversionContext";
-import { LanguagesBag } from "general-language-syntax/dist/amd/Languages/LanguagesBag";
+import { ConversionContext, LanguagesBag } from "general-language-syntax";
 import { computed, observable } from "mobx";
 
 import { InputAreaStore } from "../editor/inputareastore";
