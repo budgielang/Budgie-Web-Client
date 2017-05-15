@@ -1,10 +1,15 @@
 {
-    "extends": "tslint:all",
+    "extends": "tslint:recommended",
     "rules": {
         "arrow-parens": [false],
+        "callable-types": [false],
         "linebreak-style": [false],
+        "max-line-length": [true, 140],
         "member-ordering": [false],
+        "no-reference": [false],
+        "no-shadowed-variable": [false],
         "no-trailing-whitespace": [true, "ignore-jsdoc"],
+        "space-before-function-paren": [false],
         "typedef": [false]
     }
 }

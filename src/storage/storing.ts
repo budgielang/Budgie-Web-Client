@@ -19,7 +19,7 @@ export interface IGetStorageWrapper<TTarget> {
  * @returns A decorator to add the getStorageWrapper hook to a class.
  */
 export function storing<TTarget>(getStorageWrapper: IGetStorageWrapper<TTarget>) {
-    return function (target: any): void {
+    return (target: any): void => {
         target.getStorageWrapper = (target: any): IStorageWrapper => {
             return getStorageWrapper(target);
         };

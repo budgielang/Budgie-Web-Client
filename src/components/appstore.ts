@@ -1,4 +1,4 @@
-import { action, computed, observable } from "mobx";
+import { observable } from "mobx";
 
 import { EditorStore } from "./editorstore";
 import { PreviewStore } from "./previewstore";

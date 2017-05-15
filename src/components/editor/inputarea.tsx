@@ -29,7 +29,7 @@ export class InputArea extends React.Component<IProps, void> {
                 language="gls"
                 onChange={this.receiveNewValue}
                 options={{
-                    scrollBeyondLastLine: false
+                    scrollBeyondLastLine: false,
                 }}
                 value={this.props.store.source} />);
     }

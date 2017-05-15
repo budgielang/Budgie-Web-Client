@@ -1,4 +1,4 @@
-const headerBlurb: string = `
+const headerBlurb = `
 comment block start
 comment block : GLS ((General Language Syntax)) is a single syntax
 comment block : that compiles into common OOP languages.
@@ -7,10 +7,13 @@ comment block : Write code in the editor,
 comment block : and see the language output in real time!
 comment block end`;
 
-function prepare(strings: TemplateStringsArray): string {
-    const source = headerBlurb + "\n" + strings[0] + "\n";
+const prepare = (strings: TemplateStringsArray): string => {
+    const source = `${headerBlurb}\n${strings[0]}\n`;
+
     return source.substring(source.search(/\S+/));
-}
+};
+
+/* tslint:disable */
 
 export const Samples = {
     Default: prepare`
@@ -45,7 +48,6 @@ file start : Program
         operation : foo (multiply by) 2
         operation : foo (decrease by) bar times { parenthesis : { operation : bar minus 3 } }
         variable : bar number { operation : foo (divide by) 3 plus 4 times foo }
-        
         
     main end
 file end : Program`,
@@ -143,5 +145,7 @@ file start : Program
     main start
         comment line : Coming soon: instances
     main end
-file end : Program`
+file end : Program`,
 };
+
+/* tslint:enable */

@@ -2,8 +2,8 @@ import { Gls } from "general-language-syntax";
 import { observer } from "mobx-react";
 import * as React from "react";
 
-import { DropdownTextMenu } from "../shared/dropdowntextmenu";
 import { Samples } from "../../samples";
+import { DropdownTextMenu } from "../shared/dropdowntextmenu";
 
 /**
  * Props for a Sample component.

@@ -72,7 +72,7 @@ gulp.task("tslint", () => {
     return gulp
         .src(["src/**/*.ts", "src/**/*.tsx", "!src/**/*.d.ts"])
         .pipe(gulpTslint({
-            formatter: "verbose",
+            formatter: "stylish",
             program
         }))
         .pipe(gulpTslint.report());

@@ -6,6 +6,9 @@
         "moduleResolution": "node",
         "target": "es5",
         "sourceMap": true,
+        "types": [
+            "monaco"
+        ],
         "jsx": "react"
     },
     "include": [

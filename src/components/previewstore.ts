@@ -1,21 +1,13 @@
-import { ConversionContext } from "general-language-syntax/dist/amd/Conversions/ConversionContext";
-import { Language } from "general-language-syntax/dist/amd/Languages/Language";
-import { LanguagesBag } from "general-language-syntax/dist/amd/Languages/LanguagesBag";
-import { action, autorun, computed, observable } from "mobx";
+import { observable } from "mobx";
 
 import { InputAreaStore } from "./editor/inputareastore";
-import { OutputBarStore } from "./preview/outputbarstore";
 import { OutputAreaStore } from "./preview/outputareastore";
+import { OutputBarStore } from "./preview/outputbarstore";
 
 /**
  * Store for a Preview component.
  */
 export class PreviewStore {
-    /**
-     * Languages keyed by their friendly names.
-     */
-    private static languagesBag: LanguagesBag = new LanguagesBag();
-
     /**
      * Store for an OptionsBar component.
      */

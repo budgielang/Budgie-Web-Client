@@ -1,12 +1,12 @@
 import { Samples } from "../samples";
 import { StorageWrapper } from "../storage/storagewrapper";
+import { AppStore } from "./appstore";
 import { CommandsListStore } from "./editor/commands/commandsliststore";
 import { InputAreaStore } from "./editor/inputareastore";
 import { InputBarStore } from "./editor/inputbarstore";
-import { OutputBarStore } from "./preview/outputbarstore";
-import { OutputAreaStore } from "./preview/outputareastore";
-import { AppStore } from "./appstore";
 import { EditorStore } from "./editorstore";
+import { OutputAreaStore } from "./preview/outputareastore";
+import { OutputBarStore } from "./preview/outputbarstore";
 import { PreviewStore } from "./previewstore";
 
 /**

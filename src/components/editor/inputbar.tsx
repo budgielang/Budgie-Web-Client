@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 
-import { SampleChooser } from "./samplechooser";
 import { InputBarStore } from "./inputbarstore";
+import { SampleChooser } from "./samplechooser";
 
 /**
  * Props for an OptionsBar component.
