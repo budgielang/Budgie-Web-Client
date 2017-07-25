@@ -17,14 +17,14 @@ const prepare = (strings: TemplateStringsArray): string => {
 
 export const Samples = {
     Default: prepare`
-file start : Program
+file start : Program File
     main start
         print : ("GLS is awesome!")
         print : ("Select a sample above to see how it works!")
     main end
 file end`,
     Variables: prepare`
-file start : Program
+file start : Program File
     main start
         comment line : Simple declarations
         variable : foo string
@@ -40,7 +40,7 @@ file start : Program
     main end
 file end`,
     Operations: prepare`
-file start : Program
+file start : Program File
     main start
         variable : foo number 7
         
@@ -52,7 +52,7 @@ file start : Program
     main end
 file end`,
     Conditionals: prepare`
-file start : Program
+file start : Program File
     main start
         comment line : Conditionals
         if start : { operation : 2 plus 2 (equal to) 4 }
@@ -65,13 +65,13 @@ file start : Program
     main end
 file end`,
     "Arrays and Lists": prepare`
-file start : Program
+file start : Program File
     main start
         comment line : Coming soon!
     main end
 file end`,
     Dictionaries: prepare`
-file start : Program
+file start : Program File
     main start
         comment line : Dictionary types
         variable : foo { dictionary type : string int } { dictionary new : string int }
@@ -90,7 +90,7 @@ file start : Program
     main end
 file end`,
     Loops: prepare`
-file start : Program
+file start : Program File
     main start
         comment line : While
         while start : true
@@ -118,7 +118,7 @@ file end`,
     Lambdas: prepare`
 comment line : Coming soon!`,
     Classes: prepare`
-file start : Program
+file start : Program File
     class start : Person
         comment doc start
         comment doc tag : summary The person's name.
