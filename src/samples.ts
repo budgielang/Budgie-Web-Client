@@ -22,7 +22,7 @@ file start : Program
         print : ("GLS is awesome!")
         print : ("Select a sample above to see how it works!")
     main end
-file end : Program`,
+file end`,
     Variables: prepare`
 file start : Program
     main start
@@ -38,7 +38,7 @@ file start : Program
         variable : quux number infinity
         variable : corge boolean true
     main end
-file end : Program`,
+file end`,
     Operations: prepare`
 file start : Program
     main start
@@ -50,7 +50,7 @@ file start : Program
         variable : bar number { operation : foo (divide by) 3 plus 4 times foo }
         
     main end
-file end : Program`,
+file end`,
     Conditionals: prepare`
 file start : Program
     main start
@@ -63,13 +63,13 @@ file start : Program
             print : ("Math.")
         if end
     main end
-file end : Program`,
+file end`,
     "Arrays and Lists": prepare`
 file start : Program
     main start
         comment line : Coming soon!
     main end
-file end : Program`,
+file end`,
     Dictionaries: prepare`
 file start : Program
     main start
@@ -88,7 +88,7 @@ file start : Program
             dictionary pair : "ddd" 3
         dictionary new end
     main end
-file end : Program`,
+file end`,
     Loops: prepare`
 file start : Program
     main start
@@ -114,7 +114,7 @@ file start : Program
             print : { concatenate : ("Looking at ") key  }
         for each end
     main end
-file end : Program`,
+file end`,
     Lambdas: prepare`
 comment line : Coming soon!`,
     Classes: prepare`
@@ -145,7 +145,7 @@ file start : Program
     main start
         comment line : Coming soon: instances
     main end
-file end : Program`,
+file end`,
 };
 
 /* tslint:enable */
