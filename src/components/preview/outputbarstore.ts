@@ -1,8 +1,12 @@
-import { action, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 
 import { IStorageWrapper } from "../../storage/storagewrapper";
 import { stored } from "../../storage/stored";
 import { storing } from "../../storage/storing";
+
+const languageAliases: { [i: string]: string } = {
+    "C#": "csharp",
+};
 
 /**
  * Store for an output bar component.
@@ -12,7 +16,7 @@ export class OutputBarStore {
     /**
      * Language the GLS syntax will compile to.
      */
-    @stored("CSharp")
+    @stored("C#")
     public language: string;
 
     /**
@@ -27,6 +31,13 @@ export class OutputBarStore {
     @action
     public readonly setLanguage = (language: string): void => {
         this.language = language;
+    }
+
+    @computed
+    public get friendlyLanguage(): string {
+        return this.language in languageAliases
+            ? languageAliases[this.language]
+            : this.language;
     }
 
     /**

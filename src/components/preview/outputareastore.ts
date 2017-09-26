@@ -69,7 +69,7 @@ export class OutputAreaStore {
      */
     @computed
     private get conversionContext(): ConversionContext {
-        return new ConversionContext(OutputAreaStore.languagesBag[this.outputBar.language]);
+        return new ConversionContext(OutputAreaStore.languagesBag.getLanguageByName(this.outputBar.language));
     }
 
     /**
