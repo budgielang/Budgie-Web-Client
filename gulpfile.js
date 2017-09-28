@@ -22,13 +22,13 @@ gulp.task("html", () => {
 });
 
 gulp.task("sass", () => {
-    const sass = require("gulp-sass");
-    const cleanCss = require("gulp-clean-css");
+    // const sass = require("gulp-sass");
+    // const cleanCss = require("gulp-clean-css");
 
-    return gulp.src("src/**/*.scss")
-        .pipe(sass())
-        .pipe(cleanCss())
-        .pipe(gulp.dest("lib"));
+    // return gulp.src("src/**/*.scss")
+    //     .pipe(sass())
+    //     .pipe(cleanCss())
+    //     .pipe(gulp.dest("lib"));
 });
 
 gulp.task("stylelint", () => {
