@@ -48,7 +48,7 @@ export class CommandsListStore {
      */
     private static getCommands(): { [i: string]: GlsCommand } {
         const conversionContext: ConversionContext = new ConversionContext(new TypeScript());
-        const commandsBag: CommandsBag = new CommandsBag(conversionContext);
+        const commandsBag: CommandsBag = CommandsBag.forContext(conversionContext);
 
         return commandsBag.getCommands();
     }

@@ -28,6 +28,6 @@ export function Command(props: IProps): JSX.Element {
     return (
         <div className="command">
             <h3>{props.name}</h3>
-            <Parameters parameters={props.command.getParameters()} />
+            <Parameters parameters={props.command.getMetadata().parameters} />
         </div>);
 }

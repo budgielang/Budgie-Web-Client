@@ -1,4 +1,4 @@
-import { Parameter } from "general-language-syntax";
+import { IParameter } from "general-language-syntax";
 import { RepeatingParameters } from "general-language-syntax";
 import { SingleParameter } from "general-language-syntax";
 import * as React from "react";
@@ -13,7 +13,7 @@ export interface IProps {
     /**
      * GLS parameters for a command.
      */
-    parameters: Parameter[];
+    parameters: IParameter[];
 }
 
 /**
@@ -36,7 +36,7 @@ export function Parameters(props: IProps): JSX.Element {
  * @param key   Ordeered identifier for the parameter.
  * @returns The rendered parameter.
  */
-function renderParameter(parameter: Parameter, key: number): JSX.Element {
+function renderParameter(parameter: IParameter, key: number): JSX.Element {
     if (parameter instanceof SingleParameter) {
         return <Single key={parameter.name} parameter={parameter} />;
     }
