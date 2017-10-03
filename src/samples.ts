@@ -134,7 +134,7 @@ file start : Program File
         member variable declare : private name string
         member variable declare : private age float
 
-        constructor start : Person name string age float
+        constructor start : public Person name string age float
             operation : { member variable : private { this } name } equals name
             operation : { member variable : private { this } age} equals age
         constructor end
