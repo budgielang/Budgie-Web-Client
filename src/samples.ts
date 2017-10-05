@@ -19,8 +19,10 @@ export const Samples = {
     "Default": prepare`
 file start : Program File
     main context start
-        print : ("GLS is awesome!")
-        print : ("Select a sample below to see how it works!")
+        main start
+            print : ("GLS is awesome!")
+            print : ("Select a sample below to see how it works!")
+        main end
     main context end
 file end`,
     "Variables": prepare`
@@ -83,50 +85,54 @@ file start : Program File
 file end`,
     "Dictionaries": prepare`
 file start : Program File
-    main start
-        comment line : Simple type
-        variable start : respondentResults { dictionary type : string float } { dictionary new start : string float }
-            dictionary pair : "javascript" 62.5 ,
-            dictionary pair : "sql" 51.2 ,
-            dictionary pair : "java" 39.7 ,
-            dictionary pair : "c#" 34.1
-        dictionary new end
+    main context start
+        main start
+            comment line : Simple type
+            variable start : respondentResults { dictionary type : string float } { dictionary new start : string float }
+                dictionary pair : "javascript" 62.5 ,
+                dictionary pair : "sql" 51.2 ,
+                dictionary pair : "java" 39.7 ,
+                dictionary pair : "c#" 34.1
+            dictionary new end
 
-        comment line : Indices
-        variable : javascript float { index : surveyResults "javascript" }
-        operation : { index : respondentResults "python" } equals 7
+            comment line : Indices
+            variable : javascript float { index : surveyResults "javascript" }
+            operation : { index : respondentResults "python" } equals 7
 
-        comment line : Deep type
-        variable start : allSurveys { dictionary type : string { dictionary type : string float } } { dictionary new start : string { dictionary type : string float } }
-            dictionary pair : "respondent" respondentResults
-        dictionary new end
-    main end
+            comment line : Deep type
+            variable start : allSurveys { dictionary type : string { dictionary type : string float } } { dictionary new start : string { dictionary type : string float } }
+                dictionary pair : "respondent" respondentResults
+            dictionary new end
+        main end
+    main context end
 file end`,
     "Loops": prepare`
 file start : Program File
-    main start
-        comment line : While
-        while start : true
-            print : "Hey!"
-            break
-        while end
+    main context start
+        main start
+            comment line : While
+            while start : true
+                print : "Hey!"
+                break
+            while end
 
-        comment line : For ((range))
-        for numbers start : i int 0 10
-            print : i
-        for numbers end
+            comment line : For ((range))
+            for numbers start : i int 0 10
+                print : i
+            for numbers end
 
-        comment line: For ((collection))
-        variable start : container { dictionary type : string int } { dictionary new start : string int }
-            dictionary pair : "bbb" 1 ,
-            dictionary pair : "ccc" 2 ,
-            dictionary pair : "ddd" 3
-        dictionary new end
+            comment line: For ((collection))
+            variable start : container { dictionary type : string int } { dictionary new start : string int }
+                dictionary pair : "bbb" 1 ,
+                dictionary pair : "ccc" 2 ,
+                dictionary pair : "ddd" 3
+            dictionary new end
 
-        for each pair start : container pair key string value int
-            print : { concatenate : ("Looking at ") key  }
-        for each end
-    main end
+            for each pair start : container pair key string value int
+                print : { concatenate : ("Looking at ") key  }
+            for each end
+        main end
+    main context end
 file end`,
     "Classes": prepare`
 file start : Program File
