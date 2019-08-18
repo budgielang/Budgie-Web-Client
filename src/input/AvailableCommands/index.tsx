@@ -31,7 +31,7 @@ export const AvailableCommands: React.FC = () => {
         <input
           className="available-commands--filter"
           onChange={event => setFilter(event.target.value)}
-          placeholder="filter commands list"
+          placeholder="filter commands"
           value={filter}
         />
       </div>

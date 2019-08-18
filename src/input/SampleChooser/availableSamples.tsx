@@ -70,7 +70,7 @@ file start : Program File
             variable : fruits { array type : string } { array initialize : string "apple" "banana" "cherry" }
 
             print : { string format : ("There are {0} fruits.") { array length : fruits } int }
-            print : { string format : ("The first fruit is {0}.") { index : fruits 0 } string }
+            print : { string format : ("The first fruit is {0}.") { dictionary index : fruits 0 } string }
 
             variable : vegetables { list type : string } { list initialize : string "artichoke" "broccolli" "carrot" }
 
@@ -78,8 +78,8 @@ file start : Program File
             list add list : vegetables { list initialize : string "pea" "potato" }
 
             print : { string format : ("There are {0} vegetables.") { list length : vegetables } int }
-            print : { string format : ("The first vegetable is {0}.") { index : vegetables 0 } string }
-            print : { string format : ("The last vegetable is {0}.") { index : vegetables { operation : { list length : vegetables } minus 1 } } string }
+            print : { string format : ("The first vegetable is {0}.") { dictionary index : vegetables 0 } string }
+            print : { string format : ("The last vegetable is {0}.") { dictionary index : vegetables { operation : { list length : vegetables } minus 1 } } string }
         main end
     main context end
 file end`,
@@ -88,21 +88,21 @@ file start : Program File
     main context start
         main start
             comment line : Simple type
-            variable start : respondentResults { dictionary type : string float } { dictionary new start : string float }
+            variable start : respondentResults { dictionary type : string float } { dictionary initialize start : string float }
                 dictionary pair : "javascript" 62.5 ,
                 dictionary pair : "sql" 51.2 ,
                 dictionary pair : "java" 39.7 ,
                 dictionary pair : "c#" 34.1
-            dictionary new end
+            dictionary initialize end
 
             comment line : Indices
-            variable : javascript float { index : surveyResults "javascript" }
-            operation : { index : respondentResults "python" } equals 7
+            variable : javascript float { dictionary index : surveyResults "javascript" }
+            operation : { dictionary index : respondentResults "python" } equals 7
 
             comment line : Deep type
-            variable start : allSurveys { dictionary type : string { dictionary type : string float } } { dictionary new start : string { dictionary type : string float } }
+            variable start : allSurveys { dictionary type : string { dictionary type : string float } } { dictionary initialize start : string { dictionary type : string float } }
                 dictionary pair : "respondent" respondentResults
-            dictionary new end
+            dictionary initialize end
         main end
     main context end
 file end`,
@@ -122,11 +122,11 @@ file start : Program File
             for numbers end
 
             comment line: For ((collection))
-            variable start : container { dictionary type : string int } { dictionary new start : string int }
+            variable start : container { dictionary type : string int } { dictionary initialize start : string int }
                 dictionary pair : "bbb" 1 ,
                 dictionary pair : "ccc" 2 ,
                 dictionary pair : "ddd" 3
-            dictionary new end
+            dictionary initialize end
 
             for each pair start : container pair key string value int
                 print : { concatenate : ("Looking at ") key  }
