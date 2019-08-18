@@ -1,0 +1,18 @@
+.sample-chooser {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  height: 3.5rem;
+  position: absolute;
+  right: 1rem;
+}
+
+.sample-chooser--select {
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.sample-chooser--reset {
+  padding: 0.5rem;
+  margin-left: 1rem;
+}

@@ -1,45 +1,39 @@
 {
   "name": "gls-web-client",
-  "description": "A web editor for GLS.",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:HighSchoolHacking/GLS-Web-Client.git"
-  },
-  "version": "1.0.0",
-  "author": {
-    "name": "Josh Goldberg",
-    "email": "jogol@microsoft.com"
-  },
-  "bugs": {
-    "url": "https://github.com/HighSchoolHacking/GLS-Web-Client/issues"
-  },
+  "description": "A web playground for GLS.",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "general-language-syntax": "^0.3.19",
-    "mobx": "^3.1.9",
-    "mobx-react": "^4.1.8",
-    "monaco-editor": "^0.8.3",
-    "nprogress": "^0.2.0",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
-    "requirejs": "^2.3.3"
+    "@monaco-editor/react": "^1.2.0",
+    "@types/jest": "24.0.17",
+    "@types/node": "12.7.2",
+    "@types/react": "16.9.2",
+    "@types/react-dom": "16.8.5",
+    "general-language-syntax": "^0.3.25",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "3.1.1",
+    "typescript": "3.5.3"
   },
-  "devDependencies": {
-    "@types/react": "^15.0.24",
-    "@types/react-dom": "^15.5.0",
-    "del": "^2.2.2",
-    "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.2.0",
-    "gulp-htmlmin": "^3.0.0",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.0",
-    "gulp-stylelint": "^3.9.0",
-    "gulp-tslint": "^8.0.0",
-    "gulp-typescript": "^3.1.6",
-    "gulp-uglify": "^2.1.2",
-    "merge2": "^1.0.3",
-    "run-sequence": "^1.2.2",
-    "tslint": "^5.2.0",
-    "typescript": "^2.3.2"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

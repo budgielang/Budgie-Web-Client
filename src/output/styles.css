@@ -1,0 +1,16 @@
+.output {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.output--editor {
+  height: calc(100% - 2rem);
+}
+
+.output--options {
+  align-items: center;
+  display: flex;
+  height: 3.5rem;
+  padding-left: 1rem;
+}

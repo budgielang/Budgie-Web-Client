@@ -1,4 +1,20 @@
-lib/**/*
-bower_components
-node_modules/
-npm-debug.log
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.log*
+.log*
+.log*

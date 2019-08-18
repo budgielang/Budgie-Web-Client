@@ -1,0 +1,14 @@
+.input {
+  height: 100%;
+  width: 100%;
+}
+
+.input--main {
+  height: 60%;
+}
+
+.input--help {
+  height: 40%;
+  padding: 0 0.5rem;
+  position: relative;
+}

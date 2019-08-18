@@ -1,0 +1,25 @@
+.available-commands {
+  border-right: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.available-commands--heading {
+  margin: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.available-commands--list {
+  margin: 0;
+  overflow-x: auto;
+  overflow-y: scroll;
+  padding-left: 0;
+}
+
+.available-commands--filter {
+  box-sizing: border-box;
+  font-size: 1rem;
+  left: 0;
+  padding: 1rem 0.5rem;
+}

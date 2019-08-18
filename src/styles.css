@@ -1,0 +1,22 @@
+.app-screen--main {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-screen--left,
+.app-screen--right {
+  width: 100%;
+  height: 50%;
+}
+
+@media screen and (min-width: 700px) {
+  .app-screen--main {
+    flex-direction: row;
+  }
+
+  .app-screen--left,
+  .app-screen--right {
+    width: 50%;
+    height: 100%;
+  }
+}

@@ -1,19 +1,10 @@
-import { useStrict } from "mobx";
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom";
 
-import { App } from "./components/app";
-import { AppStoreFactory } from "./components/appstorefactory";
+import "./index.css";
+import { App } from "./App";
+import * as serviceWorker from "./serviceWorker";
 
-useStrict(true);
+ReactDOM.render(<App />, document.getElementById("root"));
 
-const storeFactory: AppStoreFactory = new AppStoreFactory();
-const app = document.getElementById("app");
-
-ReactDOM.render(
-    <App store={storeFactory.create()} />,
-    app);
-
-(window as any).NProgress.done();
-delete (window as any).requirejs.onResourceLoad;
-app.className = "";
+serviceWorker.register();
