@@ -72,6 +72,14 @@ export const Output: React.FC<OutputProps> = ({ input }) => {
           ))}
         </select>
       </div>
+      <a
+        className="output--github"
+        href="https://github.com/general-language-syntax/GLS-Web-Client"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        See GLS-Web-Client on GitHub
+      </a>
     </div>
   );
 };
