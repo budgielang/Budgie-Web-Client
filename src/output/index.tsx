@@ -50,6 +50,8 @@ export const Output: React.FC<OutputProps> = ({ input }) => {
     <div className="output">
       <div className="output--editor">
         <MonacoEditor
+          // https://github.com/SurenAt93/monaco-react/issues/15
+          // 😔
           key={value}
           language={
             languageAliases.get(languageName) || languageName.toLowerCase()
