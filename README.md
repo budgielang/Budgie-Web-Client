@@ -1,6 +1,7 @@
 # GLS Web Client
 
 A web client for previewing [GLS](https://github.com/general-language-syntax/gls).
+See it online at [bit.ly/gls-demo](http://bit.ly/gls-demo).
 
 ## Development
 
