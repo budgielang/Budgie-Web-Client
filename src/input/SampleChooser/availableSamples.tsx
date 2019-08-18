@@ -42,9 +42,9 @@ file start : Program File
             variable : corge boolean true
 
             comment line : Operation chains
-            operation : foo (multiply by) 2
-            operation : foo (decrease by) bar times { parenthesis : { operation : bar minus 3 } }
-            variable : bar number { operation : foo (divide by) 3 plus 4 times foo }
+            operation : bar (multiply by) 2
+            operation : bar (decrease by) bar times { parenthesis : { operation : bar minus 3 } }
+            variable : grault number { operation : foo (divide by) 3 plus 4 times foo }
         main end
     main context end
 file end`,
@@ -146,7 +146,7 @@ file start : Program File
         constructor end
 
         member function declare start : public Speak void
-            print : { concatenate : ("Hello! I'm ") { member variable : private { this } greeting } "!" }
+            print : { concatenate : ("Hello! I'm ") { member variable : private { this } name } "!" }
         member function declare end
 
         member function declare start : public CreateClone Person
