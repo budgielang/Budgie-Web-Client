@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from "react";
+import MonacoEditor from "@monaco-editor/react";
+import React, { useMemo } from "react";
 import { LanguagesBag, Gls } from "general-language-syntax";
 
-import MonacoEditor from "@monaco-editor/react";
-
+import { useStoredState } from "../useStoredState";
 import "./styles.css";
 
 export type OutputProps = {
@@ -23,7 +23,10 @@ const tryConvert = (gls: Gls, input: string[]) => {
 };
 
 export const Output: React.FC<OutputProps> = ({ input }) => {
-  const [languageName, setLanguageName] = useState(languageNames[0]);
+  const [languageName, setLanguageName] = useStoredState(
+    "language-name",
+    languageNames[0]
+  );
   const gls = useMemo(() => new Gls(languageName), [languageName]);
 
   if (input === undefined) {

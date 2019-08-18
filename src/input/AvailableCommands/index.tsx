@@ -3,8 +3,9 @@ import {
   RenderContext,
   TypeScript
 } from "general-language-syntax";
-import React, { useState } from "react";
+import React from "react";
 
+import { useStoredState } from "../../useStoredState";
 import { AvailableCommand } from "./AvailableCommand";
 import "./styles.css";
 
@@ -15,7 +16,7 @@ const commandsBag = CommandsBagFactory.forContext(
 const commands = commandsBag.getCommands();
 
 export const AvailableCommands: React.FC = () => {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useStoredState("available-commands-filter", "");
 
   return (
     <div className="available-commands">
