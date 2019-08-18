@@ -142,7 +142,7 @@ file start : Program File
 
         constructor start : public Person name string age float
             operation : { member variable : private { this } name } equals name
-            operation : { member variable : private { this } age} equals age
+            operation : { member variable : private { this } age } equals age
         constructor end
 
         member function declare start : public Speak void
