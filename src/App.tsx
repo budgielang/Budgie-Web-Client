@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Input } from "./input";
 import { Output } from "./output";
 import { AppScreen } from "./AppScreen";
+import { useStoredState } from "./useStoredState";
 
 export const App = () => {
-  const [input, setInput] = useState<string | undefined>();
+  const [input, setInput] = useStoredState("input", undefined);
 
   return (
     <AppScreen>
