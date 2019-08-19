@@ -17,6 +17,7 @@
 
 .output--language-chooser {
   padding: 0.5rem;
+  margin-left: .5rem;
 }
 
 .output--github {
