@@ -63,7 +63,7 @@ export const Output: React.FC<OutputProps> = ({ input }) => {
         />
       </div>
       <div className="output--options">
-        <span>Choose an output language: </span>
+        <span className="non-mobile">Choose an output language: </span>
         <select className="output--language-chooser" onChange={onLanguageChange} value={languageName}>
           {languageNames.map(languageName => (
             <option key={languageName} value={languageName}>
