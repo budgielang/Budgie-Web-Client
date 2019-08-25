@@ -28,7 +28,9 @@ export const SampleChooser: React.FC<SampleChooserProps> = ({
 
   return (
     <div className="sample-chooser">
-      Choose a sample:
+      <span className="non-mobile">
+        Choose a sample:
+      </span>
       <select
         className="sample-chooser--select"
         onChange={setNewSample}
