@@ -30,6 +30,7 @@ export const AvailableCommands: React.FC = () => {
       </ul>
       <div className="available-commands--bottom">
         <input
+          aria-label="filter commands"
           className="available-commands--filter"
           onChange={event => setFilter(event.target.value)}
           placeholder="filter commands"

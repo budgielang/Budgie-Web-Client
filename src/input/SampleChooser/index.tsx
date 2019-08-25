@@ -28,10 +28,12 @@ export const SampleChooser: React.FC<SampleChooserProps> = ({
 
   return (
     <div className="sample-chooser">
-      <span className="non-mobile">
+      <label className="non-mobile" id="choose-a-sample">
         Choose a sample:
-      </span>
+      </label>
       <select
+        aria-label="Choose a sample"
+        aria-labelledby="choose-a-sample"
         className="sample-chooser--select"
         onChange={setNewSample}
         value={sampleName}
