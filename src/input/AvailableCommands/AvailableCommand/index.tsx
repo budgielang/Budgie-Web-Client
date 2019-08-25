@@ -26,7 +26,7 @@ export const AvailableCommand: React.FC<AvailableCommandProps> = ({
 }) => {
   const metadata = command.getMetadata();
   return (
-    <div className="available-command">
+    <li className="available-command">
       <h3 className="available-command--name">
         <code>{metadata.name}</code>
       </h3>
@@ -36,6 +36,6 @@ export const AvailableCommand: React.FC<AvailableCommandProps> = ({
         <em> {renderParameterDescription(metadata.parameters)}</em>
       </div>
       <Parameters parameters={metadata.parameters} />
-    </div>
+    </li>
   );
 };
