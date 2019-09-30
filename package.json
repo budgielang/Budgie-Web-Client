@@ -22,7 +22,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "https://joshuakgoldberg.com/GLS-Web-Client",
+  "homepage": "https://glslang.org",
   "name": "gls-web-client",
   "private": true,
   "scripts": {
