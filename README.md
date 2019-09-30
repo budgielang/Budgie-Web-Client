@@ -1,7 +1,9 @@
 # GLS Web Client
 
 A web client for previewing [GLS](https://github.com/general-language-syntax/gls).
-See it online at [glslang.org](http://glslang.org).
+
+* 🎭 Try it at [glslang.org](http://glslang.org) 🎭
+* 📚 Read the docs on [docs.glslang.org](http://docs.glslang.org) 📚
 
 ## Development
 
