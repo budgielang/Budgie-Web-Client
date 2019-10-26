@@ -1,4 +1,4 @@
-import { Command } from "general-language-syntax";
+import { Command } from "budgie";
 import React from "react";
 
 import { Parameters } from "../parameters";

@@ -3,7 +3,7 @@ import {
   RepeatingParameters,
   SingleParameter,
   KeywordParameter
-} from "general-language-syntax";
+} from "budgie";
 import * as React from "react";
 
 import { Keyword } from "./Keyword";

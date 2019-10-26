@@ -1,12 +1,12 @@
 import { ControlledEditor } from "@monaco-editor/react";
 import React from "react";
 
-export type GlsInputProps = {
+export type BudgieInputProps = {
   initialValue?: string;
   setInput: (input: string) => void;
 };
 
-export const GlsInput: React.FC<GlsInputProps> = ({
+export const BudgieInput: React.FC<BudgieInputProps> = ({
   initialValue,
   setInput
 }) => {
@@ -17,7 +17,7 @@ export const GlsInput: React.FC<GlsInputProps> = ({
 
   return (
     <ControlledEditor
-      language="gls"
+      language="budgie"
       options={{
         minimap: {
           enabled: 0

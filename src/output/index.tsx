@@ -1,6 +1,6 @@
 import MonacoEditor from "@monaco-editor/react";
 import React, { useMemo } from "react";
-import { LanguagesBag, Gls } from "general-language-syntax";
+import { LanguagesBag, Budgie } from "budgie";
 
 import { useStoredState } from "../useStoredState";
 import "./styles.css";
@@ -14,9 +14,9 @@ const languageNames = languagesBag.getLanguageNames();
 
 const languageAliases = new Map([["C#", "csharp"]]);
 
-const tryConvert = (gls: Gls, input: string[]) => {
+const tryConvert = (budgie: Budgie, input: string[]) => {
   try {
-    return gls.convert(input).join("\n");
+    return budgie.convert(input).join("\n");
   } catch (error) {
     return error;
   }
@@ -27,13 +27,13 @@ export const Output: React.FC<OutputProps> = ({ input }) => {
     "language-name",
     languageNames[0]
   );
-  const gls = useMemo(() => new Gls(languageName), [languageName]);
+  const budgie = useMemo(() => new Budgie(languageName), [languageName]);
 
   if (input === undefined) {
     return null;
   }
 
-  const value = tryConvert(gls, input.split(/\r\n|\r|\n/g));
+  const value = tryConvert(budgie, input.split(/\r\n|\r|\n/g));
   if (value instanceof Error) {
     return (
       <pre>
@@ -82,11 +82,11 @@ export const Output: React.FC<OutputProps> = ({ input }) => {
       </div>
       <a
         className="output--github"
-        href="https://github.com/general-language-syntax/GLS-Web-Client"
+        href="https://github.com/budgielang/Budgie-Web-Client"
         rel="noopener noreferrer"
         target="_blank"
       >
-        See GLS-Web-Client on GitHub
+        See Budgie-Web-Client on GitHub
       </a>
     </div>
   );

@@ -2,7 +2,7 @@ import {
   CommandsBagFactory,
   RenderContext,
   TypeScript
-} from "general-language-syntax";
+} from "budgie";
 import React from "react";
 
 import { useStoredState } from "../../useStoredState";

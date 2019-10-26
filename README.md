@@ -1,9 +1,9 @@
-# GLS Web Client
+# Budgie Web Client
 
-A web client for previewing [GLS](https://github.com/general-language-syntax/gls).
+A web client for previewing [Budgie](https://github.com/budgielang/budgie).
 
-* 🎭 Try it at [glslang.org](http://glslang.org) 🎭
-* 📚 Read the docs on [docs.glslang.org](http://docs.glslang.org) 📚
+* 🎭 Try it at [budgielang.org](http://budgielang.org) 🎭
+* 📚 Read the docs on [docs.budgielang.org](http://docs.budgielang.org) 📚
 
 ## Development
 

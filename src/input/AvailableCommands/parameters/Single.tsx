@@ -1,4 +1,4 @@
-import { SingleParameter } from "general-language-syntax";
+import { SingleParameter } from "budgie";
 import * as React from "react";
 
 export type SingleProps = {

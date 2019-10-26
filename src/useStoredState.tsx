@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const prefix = "gls-web-client-prefix-";
+const prefix = "budgie-web-client-prefix-";
 
 export const useStoredState = <T extends string | undefined>(
   keyAfterPrefix: string,

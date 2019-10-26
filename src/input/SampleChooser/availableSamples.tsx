@@ -1,6 +1,6 @@
 const headerBlurb = `
 comment block start
-comment block : GLS ((General Language Syntax)) is a single syntax
+comment block : Budgie is a single syntax
 comment block : that compiles into common OOP languages.
 comment block : ---
 comment block : Write code in the editor,
@@ -20,7 +20,7 @@ export const samples = {
 file start : Program File
     main context start
         main start
-            print : ("GLS is awesome!")
+            print : ("Budgie is awesome!")
             print : ("Select a sample below to see how it works!")
         main end
     main context end

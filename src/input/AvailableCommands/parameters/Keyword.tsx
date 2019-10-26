@@ -1,4 +1,4 @@
-import { KeywordParameter } from "general-language-syntax";
+import { KeywordParameter } from "budgie";
 import * as React from "react";
 
 export type KeywordProps = {

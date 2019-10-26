@@ -1,4 +1,4 @@
-import { RepeatingParameters } from "general-language-syntax";
+import { RepeatingParameters } from "budgie";
 import * as React from "react";
 
 import { Parameters as ParametersComponent } from "./index";
